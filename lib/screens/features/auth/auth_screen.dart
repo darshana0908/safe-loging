@@ -55,7 +55,7 @@ class _AuthScreen extends State<AuthScreen> {
                         ),
                         const SizedBox(height: 100),
                         Text(
-                          ' Welcome To Keepsafe ashdjasd ',
+                          ' Welcome To Keepsafe',
                           style: TextStyle(fontSize: 25, color: kwhite),
                           textAlign: TextAlign.start,
                         ),
