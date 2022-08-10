@@ -157,7 +157,7 @@ class _ImageScreenState extends State<ImageScreen> {
       for (var image in encryptedImages) {
         imageName = image.replaceAll('$currentDirectory/', '');
         outputName = imageName.replaceAll('.aes', '');
-        File decryptedFile = await fileCryptor.decrypt(inputFile: imageName, outputFile: outputName);
+        File decryptedFile =  await fileCryptor.decrypt(inputFile: imageName, outputFile: outputName);
         decryptedImages.add(decryptedFile.path);
       }
 
