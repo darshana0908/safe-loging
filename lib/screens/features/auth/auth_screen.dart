@@ -7,7 +7,7 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:safe_encrypt/constants/colors.dart';
-import 'package:safe_encrypt/screens/features/auth/pin_number.dart';
+import 'package:safe_encrypt/screens/features/auth/components/pin_number/pin_number.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 
 import '../../../providers/google_sign_provider.dart';
@@ -55,7 +55,7 @@ class _AuthScreen extends State<AuthScreen> {
                         ),
                         const SizedBox(height: 100),
                         Text(
-                          ' Welcome To Keepsafe',
+                          ' Welcome To Keepsafe ',
                           style: TextStyle(fontSize: 25, color: kwhite),
                           textAlign: TextAlign.start,
                         ),
@@ -119,13 +119,7 @@ class _AuthScreen extends State<AuthScreen> {
                             onPressed: () {
                               signInWithFacebook();
 
-                              // Navigator.of(context).push(
-                              //   MaterialPageRoute(
-                              //     builder: (context) {
-                              //       return const Welcomepage();
-                              //     },
-                              //   ),
-                              // );
+                         
                             },
                           ),
                         ),
