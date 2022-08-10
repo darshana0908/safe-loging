@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 
-import 'verification.dart';
-import 'components/pin_key_pad.dart';
+import '../../verification.dart';
+import '../pin_key_pad.dart';
 
-class PinNumber extends StatefulWidget {
-  const PinNumber({Key? key}) : super(key: key);
+class ReEnterPin extends StatefulWidget {
+  const ReEnterPin({Key? key,required this.controler_pin}) : super(key: key);
+  final  TextEditingController controler_pin;
 
   @override
-  State<PinNumber> createState() => _PinNumberState();
+  State<ReEnterPin> createState() => _ReEnterPinState();
 }
 
-class _PinNumberState extends State<PinNumber> {
-  final TextEditingController controler_pin = TextEditingController();
+class _ReEnterPinState extends State<ReEnterPin> {
+  final TextEditingController controler_re_enter_pin = TextEditingController();
   bool backspacecolorchange = false;
 
   @override
@@ -39,7 +40,7 @@ class _PinNumberState extends State<PinNumber> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Text(
-                        "Let's get you set up.\n First, choose a PIN",
+                        "Re Enter Pin Number.",
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 25,
@@ -50,7 +51,7 @@ class _PinNumberState extends State<PinNumber> {
                       ),
                       TextField(
                         style: TextStyle(color: kwhite, fontSize: 35),
-                        controller: controler_pin,
+                        controller: controler_re_enter_pin,
                         keyboardType: TextInputType.none,
                         decoration: InputDecoration(
                           suffixIcon: IconButton(
@@ -59,8 +60,9 @@ class _PinNumberState extends State<PinNumber> {
                               color: backspacecolorchange ? kgray : kwhite,
                             ),
                             onPressed: () {
-                              controler_pin.text = controler_pin.text
-                                  .substring(0, controler_pin.text.length - 1);
+                              controler_re_enter_pin.text =
+                                  controler_re_enter_pin.text.substring(0,
+                                      controler_re_enter_pin.text.length - 1);
                             },
                           ),
                         ),
@@ -79,8 +81,8 @@ class _PinNumberState extends State<PinNumber> {
                                   setState(() {
                                     backspacecolorchange = false;
 
-                                    controler_pin.text =
-                                        controler_pin.text + '1';
+                                    controler_re_enter_pin.text =
+                                        controler_re_enter_pin.text + '1';
                                   });
                                 }),
                             PinKeyPad(
@@ -89,8 +91,8 @@ class _PinNumberState extends State<PinNumber> {
                                   setState(() {
                                     backspacecolorchange = false;
 
-                                    controler_pin.text =
-                                        controler_pin.text + '2';
+                                    controler_re_enter_pin.text =
+                                        controler_re_enter_pin.text + '2';
                                   });
                                 }),
                             PinKeyPad(
@@ -99,8 +101,8 @@ class _PinNumberState extends State<PinNumber> {
                                   setState(() {
                                     backspacecolorchange = false;
 
-                                    controler_pin.text =
-                                        controler_pin.text + '3';
+                                    controler_re_enter_pin.text =
+                                        controler_re_enter_pin.text + '3';
                                   });
                                 }),
                           ],
@@ -120,8 +122,8 @@ class _PinNumberState extends State<PinNumber> {
                                   setState(() {
                                     backspacecolorchange = false;
 
-                                    controler_pin.text =
-                                        controler_pin.text + '4';
+                                    controler_re_enter_pin.text =
+                                        controler_re_enter_pin.text + '4';
                                   });
                                 }),
                             PinKeyPad(
@@ -130,8 +132,8 @@ class _PinNumberState extends State<PinNumber> {
                                   setState(() {
                                     backspacecolorchange = false;
 
-                                    controler_pin.text =
-                                        controler_pin.text + '5';
+                                    controler_re_enter_pin.text =
+                                        controler_re_enter_pin.text + '5';
                                   });
                                 }),
                             PinKeyPad(
@@ -140,8 +142,8 @@ class _PinNumberState extends State<PinNumber> {
                                   setState(() {
                                     backspacecolorchange = false;
 
-                                    controler_pin.text =
-                                        controler_pin.text + '6';
+                                    controler_re_enter_pin.text =
+                                        controler_re_enter_pin.text + '6';
                                   });
                                 }),
                           ],
@@ -161,8 +163,8 @@ class _PinNumberState extends State<PinNumber> {
                                   setState(() {
                                     backspacecolorchange = false;
 
-                                    controler_pin.text =
-                                        controler_pin.text + '7';
+                                    controler_re_enter_pin.text =
+                                        controler_re_enter_pin.text + '7';
                                   });
                                 }),
                             PinKeyPad(
@@ -171,8 +173,8 @@ class _PinNumberState extends State<PinNumber> {
                                   setState(() {
                                     backspacecolorchange = false;
 
-                                    controler_pin.text =
-                                        controler_pin.text + '8';
+                                    controler_re_enter_pin.text =
+                                        controler_re_enter_pin.text + '8';
                                   });
                                 }),
                             PinKeyPad(
@@ -181,8 +183,8 @@ class _PinNumberState extends State<PinNumber> {
                                   setState(() {
                                     backspacecolorchange = false;
 
-                                    controler_pin.text =
-                                        controler_pin.text + '9';
+                                    controler_re_enter_pin.text =
+                                        controler_re_enter_pin.text + '9';
                                   });
                                 }),
                           ],
@@ -210,7 +212,8 @@ class _PinNumberState extends State<PinNumber> {
                                 setState(() {
                                   backspacecolorchange = false;
 
-                                  controler_pin.text = controler_pin.text + '0';
+                                  controler_re_enter_pin.text =
+                                      controler_re_enter_pin.text + '0';
                                 });
                               }),
                           const SizedBox(

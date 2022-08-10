@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 
-import 'pin_number.dart';
+import 'components/pin_number/pin_number.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
