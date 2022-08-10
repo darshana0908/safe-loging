@@ -1,8 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 
-import 'pin_number.dart';
+import 'components/pin_number/pin_number.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({Key? key}) : super(key: key);
@@ -73,6 +74,12 @@ class _UserProfileState extends State<UserProfile> {
                 ),
                 InkWell(
                   onTap: () {
+                    final username = user.displayName;
+                    final useremail = user.email;
+                    createuser(
+                        name: username.toString(),
+                        email: user.email.toString());
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -99,5 +106,18 @@ class _UserProfileState extends State<UserProfile> {
         ),
       ),
     );
+  }
+
+  Future createuser({
+    required String name,
+    required String email,
+  }) async {
+    final docUser = FirebaseFirestore.instance.collection('users').doc('my-id');
+    final json = {
+      'name': name,
+      'email': email,
+    };
+
+    await docUser.set(json);
   }
 }
