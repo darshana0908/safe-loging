@@ -218,12 +218,14 @@ class _PinNumberState extends State<PinNumber> {
                           ),
                           IconButton(
                             onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ReEnterPin(
-                                        controler_pin: controler_pin),
-                                  ));
+                              if (controler_pin.text.isNotEmpty) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ReEnterPin(
+                                          controler_pin: controler_pin),
+                                    ));
+                              } else {}
                             },
                             icon: Icon(
                               Icons.check_circle,

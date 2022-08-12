@@ -1,9 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 
-import '../../verification.dart';
 import '../pin_key_pad.dart';
 
 class UserPIn extends StatefulWidget {
@@ -217,31 +215,7 @@ class _UserPInState extends State<UserPIn> {
                             width: 115,
                           ),
                           IconButton(
-                            onPressed: () async {
-                              if (controler_re_enter_pin.text ==
-                                  widget.controler_pin.text) {
-                                final pinNumber = controler_re_enter_pin.text;
-                                final username = user.displayName;
-                                final useremail = user.email;
-                                final userpasward = user.uid;
-                                createuser(
-                                  pin: pinNumber,
-                                  name: username.toString(),
-                                  email: user.email.toString(),
-                                  uid: user.uid.toString(),
-                                );
-                                await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const Verification(),
-                                    ));
-                              } else {
-                                setState(() {
-                                  newpin_nuber = false;
-                                });
-                              }
-                            },
+                            onPressed: () {},
                             icon: Icon(
                               Icons.check_circle,
                               color: kwhite,
@@ -259,20 +233,20 @@ class _UserPInState extends State<UserPIn> {
     );
   }
 
-  Future createuser({
-    required String pin,
-    required String name,
-    required String email,
-    required String uid,
-  }) async {
-    final docUser = FirebaseFirestore.instance.collection('users').doc();
-    final json = {
-      'pin': pin,
-      'name': name,
-      'email': email,
-      'uid': uid,
-    };
+  // Future createuser({
+  //   required String pin,
+  //   required String name,
+  //   required String email,
+  //   required String uid,
+  // }) async {
+  //   final docUser = FirebaseFirestore.instance.collection('users').doc();
+  //   final json = {
+  //     'pin': pin,
+  //     'name': name,
+  //     'email': email,
+  //     'uid': uid,
+  //   };
 
-    await docUser.set(json);
-  }
+  //   await docUser.set(json);
+  // }
 }

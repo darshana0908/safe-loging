@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:safe_encrypt/constants/colors.dart';
+import 'package:safe_encrypt/screens/features/auth/components/pin_number/user_pin.dart';
 
-import '../../verification.dart';
 import '../pin_key_pad.dart';
 
 class ReEnterPin extends StatefulWidget {
@@ -242,8 +242,9 @@ class _ReEnterPinState extends State<ReEnterPin> {
                                 await Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          const Verification(),
+                                      builder: (context) => UserPIn(
+                                          controler_pin:
+                                              controler_re_enter_pin),
                                     ));
                               } else {
                                 setState(() {

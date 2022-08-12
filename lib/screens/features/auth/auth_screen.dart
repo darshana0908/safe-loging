@@ -7,7 +7,7 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:safe_encrypt/constants/colors.dart';
-import 'package:safe_encrypt/screens/features/auth/components/pin_number/pin_number.dart';
+import 'package:safe_encrypt/screens/features/auth/components/pin_number/first_pin_number.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 
 import '../../../providers/google_sign_provider.dart';
