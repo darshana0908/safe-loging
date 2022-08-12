@@ -19,7 +19,7 @@ class _GmailLoginState extends State<GmailLogin> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
-            child: Text('gggg'),
+            child: CircularProgressIndicator(),
           );
         } else if (snapshot.hasData) {
           return const UserProfile();

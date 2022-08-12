@@ -12,7 +12,6 @@ import 'package:social_login_buttons/social_login_buttons.dart';
 
 import '../../../providers/google_sign_provider.dart';
 import '../gallery/gallery_home.dart';
-import 'profile.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({Key? key}) : super(key: key);
@@ -118,8 +117,6 @@ class _AuthScreen extends State<AuthScreen> {
                             // },
                             onPressed: () {
                               signInWithFacebook();
-
-                         
                             },
                           ),
                         ),
@@ -132,11 +129,11 @@ class _AuthScreen extends State<AuthScreen> {
                                   Provider.of<GoogleSignInProvider>(context,
                                       listen: false);
                               provider.googleLogin();
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const UserProfile()));
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) =>
+                              //             const UserProfile()));
                             },
                           ),
                         ),
