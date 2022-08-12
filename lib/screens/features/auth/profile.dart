@@ -19,7 +19,7 @@ class _UserProfileState extends State<UserProfile> {
     super.initState();
   }
 
-  final user = FirebaseAuth.instance.currentUser!;
+  final _user = FirebaseAuth.instance.currentUser!;
 
   @override
   Widget build(BuildContext context) {
@@ -52,11 +52,11 @@ class _UserProfileState extends State<UserProfile> {
                   height: 40,
                 ),
                 CircleAvatar(
-                    backgroundImage: NetworkImage(user.photoURL!, scale: 300)),
+                    backgroundImage: NetworkImage(_user.photoURL!, scale: 300)),
                 const SizedBox(
                   height: 20,
                 ),
-                Text(user.displayName!.toString(),
+                Text(_user.displayName!.toString(),
                     style: const TextStyle(
                         fontSize: 17,
                         color: Colors.white60,
@@ -64,7 +64,7 @@ class _UserProfileState extends State<UserProfile> {
                 const SizedBox(
                   height: 20,
                 ),
-                Text(user.email!.toString(),
+                Text(_user.email!.toString(),
                     style: const TextStyle(
                         fontSize: 17,
                         color: Colors.white60,
@@ -74,11 +74,11 @@ class _UserProfileState extends State<UserProfile> {
                 ),
                 InkWell(
                   onTap: () {
-                    final username = user.displayName;
-                    final useremail = user.email;
+                    final username = _user.displayName;
+                    final useremail = _user.email;
                     createuser(
                         name: username.toString(),
-                        email: user.email.toString());
+                        email: _user.email.toString());
 
                     Navigator.push(
                       context,
