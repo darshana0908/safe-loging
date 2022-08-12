@@ -18,9 +18,10 @@ class PermissionScreen extends StatefulWidget {
 }
 
 class _PermissionScreenState extends State<PermissionScreen> {
-  final Directory directory = Directory('/storage/emulated/0/Android/data/com.example.safe_encrypt/files');
+  final Directory directory = Directory(
+      '/storage/emulated/0/Android/data/com.example.safe_encrypt/files');
   static const String realFolder = "folder";
-  static const String fakeFolder = "fakeFolder";
+  // static const String fakeFolder = "fakeFolder";
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +32,12 @@ class _PermissionScreenState extends State<PermissionScreen> {
           width: MediaQuery.of(context).size.width,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40),
-            child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.start, children: [
               const SizedBox(height: 150),
               SvgPicture.asset(
                 'assets/pramisson_1.svg',
+                color: Colors.limeAccent,
                 width: 150,
               ),
               const SizedBox(height: 100),
@@ -54,9 +57,12 @@ class _PermissionScreenState extends State<PermissionScreen> {
                 onTap: () async {
                   if (await requestPermission(Permission.storage)) {
                     await createFolder(realFolder);
-                    await createFolder(fakeFolder);
-                    
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const AuthScreen()));
+                    // await createFolder(fakeFolder);
+
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AuthScreen()));
                     // Either the permission was already granted before or the user just granted it.
                   }
                 },
@@ -67,7 +73,10 @@ class _PermissionScreenState extends State<PermissionScreen> {
                   width: MediaQuery.of(context).size.width,
                   child: Text(
                     'GRANT ACCESS',
-                    style: TextStyle(fontSize: 17, color: kwhite, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                        fontSize: 17,
+                        color: kwhite,
+                        fontWeight: FontWeight.w500),
                   ),
                 ),
               ),
