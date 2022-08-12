@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 
@@ -5,8 +7,8 @@ import '../../verification.dart';
 import '../pin_key_pad.dart';
 
 class ReEnterPin extends StatefulWidget {
-  const ReEnterPin({Key? key,required this.controler_pin}) : super(key: key);
-  final  TextEditingController controler_pin;
+  const ReEnterPin({Key? key, required this.controler_pin}) : super(key: key);
+  final TextEditingController controler_pin;
 
   @override
   State<ReEnterPin> createState() => _ReEnterPinState();
@@ -15,6 +17,8 @@ class ReEnterPin extends StatefulWidget {
 class _ReEnterPinState extends State<ReEnterPin> {
   final TextEditingController controler_re_enter_pin = TextEditingController();
   bool backspacecolorchange = false;
+  final user = FirebaseAuth.instance.currentUser!;
+  bool newpin_nuber = true;
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +43,11 @@ class _ReEnterPinState extends State<ReEnterPin> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Text(
-                        "Re Enter Pin Number.",
-                        style: TextStyle(
+                      Text(
+                        newpin_nuber
+                            ? "Re Enter Pin Number."
+                            : " Pin Number is wrong Try again",
+                        style: const TextStyle(
                             color: Colors.white,
                             fontSize: 25,
                             fontWeight: FontWeight.w600),
@@ -220,12 +226,30 @@ class _ReEnterPinState extends State<ReEnterPin> {
                             width: 115,
                           ),
                           IconButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const Verification(),
-                                  ));
+                            onPressed: () async {
+                              if (controler_re_enter_pin.text ==
+                                  widget.controler_pin.text) {
+                                final pinNumber = controler_re_enter_pin.text;
+                                final username = user.displayName;
+                                final useremail = user.email;
+                                final userpasward = user.uid;
+                                createuser(
+                                  pin: pinNumber,
+                                  name: username.toString(),
+                                  email: user.email.toString(),
+                                  uid: user.uid.toString(),
+                                );
+                                await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const Verification(),
+                                    ));
+                              } else {
+                                setState(() {
+                                  newpin_nuber = false;
+                                });
+                              }
                             },
                             icon: Icon(
                               Icons.check_circle,
@@ -242,5 +266,22 @@ class _ReEnterPinState extends State<ReEnterPin> {
         ),
       ),
     );
+  }
+
+  Future createuser({
+    required String pin,
+    required String name,
+    required String email,
+    required String uid,
+  }) async {
+    final docUser = FirebaseFirestore.instance.collection('users').doc();
+    final json = {
+      'pin': pin,
+      'name': name,
+      'email': email,
+      'uid': uid,
+    };
+
+    await docUser.set(json);
   }
 }
