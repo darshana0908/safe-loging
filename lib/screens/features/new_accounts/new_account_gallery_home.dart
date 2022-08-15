@@ -269,8 +269,8 @@ class _NewAccountGalleryHomeState extends State<NewAccountGalleryHome> {
                     TextButton(
                         onPressed: () async {
                           setState(() async {
-                            createFolder(_folderName.text);
-                            await getFolderList();
+                            await createFolder(_folderName.text);
+                            getFolderList();
                             _folderName.clear();
                           });
                         },
@@ -294,7 +294,7 @@ class _NewAccountGalleryHomeState extends State<NewAccountGalleryHome> {
 
     log(directory.toString());
 
-    folderList = directory.listSync(followLinks: true);
+     folderList = directory.listSync(followLinks: true);
     folderList.removeWhere((item) => item.runtimeType.toString() == '_File');
   }
 

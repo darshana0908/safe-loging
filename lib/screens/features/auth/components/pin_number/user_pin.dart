@@ -1,12 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:safe_encrypt/constants/colors.dart';
+import 'package:safe_encrypt/screens/features/gallery/gallery_home.dart';
 
 import '../pin_key_pad.dart';
 
 class UserPIn extends StatefulWidget {
-  const UserPIn({Key? key, required this.controler_pin}) : super(key: key);
+  UserPIn({Key? key, required this.controler_pin}) : super(key: key);
   final TextEditingController controler_pin;
+
+  final CollectionReference _firebaseFirestore =
+      FirebaseFirestore.instance.collection('users');
+  List documents = [];
 
   @override
   State<UserPIn> createState() => _UserPInState();
@@ -17,6 +23,17 @@ class _UserPInState extends State<UserPIn> {
   bool backspacecolorchange = false;
   final user = FirebaseAuth.instance.currentUser!;
   bool newpin_nuber = true;
+  String usern = '';
+  String pas = '';
+  String data = '';
+
+  bool pin = true;
+  @override
+  void initState() {
+    getData();
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +58,7 @@ class _UserPInState extends State<UserPIn> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      pin ? const Text('') : const Text("ffffff"),
                       const SizedBox(
                         height: 50,
                       ),
@@ -191,9 +209,9 @@ class _UserPInState extends State<UserPIn> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          const Text(
-                            '',
-                            style: TextStyle(
+                          Text(
+                            data,
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 35,
                                 fontWeight: FontWeight.w600),
@@ -215,7 +233,45 @@ class _UserPInState extends State<UserPIn> {
                             width: 115,
                           ),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              FirebaseFirestore.instance
+                                  .collection('users')
+                                  .get()
+                                  .then((QuerySnapshot querySnapshot) {
+                                for (var doc in querySnapshot.docs) {
+                                  if (doc['pin'] ==
+                                      controler_re_enter_pin.text) {
+                                    if (user.uid == doc['uid']) {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const GalleryHome(),
+                                          ));
+                                      print(doc['uid']);
+                                    }
+                                    print(controler_re_enter_pin.text);
+                                  } else {
+                                    print('fff');
+                                    print(pin);
+                                  }
+                                }
+                              });
+                              // getDocs();
+                              // FirebaseFirestore.instance
+                              //     .collection('users')
+                              //     .where('uid', isEqualTo: user.uid)
+                              //     .snapshots()
+                              //     .listen((data) => {
+                              //           print(user.email),
+                              //           print(controler_re_enter_pin.text)
+                              //         });
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //       builder: (context) => GetUserName(data),
+                              //     ));
+                            },
                             icon: Icon(
                               Icons.check_circle,
                               color: kwhite,
@@ -249,4 +305,36 @@ class _UserPInState extends State<UserPIn> {
 
   //   await docUser.set(json);
   // }
+}
+
+final _fireStore = FirebaseFirestore.instance;
+
+CollectionReference _collectionRef =
+    FirebaseFirestore.instance.collection('users');
+
+Future<void> getData() async {
+  // Get docs from collection reference
+  QuerySnapshot querySnapshot = await _collectionRef.get();
+
+  // Get data from docs and convert map to List
+  final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+  querySnapshot.docs
+      .map((doc) => print(doc["name"])
+          // ListTile(
+          //     title: Text(doc["name"]), subtitle: Text(doc["amount"].toString()))
+          )
+      .toList();
+  print(allData);
+  allData.length;
+}
+
+Future getDocs() async {
+  List doc = ['name', 'pin'];
+  QuerySnapshot querySnapshot =
+      await FirebaseFirestore.instance.collection("users").get();
+  for (int i = 0; i < querySnapshot.docs.length; i++) {
+    var a = querySnapshot.docs[i];
+    print(a.data);
+    print(doc[1]);
+  }
 }

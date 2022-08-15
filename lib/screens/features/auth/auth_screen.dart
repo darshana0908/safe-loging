@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 import 'package:safe_encrypt/screens/features/auth/components/pin_number/first_pin_number.dart';
+import 'package:safe_encrypt/screens/features/auth/profile.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 
 import '../../../providers/google_sign_provider.dart';
@@ -124,16 +125,16 @@ class _AuthScreen extends State<AuthScreen> {
                           padding: const EdgeInsets.all(8.0),
                           child: SocialLoginButton(
                             buttonType: SocialLoginButtonType.google,
-                            onPressed: () {
+                            onPressed: () async {
                               final provider =
                                   Provider.of<GoogleSignInProvider>(context,
                                       listen: false);
                               provider.googleLogin();
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) =>
-                              //             const UserProfile()));
+                              await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const UserProfile()));
                             },
                           ),
                         ),

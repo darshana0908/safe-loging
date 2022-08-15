@@ -51,8 +51,8 @@ class _UserProfileState extends State<UserProfile> {
                 const SizedBox(
                   height: 40,
                 ),
-                CircleAvatar(
-                    backgroundImage: NetworkImage(_user.photoURL!, scale: 300)),
+                // CircleAvatar(
+                //     backgroundImage: NetworkImage(_user.photoURL!, scale: 300)),
                 const SizedBox(
                   height: 20,
                 ),

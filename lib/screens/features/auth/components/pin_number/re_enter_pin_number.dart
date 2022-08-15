@@ -239,6 +239,8 @@ class _ReEnterPinState extends State<ReEnterPin> {
                                   email: user.email.toString(),
                                   uid: user.uid.toString(),
                                 );
+                                // readUsers();
+
                                 await Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -259,7 +261,21 @@ class _ReEnterPinState extends State<ReEnterPin> {
                             ),
                           )
                         ],
-                      )
+                      ),
+
+                      // StreamBuilder<List<User>>(
+                      //     stream: readUsers(),
+                      //     builder: (context, snapshot) {
+                      //       if (snapshot.hasError) {
+                      //         return const Text('ggggggggggg');
+                      //       } else if (snapshot.hasData) {
+                      //         final users = snapshot.data!;
+                      //         return const Text('hhhh');
+                      //         ListView(children: users.map(buildUser).toList());
+                      //       } else {
+                      //         return const Text('jjjjjjjjjjjjj');
+                      //       }
+                      //     })
                     ]),
               ),
             ),
@@ -269,6 +285,15 @@ class _ReEnterPinState extends State<ReEnterPin> {
     );
   }
 
+  // Widget buildUser(User user) => Column(
+  //       children: [
+  //         Text(user.email),
+  //         Text(user.id),
+  //         Text(user.name),
+  //         Text(user.pin),
+  //         Text(user.uid),
+  //       ],
+  //     );
   Future createuser({
     required String pin,
     required String name,
@@ -277,12 +302,55 @@ class _ReEnterPinState extends State<ReEnterPin> {
   }) async {
     final docUser = FirebaseFirestore.instance.collection('users').doc();
     final json = {
+      'id': docUser.id,
       'pin': pin,
       'name': name,
       'email': email,
       'uid': uid,
     };
-
+    // final user = User(
+    //   id: docUser.id,
+    //   pin: pin,
+    //   name: name,
+    //   email: email,
+    //   uid: uid,
+    // );
     await docUser.set(json);
   }
+
+//   Stream<List<User>> readUsers() => FirebaseFirestore.instance
+//       .collection('users')
+//       .snapshots()
+//       .map((snapshot) =>
+//           snapshot.docs.map((doc) => User.fromJson(doc.data())).toList());
+// }
+
+// class User {
+//   String id;
+//   final String pin;
+//   final String name;
+//   final String email;
+//   final String uid;
+
+//   User({
+//     this.id = '',
+//     required this.pin,
+//     required this.name,
+//     required this.email,
+//     required this.uid,
+//   });
+//   Map<String, dynamic> tojson() => {
+//         'id': id,
+//         'pin': pin,
+//         'name': name,
+//         'email': email,
+//         'uid': uid,
+//       };
+//   static User fromJson(Map<String, dynamic> json) => User(
+//         email: json['id'],
+//         name: json['name'],
+//         pin: json['pin'],
+//         uid: json['uid'],
+//       );
+// }
 }
