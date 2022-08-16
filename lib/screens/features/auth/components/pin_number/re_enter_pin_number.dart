@@ -16,6 +16,7 @@ class ReEnterPin extends StatefulWidget {
 
 class _ReEnterPinState extends State<ReEnterPin> {
   final TextEditingController controler_re_enter_pin = TextEditingController();
+
   bool backspacecolorchange = false;
   final user = FirebaseAuth.instance.currentUser!;
   bool newpin_nuber = true;
@@ -88,7 +89,7 @@ class _ReEnterPinState extends State<ReEnterPin> {
                                     backspacecolorchange = false;
 
                                     controler_re_enter_pin.text =
-                                        controler_re_enter_pin.text + '1';
+                                        '${controler_re_enter_pin.text}1';
                                   });
                                 }),
                             PinKeyPad(
@@ -98,7 +99,7 @@ class _ReEnterPinState extends State<ReEnterPin> {
                                     backspacecolorchange = false;
 
                                     controler_re_enter_pin.text =
-                                        controler_re_enter_pin.text + '2';
+                                        '${controler_re_enter_pin.text}2';
                                   });
                                 }),
                             PinKeyPad(
@@ -108,7 +109,7 @@ class _ReEnterPinState extends State<ReEnterPin> {
                                     backspacecolorchange = false;
 
                                     controler_re_enter_pin.text =
-                                        controler_re_enter_pin.text + '3';
+                                        '${controler_re_enter_pin.text}3';
                                   });
                                 }),
                           ],
@@ -129,7 +130,7 @@ class _ReEnterPinState extends State<ReEnterPin> {
                                     backspacecolorchange = false;
 
                                     controler_re_enter_pin.text =
-                                        controler_re_enter_pin.text + '4';
+                                        '${controler_re_enter_pin.text}4';
                                   });
                                 }),
                             PinKeyPad(
@@ -139,7 +140,7 @@ class _ReEnterPinState extends State<ReEnterPin> {
                                     backspacecolorchange = false;
 
                                     controler_re_enter_pin.text =
-                                        controler_re_enter_pin.text + '5';
+                                        '${controler_re_enter_pin.text}5';
                                   });
                                 }),
                             PinKeyPad(
@@ -149,7 +150,7 @@ class _ReEnterPinState extends State<ReEnterPin> {
                                     backspacecolorchange = false;
 
                                     controler_re_enter_pin.text =
-                                        controler_re_enter_pin.text + '6';
+                                        '${controler_re_enter_pin.text}6';
                                   });
                                 }),
                           ],
@@ -170,7 +171,7 @@ class _ReEnterPinState extends State<ReEnterPin> {
                                     backspacecolorchange = false;
 
                                     controler_re_enter_pin.text =
-                                        controler_re_enter_pin.text + '7';
+                                        '${controler_re_enter_pin.text}7';
                                   });
                                 }),
                             PinKeyPad(
@@ -180,7 +181,7 @@ class _ReEnterPinState extends State<ReEnterPin> {
                                     backspacecolorchange = false;
 
                                     controler_re_enter_pin.text =
-                                        controler_re_enter_pin.text + '8';
+                                        '${controler_re_enter_pin.text}8';
                                   });
                                 }),
                             PinKeyPad(
@@ -190,7 +191,7 @@ class _ReEnterPinState extends State<ReEnterPin> {
                                     backspacecolorchange = false;
 
                                     controler_re_enter_pin.text =
-                                        controler_re_enter_pin.text + '9';
+                                        '${controler_re_enter_pin.text}9';
                                   });
                                 }),
                           ],
@@ -219,7 +220,7 @@ class _ReEnterPinState extends State<ReEnterPin> {
                                   backspacecolorchange = false;
 
                                   controler_re_enter_pin.text =
-                                      controler_re_enter_pin.text + '0';
+                                      '${controler_re_enter_pin.text}0';
                                 });
                               }),
                           const SizedBox(
@@ -353,4 +354,14 @@ class _ReEnterPinState extends State<ReEnterPin> {
 //         uid: json['uid'],
 //       );
 // }
+}
+
+class extEditingController extends ChangeNotifier {
+  TextEditingController controler_pin = TextEditingController();
+
+  TextEditingController get getcontroler_pin => controler_pin;
+  setcontroler() {
+    controler_pin.text;
+    notifyListeners();
+  }
 }

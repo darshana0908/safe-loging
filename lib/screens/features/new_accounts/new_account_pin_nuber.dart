@@ -7,10 +7,10 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 import 'package:safe_encrypt/screens/features/new_accounts/pin_key_pad.dart';
 
-import '../../../../utils/helper_methods.dart';
+import '../../../utils/helper_methods.dart';
 
-import '../re_enter_pin_number.dart';
-import 'text.dart';
+import 're_enter_pin_number.dart';
+import 'componets/text.dart';
 
 class NewAccountPin extends StatefulWidget {
   const NewAccountPin({Key? key}) : super(key: key);

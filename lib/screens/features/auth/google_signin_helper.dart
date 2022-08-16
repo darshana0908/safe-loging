@@ -29,7 +29,7 @@ class _GmailLoginState extends State<GmailLogin> {
           );
         } else {
           return const Center(
-            child: Text('hhhhhhhhhhhhhhhhhhh'),
+            child: CircularProgressIndicator(),
           );
         }
       },
@@ -38,20 +38,20 @@ class _GmailLoginState extends State<GmailLogin> {
   }
 }
 
-class New extends StatefulWidget {
-  const New({Key? key}) : super(key: key);
+// class New extends StatefulWidget {
+//   const New({Key? key}) : super(key: key);
 
-  @override
-  State<New> createState() => _NewState();
-}
+//   @override
+//   State<New> createState() => _NewState();
+// }
 
-class _NewState extends State<New> {
-  @override
-  Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser!;
-    return Scaffold(
-      body:
-          Column(children: [Text(user.uid), Text(user.displayName.toString())]),
-    );
-  }
-}
+// class _NewState extends State<New> {
+//   @override
+//   Widget build(BuildContext context) {
+//     final user = FirebaseAuth.instance.currentUser!;
+//     return Scaffold(
+//       body:
+//           Column(children: [Text(user.uid), Text(user.displayName.toString())]),
+//     );
+//   }
+// }

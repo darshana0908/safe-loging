@@ -48,6 +48,7 @@ dependencies:
   flutter_facebook_auth: ^4.4.0+1
   flutter_login_facebook: ^1.5.0+1
   cloud_firestore: ^3.4.3
+  shared_preferences: ^2.0.15
   # webview_flutter: ^3.0.4
 
   awesome_dialog: ^2.2.1
@@ -95,3 +96,4 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+ 

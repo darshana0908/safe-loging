@@ -8,11 +8,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 import 'package:safe_encrypt/screens/features/auth/components/pin_number/first_pin_number.dart';
-import 'package:safe_encrypt/screens/features/auth/profile.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 
 import '../../../providers/google_sign_provider.dart';
 import '../gallery/gallery_home.dart';
+import 'google_signin_helper.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({Key? key}) : super(key: key);
@@ -134,7 +134,7 @@ class _AuthScreen extends State<AuthScreen> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          const UserProfile()));
+                                          const GmailLogin()));
                             },
                           ),
                         ),
@@ -166,7 +166,7 @@ class _AuthScreen extends State<AuthScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        const GalleryHome(isFake: true)),
+                                        const GalleryHome(isFake: true, )),
                               );
                             },
                           ),

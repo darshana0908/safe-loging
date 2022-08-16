@@ -21,7 +21,7 @@ import 'image_screen.dart';
 class GalleryHome extends StatefulWidget {
   final bool isFake;
   const GalleryHome({Key? key, this.isFake = false}) : super(key: key);
-
+ 
   @override
   State<GalleryHome> createState() => _GalleryHomeState();
 }
@@ -137,7 +137,7 @@ class _GalleryHomeState extends State<GalleryHome> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ConfirmPin(),
+                      builder: (context) =>  ConfirmPin(),
                     ));
               },
             ),

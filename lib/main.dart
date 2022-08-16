@@ -3,9 +3,12 @@ import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:safe_encrypt/providers/google_sign_provider.dart';
 
+import 'screens/features/auth/components/pin_number/re_enter_pin_number.dart';
+import 'screens/features/auth/components/pin_number/user_pin.dart';
 import 'screens/features/gallery/album_covers.dart';
-import 'screens/features/permission/permission_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+
+import 'screens/features/splash/splash.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,6 +18,7 @@ Future main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => FolderCoverImageProvider()),
         ChangeNotifierProvider(create: (_) => GoogleSignInProvider()),
+        ChangeNotifierProvider(create: (_) => extEditingController()),
       ],
       child: const MyApp(),
     ),
@@ -39,7 +43,7 @@ class MyApp extends StatelessWidget {
           ],
           background: Container(color: const Color(0xFFF5F5F5))),
       initialRoute: "/",
-      home: const PermissionScreen(),
+      home: const splash(),
     );
   }
 }

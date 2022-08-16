@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 import 'package:safe_encrypt/screens/features/gallery/gallery_home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../pin_key_pad.dart';
 
@@ -13,6 +14,7 @@ class UserPIn extends StatefulWidget {
   final CollectionReference _firebaseFirestore =
       FirebaseFirestore.instance.collection('users');
   List documents = [];
+  bool owner = false;
 
   @override
   State<UserPIn> createState() => _UserPInState();
@@ -27,16 +29,29 @@ class _UserPInState extends State<UserPIn> {
   String pas = '';
   String data = '';
 
-  bool pin = true;
+  bool confirm_pin = true;
+  String name = '';
+  bool ownerlogin = true;
+
+  late SharedPreferences preferences;
   @override
   void initState() {
-    getData();
+    // getData();
     // TODO: implement initState
     super.initState();
   }
 
+// Obtain shared preferences.
+
   @override
   Widget build(BuildContext context) {
+    @override
+    savebool() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('ownerlogin', ownerlogin);
+      print(ownerlogin);
+    }
+
     return Scaffold(
       backgroundColor: kdarkblue,
       body: SafeArea(
@@ -58,7 +73,13 @@ class _UserPInState extends State<UserPIn> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      pin ? const Text('') : const Text("ffffff"),
+                      Text(
+                        confirm_pin ? "" : " Pin Number is wrong Try again",
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 25,
+                            fontWeight: FontWeight.w600),
+                      ),
                       const SizedBox(
                         height: 50,
                       ),
@@ -95,7 +116,7 @@ class _UserPInState extends State<UserPIn> {
                                     backspacecolorchange = false;
 
                                     controler_re_enter_pin.text =
-                                        controler_re_enter_pin.text + '1';
+                                        '${controler_re_enter_pin.text}1';
                                   });
                                 }),
                             PinKeyPad(
@@ -105,7 +126,7 @@ class _UserPInState extends State<UserPIn> {
                                     backspacecolorchange = false;
 
                                     controler_re_enter_pin.text =
-                                        controler_re_enter_pin.text + '2';
+                                        '${controler_re_enter_pin.text}2';
                                   });
                                 }),
                             PinKeyPad(
@@ -115,7 +136,7 @@ class _UserPInState extends State<UserPIn> {
                                     backspacecolorchange = false;
 
                                     controler_re_enter_pin.text =
-                                        controler_re_enter_pin.text + '3';
+                                        '${controler_re_enter_pin.text}3';
                                   });
                                 }),
                           ],
@@ -136,7 +157,7 @@ class _UserPInState extends State<UserPIn> {
                                     backspacecolorchange = false;
 
                                     controler_re_enter_pin.text =
-                                        controler_re_enter_pin.text + '4';
+                                        '${controler_re_enter_pin.text}4';
                                   });
                                 }),
                             PinKeyPad(
@@ -146,7 +167,7 @@ class _UserPInState extends State<UserPIn> {
                                     backspacecolorchange = false;
 
                                     controler_re_enter_pin.text =
-                                        controler_re_enter_pin.text + '5';
+                                        '${controler_re_enter_pin.text}5';
                                   });
                                 }),
                             PinKeyPad(
@@ -156,7 +177,7 @@ class _UserPInState extends State<UserPIn> {
                                     backspacecolorchange = false;
 
                                     controler_re_enter_pin.text =
-                                        controler_re_enter_pin.text + '6';
+                                        '${controler_re_enter_pin.text}6';
                                   });
                                 }),
                           ],
@@ -177,7 +198,7 @@ class _UserPInState extends State<UserPIn> {
                                     backspacecolorchange = false;
 
                                     controler_re_enter_pin.text =
-                                        controler_re_enter_pin.text + '7';
+                                        '${controler_re_enter_pin.text}7';
                                   });
                                 }),
                             PinKeyPad(
@@ -187,7 +208,7 @@ class _UserPInState extends State<UserPIn> {
                                     backspacecolorchange = false;
 
                                     controler_re_enter_pin.text =
-                                        controler_re_enter_pin.text + '8';
+                                        '${controler_re_enter_pin.text}8';
                                   });
                                 }),
                             PinKeyPad(
@@ -197,7 +218,7 @@ class _UserPInState extends State<UserPIn> {
                                     backspacecolorchange = false;
 
                                     controler_re_enter_pin.text =
-                                        controler_re_enter_pin.text + '9';
+                                        '${controler_re_enter_pin.text}9';
                                   });
                                 }),
                           ],
@@ -226,7 +247,7 @@ class _UserPInState extends State<UserPIn> {
                                   backspacecolorchange = false;
 
                                   controler_re_enter_pin.text =
-                                      controler_re_enter_pin.text + '0';
+                                      '${controler_re_enter_pin.text}0';
                                 });
                               }),
                           const SizedBox(
@@ -239,38 +260,34 @@ class _UserPInState extends State<UserPIn> {
                                   .get()
                                   .then((QuerySnapshot querySnapshot) {
                                 for (var doc in querySnapshot.docs) {
-                                  if (doc['pin'] ==
-                                      controler_re_enter_pin.text) {
+                                  String pinNum = doc['pin'].toString();
+                                  if (pinNum == controler_re_enter_pin.text) {
                                     if (user.uid == doc['uid']) {
+                                      // Navigator.pushAndRemoveUntil(
+                                      //   context,
+                                      //   MaterialPageRoute(
+                                      //     builder: (BuildContext context) =>
+                                      //         const GalleryHome(),
+                                      //   ),
+                                      //   (route) => false,
+                                      // );
+
+                                      savebool();
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                const GalleryHome(),
+                                            builder: (context) => GalleryHome(
+                                               ),
                                           ));
-                                      print(doc['uid']);
                                     }
                                     print(controler_re_enter_pin.text);
                                   } else {
-                                    print('fff');
-                                    print(pin);
+                                    setState(() {
+                                      confirm_pin = false;
+                                    });
                                   }
                                 }
                               });
-                              // getDocs();
-                              // FirebaseFirestore.instance
-                              //     .collection('users')
-                              //     .where('uid', isEqualTo: user.uid)
-                              //     .snapshots()
-                              //     .listen((data) => {
-                              //           print(user.email),
-                              //           print(controler_re_enter_pin.text)
-                              //         });
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //       builder: (context) => GetUserName(data),
-                              //     ));
                             },
                             icon: Icon(
                               Icons.check_circle,
@@ -312,21 +329,21 @@ final _fireStore = FirebaseFirestore.instance;
 CollectionReference _collectionRef =
     FirebaseFirestore.instance.collection('users');
 
-Future<void> getData() async {
-  // Get docs from collection reference
-  QuerySnapshot querySnapshot = await _collectionRef.get();
+// Future<void> getData() async {
+//   // Get docs from collection reference
+//   QuerySnapshot querySnapshot = await _collectionRef.get();
 
-  // Get data from docs and convert map to List
-  final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-  querySnapshot.docs
-      .map((doc) => print(doc["name"])
-          // ListTile(
-          //     title: Text(doc["name"]), subtitle: Text(doc["amount"].toString()))
-          )
-      .toList();
-  print(allData);
-  allData.length;
-}
+//   // Get data from docs and convert map to List
+//   final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+//   querySnapshot.docs
+//       .map((doc) => print(doc["name"])
+//           // ListTile(
+//           //     title: Text(doc["name"]), subtitle: Text(doc["amount"].toString()))
+//           )
+//       .toList();
+//   print(allData);
+//   allData.length;
+// }
 
 Future getDocs() async {
   List doc = ['name', 'pin'];

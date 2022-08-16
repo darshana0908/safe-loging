@@ -21,7 +21,6 @@ class _PermissionScreenState extends State<PermissionScreen> {
   final Directory directory = Directory(
       '/storage/emulated/0/Android/data/com.example.safe_encrypt/files');
   static const String realFolder = "folder";
-  static const String fakeFolder = "fakeFolder";
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +56,6 @@ class _PermissionScreenState extends State<PermissionScreen> {
                 onTap: () async {
                   if (await requestPermission(Permission.storage)) {
                     await createFolder(realFolder);
-                    await createFolder(fakeFolder);
 
                     Navigator.push(
                         context,

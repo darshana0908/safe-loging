@@ -1,10 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 import 'package:safe_encrypt/screens/features/new_accounts/pin_key_pad.dart';
 
-import '../auth/verification.dart';
-import 'componets/new_account_pin_nuber.dart';
-import 'componets/text.dart';
+import 'new_account_pin_nuber.dart';
 
 class ConfirmPin extends StatefulWidget {
   const ConfirmPin({Key? key}) : super(key: key);
@@ -15,9 +15,13 @@ class ConfirmPin extends StatefulWidget {
 
 class _ConfirmPinState extends State<ConfirmPin> {
   final TextEditingController controler_pin = TextEditingController();
+  final user = FirebaseAuth.instance.currentUser!;
   bool backspacecolorchange = false;
-  String key = 'Your 32 bit key.................';
+
   String ff = 'f';
+  bool confirm_pin = true;
+  final CollectionReference _firebaseFirestore =
+      FirebaseFirestore.instance.collection('users');
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +46,15 @@ class _ConfirmPinState extends State<ConfirmPin> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const TextWidget(
-                          text: "Please confirm your pin to \n continue."),
+                      Text(
+                        confirm_pin
+                            ? "Please confirm your pin to \n continuehbvhvv."
+                            : "wrong pin Try Again",
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 25,
+                            fontWeight: FontWeight.w600),
+                      ),
                       const SizedBox(
                         height: 50,
                       ),
@@ -79,7 +90,7 @@ class _ConfirmPinState extends State<ConfirmPin> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '1';
+                                        '${controler_pin.text}1';
                                   });
                                 }),
                             PinKeyPad(
@@ -89,7 +100,7 @@ class _ConfirmPinState extends State<ConfirmPin> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '2';
+                                        '${controler_pin.text}2';
                                   });
                                 }),
                             PinKeyPad(
@@ -99,7 +110,7 @@ class _ConfirmPinState extends State<ConfirmPin> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '3';
+                                        '${controler_pin.text}3';
                                   });
                                 }),
                           ],
@@ -120,7 +131,7 @@ class _ConfirmPinState extends State<ConfirmPin> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '4';
+                                        '${controler_pin.text}4';
                                   });
                                 }),
                             PinKeyPad(
@@ -130,7 +141,7 @@ class _ConfirmPinState extends State<ConfirmPin> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '5';
+                                        '${controler_pin.text}5';
                                   });
                                 }),
                             PinKeyPad(
@@ -140,7 +151,7 @@ class _ConfirmPinState extends State<ConfirmPin> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '6';
+                                        '${controler_pin.text}6';
                                   });
                                 }),
                           ],
@@ -161,7 +172,7 @@ class _ConfirmPinState extends State<ConfirmPin> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '7';
+                                        '${controler_pin.text}7';
                                   });
                                 }),
                             PinKeyPad(
@@ -171,7 +182,7 @@ class _ConfirmPinState extends State<ConfirmPin> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '8';
+                                        '${controler_pin.text}8';
                                   });
                                 }),
                             PinKeyPad(
@@ -181,7 +192,7 @@ class _ConfirmPinState extends State<ConfirmPin> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '9';
+                                        '${controler_pin.text}9';
                                   });
                                 }),
                           ],
@@ -209,7 +220,7 @@ class _ConfirmPinState extends State<ConfirmPin> {
                                 setState(() {
                                   backspacecolorchange = false;
 
-                                  controler_pin.text = controler_pin.text + '0';
+                                  controler_pin.text = '${controler_pin.text}0';
                                 });
                               }),
                           const SizedBox(
@@ -217,8 +228,6 @@ class _ConfirmPinState extends State<ConfirmPin> {
                           ),
                           IconButton(
                             onPressed: () {
-                              setState(() {});
-
                               //   if (controler_pin.text == key) {
                               //     main();
                               //     print('okkkkkk');
@@ -230,6 +239,7 @@ class _ConfirmPinState extends State<ConfirmPin> {
                                   MaterialPageRoute(
                                     builder: (context) => const NewAccountPin(),
                                   ));
+                             
                             },
                             icon: Icon(
                               Icons.check_circle,

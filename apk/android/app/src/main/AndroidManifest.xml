@@ -1,5 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.apk">
+<manifest xmlns:app="http://schemas.android.com/apk/res-auto">
    <application
         android:label="apk"
         android:name="${applicationName}"
