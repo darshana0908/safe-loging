@@ -254,7 +254,7 @@ class _AuthScreen extends State<AuthScreen> {
           debugPrint('Continue');
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const PinNumber()),
+            MaterialPageRoute(builder: (context) => const FirstPinNumber()),
           );
         },
         btnOkIcon: Icons.check_circle,
