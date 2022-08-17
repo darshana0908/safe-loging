@@ -40,10 +40,10 @@ class _GalleryHomeState extends State<GalleryHome> {
     Future.delayed(
       const Duration(seconds: 60),
       () {
-         Navigator.push(
+        Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => UserPIn(newAccountLoging: false),
+              builder: (context) => UserPIn(),
             ));
       },
     );
@@ -147,7 +147,7 @@ class _GalleryHomeState extends State<GalleryHome> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>  UserPIn(newAccountLoging: true),
+                      builder: (context) => const ConfirmPin(),
                     ));
               },
             ),
@@ -307,16 +307,16 @@ class _GalleryHomeState extends State<GalleryHome> {
   Future<bool> createFolder(String newfolderName) async {
     // Directory? directory;
     String folderName = widget.isFake ? 'fakeFolder' : 'folder';
-    final Directory _directory = Directory(
+    final Directory directory = Directory(
         '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/$folderName');
-    Directory? directory;
+    Directory? ldirectory;
     // print(_directory);
 
     try {
       if (Platform.isAndroid) {
         if (await requestPermission(Permission.storage)) {
-          directory = await getExternalStorageDirectory();
-          log(directory!.path);
+          ldirectory = await getExternalStorageDirectory();
+          log(directory.path);
 
           String newPath = '';
           List<String> folders = directory.path.split("/");
@@ -329,7 +329,7 @@ class _GalleryHomeState extends State<GalleryHome> {
           newPath =
               "/storage/emulated/0/Android/data/com.example.safe_encrypt/files/$folderName/$newfolderName";
 
-          directory = Directory(newPath);
+          ldirectory = Directory(newPath);
           log(directory.path);
           getFolderList();
         } else {
@@ -337,7 +337,7 @@ class _GalleryHomeState extends State<GalleryHome> {
         }
       } else {
         if (await requestPermission(Permission.photos)) {
-          directory = await getTemporaryDirectory();
+          ldirectory = await getTemporaryDirectory();
         } else {
           return false;
         }

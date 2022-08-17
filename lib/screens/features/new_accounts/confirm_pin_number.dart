@@ -2,7 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:safe_encrypt/constants/colors.dart';
+import 'package:safe_encrypt/screens/features/new_accounts/new_account_gallery_home.dart';
 import 'package:safe_encrypt/screens/features/new_accounts/pin_key_pad.dart';
+
+import 'new_account_pin_nuber.dart';
 
 class ConfirmPin extends StatefulWidget {
   const ConfirmPin({Key? key}) : super(key: key);
@@ -227,24 +230,31 @@ class _ConfirmPinState extends State<ConfirmPin> {
                           ),
                           IconButton(
                             onPressed: () {
-                              List log = [];
                               FirebaseFirestore.instance
                                   .collection('users')
                                   .get()
                                   .then((QuerySnapshot querySnapshot) {
                                 for (var doc in querySnapshot.docs) {
-                                  name:
-                               doc['name'];
-                            
+                                  String pinNum = doc['pin'].toString();
+                                  if (pinNum == controler_pin.text) {
+                                    print(controler_pin.text);
+                                    print(pinNum);
+                                    if (user.uid == doc['uid']) {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const NewAccountPin(),
+                                          ));
+                                    }
+                                    print(controler_pin.text);
+                                  } else {
+                                    setState(() {
+                                      confirm_pin = false;
+                                    });
+                                  }
                                 }
                               });
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //       builder: (context) => const NewAccountPin(),
-                              //     ));
-
-                              getData();
                             },
                             icon: Icon(
                               Icons.check_circle,

@@ -245,7 +245,7 @@ class _ReEnterPinState extends State<ReEnterPin> {
                                 await Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => UserPIn(newAccountLoging: false,
+                                      builder: (context) => UserPIn(
                                          ),
                                     ));
                               } else {

@@ -39,7 +39,10 @@ class _splashState extends State<splash> {
       if (ownerlogin == true) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => UserPIn()),
+          MaterialPageRoute(
+              builder: (context) => UserPIn(
+                   
+                  )),
         );
       } else {
         Navigator.push(

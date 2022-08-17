@@ -10,11 +10,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../pin_key_pad.dart';
 
 class UserPIn extends StatefulWidget {
-  UserPIn({Key? key, required this.newAccountLoging})
-      : super(
+  UserPIn({
+    Key? key,
+  }) : super(
           key: key,
         );
-  bool newAccountLoging = false;
 
   final CollectionReference _firebaseFirestore =
       FirebaseFirestore.instance.collection('users');
@@ -42,6 +42,7 @@ class _UserPInState extends State<UserPIn> {
   @override
   void initState() {
     // getData();
+
     // TODO: implement initState
     super.initState();
   }
@@ -267,40 +268,17 @@ class _UserPInState extends State<UserPIn> {
                                 for (var doc in querySnapshot.docs) {
                                   String pinNum = doc['pin'].toString();
                                   if (pinNum == controler_re_enter_pin.text) {
+                                    print(controler_re_enter_pin.text);
+                                    print(pinNum);
                                     if (user.uid == doc['uid']) {
-                                      // Navigator.pushAndRemoveUntil(
-                                      //   context,
-                                      //   MaterialPageRoute(
-                                      //     builder: (BuildContext context) =>
-                                      //         const GalleryHome(),
-                                      //   ),
-                                      //   (route) => false,
-                                      // );
-
                                       savebool();
-                                      if (widget.newAccountLoging = false) {
-                                        Navigator.pushAndRemoveUntil(
+
+                                      Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const GalleryHome()),
-                                          (Route<dynamic> route) => false,
-                                        );
-                                      } else {
-                                        Navigator.pushAndRemoveUntil(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const GalleryHome()),
-                                          (Route<dynamic> route) => false,
-                                        );
-                                      }
-                                      // Navigator.push(
-                                      //     context,
-                                      //     MaterialPageRoute(
-                                      //       builder: (context) =>
-                                      //           const GalleryHome(),
-                                      //     ));
+                                            builder: (context) =>
+                                                const GalleryHome(),
+                                          ));
                                     }
                                     print(controler_re_enter_pin.text);
                                   } else {
@@ -328,22 +306,22 @@ class _UserPInState extends State<UserPIn> {
     );
   }
 
-  // Future createuser({
-  //   required String pin,
-  //   required String name,
-  //   required String email,
-  //   required String uid,
-  // }) async {
-  //   final docUser = FirebaseFirestore.instance.collection('users').doc();
-  //   final json = {
-  //     'pin': pin,
-  //     'name': name,
-  //     'email': email,
-  //     'uid': uid,
-  //   };
+  Future createuser({
+    required String pin,
+    required String name,
+    required String email,
+    required String uid,
+  }) async {
+    final docUser = FirebaseFirestore.instance.collection('users').doc();
+    final json = {
+      'pin': pin,
+      'name': name,
+      'email': email,
+      'uid': uid,
+    };
 
-  //   await docUser.set(json);
-  // }
+    await docUser.set(json);
+  }
 }
 
 final _fireStore = FirebaseFirestore.instance;
@@ -368,7 +346,7 @@ CollectionReference _collectionRef =
 // }
 
 Future getDocs() async {
-  List doc = ['name', 'pin'];
+  List doc = ['pin', 'pin'];
   QuerySnapshot querySnapshot =
       await FirebaseFirestore.instance.collection("users").get();
   for (int i = 0; i < querySnapshot.docs.length; i++) {
