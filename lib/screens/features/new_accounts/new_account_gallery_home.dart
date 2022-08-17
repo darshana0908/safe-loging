@@ -131,17 +131,7 @@ class _NewAccountGalleryHomeState extends State<NewAccountGalleryHome> {
                 Navigator.pop(context);
               },
             ),
-            ListTile(
-              leading: const Icon(Icons.book),
-              title: const Text(' Create New Account'),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ConfirmPin(),
-                    ));
-              },
-            ),
+       
             ListTile(
               leading: const Icon(Icons.workspace_premium),
               title: const Text(' Go Premium '),
