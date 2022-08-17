@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:safe_encrypt/screens/features/gallery/gallery_home.dart';
 import 'package:safe_encrypt/screens/features/permission/permission_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants/colors.dart';
+import '../auth/components/pin_number/user_pin.dart';
 
 class splash extends StatefulWidget {
   const splash({Key? key}) : super(key: key);
@@ -39,7 +39,7 @@ class _splashState extends State<splash> {
       if (ownerlogin == true) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const GalleryHome()),
+          MaterialPageRoute(builder: (context) => UserPIn()),
         );
       } else {
         Navigator.push(

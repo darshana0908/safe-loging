@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 import 'package:safe_encrypt/screens/features/new_accounts/pin_key_pad.dart';
 
-import 'new_account_pin_nuber.dart';
-
 class ConfirmPin extends StatefulWidget {
   const ConfirmPin({Key? key}) : super(key: key);
 
@@ -22,6 +20,7 @@ class _ConfirmPinState extends State<ConfirmPin> {
   bool confirm_pin = true;
   final CollectionReference _firebaseFirestore =
       FirebaseFirestore.instance.collection('users');
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -228,18 +227,24 @@ class _ConfirmPinState extends State<ConfirmPin> {
                           ),
                           IconButton(
                             onPressed: () {
-                              //   if (controler_pin.text == key) {
-                              //     main();
-                              //     print('okkkkkk');
-                              //   } else {
-                              //     print('qqqqqqqqqqqqqqqqqqqq');
-                              //   }
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const NewAccountPin(),
-                                  ));
-                             
+                              List log = [];
+                              FirebaseFirestore.instance
+                                  .collection('users')
+                                  .get()
+                                  .then((QuerySnapshot querySnapshot) {
+                                for (var doc in querySnapshot.docs) {
+                                  name:
+                               doc['name'];
+                            
+                                }
+                              });
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //       builder: (context) => const NewAccountPin(),
+                              //     ));
+
+                              getData();
                             },
                             icon: Icon(
                               Icons.check_circle,
@@ -256,5 +261,26 @@ class _ConfirmPinState extends State<ConfirmPin> {
         ),
       ),
     );
+  }
+
+  final CollectionReference _collectionRef =
+      FirebaseFirestore.instance.collection('users');
+
+  Future<void> getData() async {
+    // Get docs from collection reference
+    QuerySnapshot querySnapshot = await _collectionRef.get();
+
+    // Get data from docs and convert map to List
+    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+
+    print(allData);
+  }
+
+  Future getDocs() async {
+    QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection("users").get();
+    for (int i = 0; i < querySnapshot.docs.length; i++) {
+      var a = querySnapshot.docs[i];
+    }
   }
 }
