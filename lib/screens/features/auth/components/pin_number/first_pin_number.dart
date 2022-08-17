@@ -4,14 +4,14 @@ import 'package:safe_encrypt/screens/features/auth/components/pin_number/re_ente
 
 import '../pin_key_pad.dart';
 
-class PinNumber extends StatefulWidget {
-  const PinNumber({Key? key}) : super(key: key);
+class FirstPinNumber extends StatefulWidget {
+  const FirstPinNumber({Key? key}) : super(key: key);
 
   @override
-  State<PinNumber> createState() => _PinNumberState();
+  State<FirstPinNumber> createState() => _FirstPinNumberState();
 }
 
-class _PinNumberState extends State<PinNumber> {
+class _FirstPinNumberState extends State<FirstPinNumber> {
   final TextEditingController controler_pin = TextEditingController();
   bool backspacecolorchange = false;
 

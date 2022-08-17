@@ -64,7 +64,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const PinNumber()),
+                      MaterialPageRoute(builder: (context) => const FirstPinNumber()),
                     );
                   },
                   child: Container(

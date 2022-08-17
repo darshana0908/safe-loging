@@ -83,7 +83,7 @@ class _UserProfileState extends State<UserProfile> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const PinNumber()),
+                          builder: (context) => const FirstPinNumber()),
                     );
                   },
                   child: Container(
