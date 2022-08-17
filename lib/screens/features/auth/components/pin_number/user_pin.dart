@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +10,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../pin_key_pad.dart';
 
 class UserPIn extends StatefulWidget {
-  UserPIn({Key? key, required this.controler_pin}) : super(key: key);
-  final TextEditingController controler_pin;
+  UserPIn({Key? key, required this.newAccountLoging})
+      : super(
+          key: key,
+        );
+  bool newAccountLoging = false;
 
   final CollectionReference _firebaseFirestore =
       FirebaseFirestore.instance.collection('users');
@@ -273,12 +278,29 @@ class _UserPInState extends State<UserPIn> {
                                       // );
 
                                       savebool();
-                                      Navigator.push(
+                                      if (widget.newAccountLoging = false) {
+                                        Navigator.pushAndRemoveUntil(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => GalleryHome(
-                                               ),
-                                          ));
+                                              builder: (context) =>
+                                                  const GalleryHome()),
+                                          (Route<dynamic> route) => false,
+                                        );
+                                      } else {
+                                        Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const GalleryHome()),
+                                          (Route<dynamic> route) => false,
+                                        );
+                                      }
+                                      // Navigator.push(
+                                      //     context,
+                                      //     MaterialPageRoute(
+                                      //       builder: (context) =>
+                                      //           const GalleryHome(),
+                                      //     ));
                                     }
                                     print(controler_re_enter_pin.text);
                                   } else {
