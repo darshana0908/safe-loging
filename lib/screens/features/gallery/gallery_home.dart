@@ -12,6 +12,7 @@ import 'package:safe_encrypt/constants/colors.dart';
 import 'package:safe_encrypt/services/image_service.dart';
 
 import '../../../utils/helper_methods.dart';
+import '../auth/components/pin_number/user_pin.dart';
 import '../new_accounts/confirm_pin_number.dart';
 import '../settings/settings.dart';
 import 'album_covers.dart';
@@ -21,7 +22,7 @@ import 'image_screen.dart';
 class GalleryHome extends StatefulWidget {
   final bool isFake;
   const GalleryHome({Key? key, this.isFake = false}) : super(key: key);
- 
+
   @override
   State<GalleryHome> createState() => _GalleryHomeState();
 }
@@ -36,7 +37,16 @@ class _GalleryHomeState extends State<GalleryHome> {
   void initState() {
     requestPermission(Permission.storage);
     getFolderList();
-
+    Future.delayed(
+      const Duration(seconds: 60),
+      () {
+         Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => UserPIn(newAccountLoging: false),
+            ));
+      },
+    );
     super.initState();
   }
 
@@ -137,7 +147,7 @@ class _GalleryHomeState extends State<GalleryHome> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>  ConfirmPin(),
+                      builder: (context) =>  UserPIn(newAccountLoging: true),
                     ));
               },
             ),
