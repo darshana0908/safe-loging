@@ -87,7 +87,7 @@ class _NewAccountPinState extends State<NewAccountPin> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '1';
+                                        '${controler_pin.text}1';
                                   });
                                 }),
                             PinKeyPad(
@@ -97,7 +97,7 @@ class _NewAccountPinState extends State<NewAccountPin> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '2';
+                                        '${controler_pin.text}2';
                                   });
                                 }),
                             PinKeyPad(
@@ -107,7 +107,7 @@ class _NewAccountPinState extends State<NewAccountPin> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '3';
+                                        '${controler_pin.text}3';
                                   });
                                 }),
                           ],
@@ -128,7 +128,7 @@ class _NewAccountPinState extends State<NewAccountPin> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '4';
+                                        '${controler_pin.text}4';
                                   });
                                 }),
                             PinKeyPad(
@@ -138,7 +138,7 @@ class _NewAccountPinState extends State<NewAccountPin> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '5';
+                                        '${controler_pin.text}5';
                                   });
                                 }),
                             PinKeyPad(
@@ -148,7 +148,7 @@ class _NewAccountPinState extends State<NewAccountPin> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '6';
+                                        '${controler_pin.text}6';
                                   });
                                 }),
                           ],
@@ -169,7 +169,7 @@ class _NewAccountPinState extends State<NewAccountPin> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '7';
+                                        '${controler_pin.text}7';
                                   });
                                 }),
                             PinKeyPad(
@@ -179,7 +179,7 @@ class _NewAccountPinState extends State<NewAccountPin> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '8';
+                                        '${controler_pin.text}8';
                                   });
                                 }),
                             PinKeyPad(
@@ -189,7 +189,7 @@ class _NewAccountPinState extends State<NewAccountPin> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '9';
+                                        '${controler_pin.text}9';
                                   });
                                 }),
                           ],
@@ -217,7 +217,7 @@ class _NewAccountPinState extends State<NewAccountPin> {
                                 setState(() {
                                   backspacecolorchange = false;
 
-                                  controler_pin.text = controler_pin.text + '0';
+                                  controler_pin.text = '${controler_pin.text}0';
                                 });
                               }),
                           const SizedBox(
@@ -225,9 +225,7 @@ class _NewAccountPinState extends State<NewAccountPin> {
                           ),
                           IconButton(
                             onPressed: () {
-                              setState(() {
-                              
-                              });
+                              setState(() {});
 
                               //   if (controler_pin.text == key) {
                               //     main();
@@ -238,8 +236,8 @@ class _NewAccountPinState extends State<NewAccountPin> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        const ReEnterPinNumber(),
+                                    builder: (context) => ReEnterPinNumber(
+                                        controler_pin_new: controler_pin),
                                   ));
                             },
                             icon: Icon(

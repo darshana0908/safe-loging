@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -12,8 +14,9 @@ import 'componets/text.dart';
 import 'new_account_gallery_home.dart';
 
 class ReEnterPinNumber extends StatefulWidget {
-  const ReEnterPinNumber({Key? key}) : super(key: key);
-
+  const ReEnterPinNumber({Key? key, required this.controler_pin_new})
+      : super(key: key);
+  final TextEditingController controler_pin_new;
   @override
   State<ReEnterPinNumber> createState() => _ReEnterPinNumberState();
 }
@@ -21,8 +24,8 @@ class ReEnterPinNumber extends StatefulWidget {
 class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
   final TextEditingController controler_pin = TextEditingController();
   bool backspacecolorchange = false;
-  String key = 'Your 32 bit key.................';
-  String ff = 'f';
+  final user = FirebaseAuth.instance.currentUser!;
+
   final Directory _directory = Directory(
       '/storage/emulated/0/Android/data/com.example.safe_encrypt/files');
   String newFolder = '';
@@ -31,6 +34,13 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
     controler_pin.dispose();
 
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    print(widget.controler_pin_new.text);
+    // TODO: implement initState
+    super.initState();
   }
 
   @override
@@ -56,7 +66,7 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const TextWidget(text: "Re Enter Pin Number."),
+                      const TextWidget(text: "Re Enter Pin Numbedr."),
                       const SizedBox(
                         height: 50,
                       ),
@@ -92,7 +102,7 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '1';
+                                        '${controler_pin.text}1';
                                   });
                                 }),
                             PinKeyPad(
@@ -102,7 +112,7 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '2';
+                                        '${controler_pin.text}2';
                                   });
                                 }),
                             PinKeyPad(
@@ -112,7 +122,7 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '3';
+                                        '${controler_pin.text}3';
                                   });
                                 }),
                           ],
@@ -133,7 +143,7 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '4';
+                                        '${controler_pin.text}4';
                                   });
                                 }),
                             PinKeyPad(
@@ -143,7 +153,7 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '5';
+                                        '${controler_pin.text}5';
                                   });
                                 }),
                             PinKeyPad(
@@ -153,7 +163,7 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '6';
+                                        '${controler_pin.text}6';
                                   });
                                 }),
                           ],
@@ -174,7 +184,7 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '7';
+                                        '${controler_pin.text}7';
                                   });
                                 }),
                             PinKeyPad(
@@ -184,7 +194,7 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '8';
+                                        '${controler_pin.text}8';
                                   });
                                 }),
                             PinKeyPad(
@@ -194,7 +204,7 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '9';
+                                        '${controler_pin.text}9';
                                   });
                                 }),
                           ],
@@ -222,7 +232,7 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
                                 setState(() {
                                   backspacecolorchange = false;
 
-                                  controler_pin.text = controler_pin.text + '0';
+                                  controler_pin.text = '${controler_pin.text}0';
                                 });
                               }),
                           const SizedBox(
@@ -230,9 +240,32 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
                           ),
                           IconButton(
                             onPressed: () {
-                              setState(() {
-                                createFolder(controler_pin.text);
-                              });
+                              print(controler_pin.text);
+                              if (controler_pin.text ==
+                                  widget.controler_pin_new.text) {
+                                final pinNumber = controler_pin.text;
+                                final username = user.displayName;
+                                final useremail = user.email;
+                                final userpasward = user.uid;
+                                createuser(
+                                    pin: pinNumber,
+                                    name: username.toString(),
+                                    email: user.email.toString(),
+                                    uid: user.uid.toString(),
+                                    foldername: controler_pin.text);
+                                print(controler_pin.text);
+                                setState(() {
+                                  createFolder(widget.controler_pin_new.text);
+                                });
+
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            NewAccountGalleryHome(
+                                              controler_pin: controler_pin.text,
+                                            )));
+                              }
 
                               //   if (controler_pin.text == key) {
                               //     main();
@@ -240,13 +273,6 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
                               //   } else {
                               //     print('qqqqqqqqqqqqqqqqqqqq');
                               //   }
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          NewAccountGalleryHome(
-                                            controler_pin: controler_pin.text,
-                                          )));
                             },
                             icon: Icon(
                               Icons.check_circle,
@@ -311,7 +337,9 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
         await directory.create(recursive: true);
       }
       if (await directory.exists()) {
-        return true;
+        const Center(
+          child: Text('hhhhhhhhhhhhhhhhhhhhhh'),
+        );
       } else {
         return false;
       }
@@ -319,5 +347,25 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
       log(e.toString());
     }
     return false;
+  }
+
+  Future createuser({
+    required String pin,
+    required String name,
+    required String email,
+    required String uid,
+    required String foldername,
+  }) async {
+    final docUser = FirebaseFirestore.instance.collection('newusers').doc();
+    final json = {
+      'id': docUser.id,
+      'pin': pin,
+      'name': name,
+      'email': email,
+      'uid': uid,
+      'foldername': foldername,
+    };
+
+    await docUser.set(json);
   }
 }
