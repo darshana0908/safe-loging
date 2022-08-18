@@ -14,6 +14,7 @@ import 'package:safe_encrypt/services/image_service.dart';
 import '../../../utils/helper_methods.dart';
 import '../auth/components/pin_number/user_pin.dart';
 import '../new_accounts/confirm_pin_number.dart';
+import '../new_accounts/new_account_loging.dart';
 import '../settings/settings.dart';
 import 'album_covers.dart';
 import 'components/glalery_folder.dart';
@@ -148,6 +149,18 @@ class _GalleryHomeState extends State<GalleryHome> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => const ConfirmPin(),
+                    ));
+              },
+            ),
+
+            ListTile(
+              leading: const Icon(Icons.book),
+              title: const Text(' New Account Loging'),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const NewAccountLoging(),
                     ));
               },
             ),
@@ -292,10 +305,8 @@ class _GalleryHomeState extends State<GalleryHome> {
 
   // load app folders
   getFolderList() async {
-    String folderName = widget.isFake ? 'fakeFolder' : 'folder';
-
     final Directory directory = Directory(
-        '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/$folderName');
+        '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/folder');
 
     // log(directory.toString());
 
@@ -305,18 +316,17 @@ class _GalleryHomeState extends State<GalleryHome> {
 
   // creating folders
   Future<bool> createFolder(String newfolderName) async {
-    // Directory? directory;
-    String folderName = widget.isFake ? 'fakeFolder' : 'folder';
-    final Directory directory = Directory(
-        '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/$folderName');
-    Directory? ldirectory;
+    String foldername = _folderName.text;
+    final Directory _directory = Directory(
+        '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/$foldername');
+    Directory? directory;
     // print(_directory);
 
     try {
       if (Platform.isAndroid) {
         if (await requestPermission(Permission.storage)) {
-          ldirectory = await getExternalStorageDirectory();
-          log(directory.path);
+          directory = await getExternalStorageDirectory();
+          log(directory!.path);
 
           String newPath = '';
           List<String> folders = directory.path.split("/");
@@ -327,9 +337,9 @@ class _GalleryHomeState extends State<GalleryHome> {
           }
 
           newPath =
-              "/storage/emulated/0/Android/data/com.example.safe_encrypt/files/$folderName/$newfolderName";
+              "/storage/emulated/0/Android/data/com.example.safe_encrypt/files/folder/$newfolderName";
 
-          ldirectory = Directory(newPath);
+          directory = Directory(newPath);
           log(directory.path);
           getFolderList();
         } else {
@@ -337,7 +347,7 @@ class _GalleryHomeState extends State<GalleryHome> {
         }
       } else {
         if (await requestPermission(Permission.photos)) {
-          ldirectory = await getTemporaryDirectory();
+          directory = await getTemporaryDirectory();
         } else {
           return false;
         }
