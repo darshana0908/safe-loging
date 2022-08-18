@@ -17,6 +17,7 @@ import '../gallery/components/glalery_folder.dart';
 import '../gallery/image_screen.dart';
 import '../new_accounts/confirm_pin_number.dart';
 import '../settings/settings.dart';
+import 'new_account_loging.dart';
 
 class NewAccountGalleryHome extends StatefulWidget {
   final String controler_pin;
@@ -37,7 +38,16 @@ class _NewAccountGalleryHomeState extends State<NewAccountGalleryHome> {
   void initState() {
     requestPermission(Permission.storage);
     getFolderList();
-
+    Future.delayed(
+      const Duration(seconds: 60),
+      () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NewAccountLoging(),
+            ));
+      },
+    );
     super.initState();
   }
 
