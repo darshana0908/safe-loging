@@ -202,7 +202,7 @@ class _FirstPinNumberState extends State<FirstPinNumber> {
                                 fontWeight: FontWeight.w600),
                           ),
                           const SizedBox(
-                            width: 190,
+                            width: 173,
                           ),
                           PinKeyPad(
                               keypad: '0',
@@ -214,23 +214,30 @@ class _FirstPinNumberState extends State<FirstPinNumber> {
                                 });
                               }),
                           const SizedBox(
-                            width: 115,
+                            width: 85,
                           ),
-                          IconButton(
-                            onPressed: () {
-                              if (controler_pin.text.isNotEmpty) {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ReEnterPin(
-                                          controler_pin: controler_pin),
-                                    ));
-                              } else {}
-                            },
-                            icon: Icon(
-                              Icons.check_circle,
-                              color: kwhite,
-                              size: 50,
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(45),
+                                color: Colors.brown),
+                            width: 65,
+                            height: 65,
+                            child: IconButton(
+                              onPressed: () {
+                                if (controler_pin.text.isNotEmpty) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ReEnterPin(
+                                            controler_pin: controler_pin),
+                                      ));
+                                } else {}
+                              },
+                              icon: Icon(
+                                Icons.check_circle,
+                                color: kwhite,
+                                size: 50,
+                              ),
                             ),
                           )
                         ],

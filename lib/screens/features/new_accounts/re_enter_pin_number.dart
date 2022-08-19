@@ -224,7 +224,7 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
                                 fontWeight: FontWeight.w600),
                           ),
                           const SizedBox(
-                            width: 190,
+                            width: 173,
                           ),
                           PinKeyPad(
                               keypad: '0',
@@ -236,48 +236,56 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
                                 });
                               }),
                           const SizedBox(
-                            width: 115,
+                            width: 85,
                           ),
-                          IconButton(
-                            onPressed: () {
-                              print(controler_pin.text);
-                              if (controler_pin.text ==
-                                  widget.controler_pin_new.text) {
-                                final pinNumber = controler_pin.text;
-                                final username = user.displayName;
-                                final useremail = user.email;
-                                final userpasward = user.uid;
-                                createuser(
-                                    pin: pinNumber,
-                                    name: username.toString(),
-                                    email: user.email.toString(),
-                                    uid: user.uid.toString(),
-                                    foldername: controler_pin.text);
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(45),
+                                color: Colors.brown),
+                            width: 65,
+                            height: 65,
+                            child: IconButton(
+                              onPressed: () async {
                                 print(controler_pin.text);
-                                setState(() {
-                                  createFolder(widget.controler_pin_new.text);
-                                });
+                                if (controler_pin.text ==
+                                    widget.controler_pin_new.text) {
+                                  final pinNumber = controler_pin.text;
+                                  final username = user.displayName;
+                                  final useremail = user.email;
+                                  final userpasward = user.uid;
+                                  createuser(
+                                      pin: pinNumber,
+                                      name: username.toString(),
+                                      email: user.email.toString(),
+                                      uid: user.uid.toString(),
+                                      foldername: controler_pin.text);
+                                  print(controler_pin.text);
 
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            NewAccountGalleryHome(
-                                              controler_pin: controler_pin.text,
-                                            )));
-                              }
+                                  await createFolder(
+                                      widget.controler_pin_new.text);
 
-                              //   if (controler_pin.text == key) {
-                              //     main();
-                              //     print('okkkkkk');
-                              //   } else {
-                              //     print('qqqqqqqqqqqqqqqqqqqq');
-                              //   }
-                            },
-                            icon: Icon(
-                              Icons.check_circle,
-                              color: kwhite,
-                              size: 50,
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              NewAccountGalleryHome(
+                                                controler_pin:
+                                                    controler_pin.text,
+                                              )));
+                                }
+
+                                //   if (controler_pin.text == key) {
+                                //     main();
+                                //     print('okkkkkk');
+                                //   } else {
+                                //     print('qqqqqqqqqqqqqqqqqqqq');
+                                //   }
+                              },
+                              icon: Icon(
+                                Icons.check_circle,
+                                color: kwhite,
+                                size: 50,
+                              ),
                             ),
                           )
                         ],
@@ -337,9 +345,7 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
         await directory.create(recursive: true);
       }
       if (await directory.exists()) {
-        const Center(
-          child: Text('hhhhhhhhhhhhhhhhhhhhhh'),
-        );
+        return true;
       } else {
         return false;
       }

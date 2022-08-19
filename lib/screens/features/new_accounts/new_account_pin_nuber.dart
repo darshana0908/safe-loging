@@ -209,7 +209,7 @@ class _NewAccountPinState extends State<NewAccountPin> {
                                 fontWeight: FontWeight.w600),
                           ),
                           const SizedBox(
-                            width: 190,
+                            width: 173,
                           ),
                           PinKeyPad(
                               keypad: '0',
@@ -221,29 +221,36 @@ class _NewAccountPinState extends State<NewAccountPin> {
                                 });
                               }),
                           const SizedBox(
-                            width: 115,
+                            width: 85,
                           ),
-                          IconButton(
-                            onPressed: () {
-                              setState(() {});
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(45),
+                                color: Colors.brown),
+                            width: 65,
+                            height: 65,
+                            child: IconButton(
+                              onPressed: () {
+                                setState(() {});
 
-                              //   if (controler_pin.text == key) {
-                              //     main();
-                              //     print('okkkkkk');
-                              //   } else {
-                              //     print('qqqqqqqqqqqqqqqqqqqq');
-                              //   }
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ReEnterPinNumber(
-                                        controler_pin_new: controler_pin),
-                                  ));
-                            },
-                            icon: Icon(
-                              Icons.check_circle,
-                              color: kwhite,
-                              size: 50,
+                                //   if (controler_pin.text == key) {
+                                //     main();
+                                //     print('okkkkkk');
+                                //   } else {
+                                //     print('qqqqqqqqqqqqqqqqqqqq');
+                                //   }
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ReEnterPinNumber(
+                                          controler_pin_new: controler_pin),
+                                    ));
+                              },
+                              icon: Icon(
+                                Icons.check_circle,
+                                color: kwhite,
+                                size: 50,
+                              ),
                             ),
                           )
                         ],

@@ -231,7 +231,7 @@ class _UserPInState extends State<UserPIn> {
                         ),
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 30,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -244,7 +244,7 @@ class _UserPInState extends State<UserPIn> {
                                 fontWeight: FontWeight.w600),
                           ),
                           const SizedBox(
-                            width: 190,
+                            width: 173,
                           ),
                           PinKeyPad(
                               keypad: '0',
@@ -257,42 +257,49 @@ class _UserPInState extends State<UserPIn> {
                                 });
                               }),
                           const SizedBox(
-                            width: 115,
+                            width: 85,
                           ),
-                          IconButton(
-                            onPressed: () {
-                              FirebaseFirestore.instance
-                                  .collection('users')
-                                  .get()
-                                  .then((QuerySnapshot querySnapshot) {
-                                for (var doc in querySnapshot.docs) {
-                                  String pinNum = doc['pin'].toString();
-                                  if (pinNum == controler_re_enter_pin.text) {
-                                    print(controler_re_enter_pin.text);
-                                    print(pinNum);
-                                    if (user.uid == doc['uid']) {
-                                      savebool();
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(45),
+                                color: Colors.brown),
+                            width: 65,
+                            height: 65,
+                            child: IconButton(
+                              onPressed: () async {
+                                await FirebaseFirestore.instance
+                                    .collection('users')
+                                    .get()
+                                    .then((QuerySnapshot querySnapshot) {
+                                  for (var doc in querySnapshot.docs) {
+                                    String pinNum = doc['pin'].toString();
+                                    if (pinNum == controler_re_enter_pin.text) {
+                                      print(controler_re_enter_pin.text);
+                                      print(pinNum);
+                                      if (user.uid == doc['uid']) {
+                                        savebool();
 
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const GalleryHome(),
-                                          ));
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const GalleryHome(),
+                                            ));
+                                      }
+                                      print(controler_re_enter_pin.text);
+                                    } else {
+                                      setState(() {
+                                        confirm_pin = false;
+                                      });
                                     }
-                                    print(controler_re_enter_pin.text);
-                                  } else {
-                                    setState(() {
-                                      confirm_pin = false;
-                                    });
                                   }
-                                }
-                              });
-                            },
-                            icon: Icon(
-                              Icons.check_circle,
-                              color: kwhite,
-                              size: 50,
+                                });
+                              },
+                              icon: Icon(
+                                Icons.check_circle,
+                                color: kwhite,
+                                size: 50,
+                              ),
                             ),
                           )
                         ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:safe_encrypt/constants/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AlbumCovers extends StatefulWidget {
   const AlbumCovers({Key? key}) : super(key: key);
@@ -10,8 +11,10 @@ class AlbumCovers extends StatefulWidget {
 }
 
 class _AlbumCoversState extends State<AlbumCovers> {
+  late SharedPreferences preferences;
   bool customcover = false;
   bool selectedfolder = false;
+
   int selected = 0;
   String imgname = '';
   List<String> imgList = [
@@ -27,6 +30,11 @@ class _AlbumCoversState extends State<AlbumCovers> {
   ];
 
   String selectedfolderString = '';
+  saveimg(String imgname) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('imgname', imgname);
+    print(imgname);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +73,9 @@ class _AlbumCoversState extends State<AlbumCovers> {
               child: SwitchListTile(
                   activeTrackColor: klightBlueAccent,
                   activeColor: kblue,
-                  title: const Text('Set custom cover', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+                  title: const Text('Set custom cover',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
                   value: customcover,
                   onChanged: (bool value) {
                     setState(() {
@@ -83,7 +93,7 @@ class _AlbumCoversState extends State<AlbumCovers> {
             width: MediaQuery.of(context).size.width,
             height: 500,
             child: GridView.builder(
-                itemCount: Provider.of<FolderCoverImageProvider>(context, listen: true).imgList.length,
+                itemCount: imgList.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   crossAxisSpacing: 4.0,
@@ -95,11 +105,18 @@ class _AlbumCoversState extends State<AlbumCovers> {
                         ? () {
                             setState(() {
                               // use provider (FolderCoverImageProvider) load folder cover image list
-                              Provider.of<FolderCoverImageProvider>(context, listen: false).changecovername(index);
+                              Provider.of<FolderCoverImageProvider>(context,
+                                      listen: false)
+                                  .changecovername(index);
 
-                              print(Provider.of<FolderCoverImageProvider>(context, listen: false).imgList[index]);
-                              print('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');
+                              imgname = Provider.of<FolderCoverImageProvider>(
+                                      context,
+                                      listen: false)
+                                  .imgList[index];
+                              print(imgname);
+
                               selectedfolder = true;
+                              saveimg(imgname);
                             });
                           }
                         : () {
@@ -113,25 +130,67 @@ class _AlbumCoversState extends State<AlbumCovers> {
                           children: [
                             SizedBox(
                               // width: selectedfolderString == imgList[index]
-                              width: Provider.of<FolderCoverImageProvider>(context, listen: true).selectedfolderString == Provider.of<FolderCoverImageProvider>(context, listen: true).imgList[index]
+                              width: Provider.of<FolderCoverImageProvider>(
+                                              context,
+                                              listen: true)
+                                          .selectedfolderString ==
+                                      Provider.of<FolderCoverImageProvider>(
+                                              context,
+                                              listen: true)
+                                          .imgList[index]
                                   ? MediaQuery.of(context).size.width
                                   : 0,
-                              height: Provider.of<FolderCoverImageProvider>(context, listen: true).selectedfolderString == Provider.of<FolderCoverImageProvider>(context, listen: true).imgList[index]
+                              height: Provider.of<FolderCoverImageProvider>(
+                                              context,
+                                              listen: true)
+                                          .selectedfolderString ==
+                                      Provider.of<FolderCoverImageProvider>(
+                                              context,
+                                              listen: true)
+                                          .imgList[index]
                                   ? MediaQuery.of(context).size.height
                                   : 0,
                             ),
                             Positioned(
-                              left: Provider.of<FolderCoverImageProvider>(context, listen: true).selectedfolderString == Provider.of<FolderCoverImageProvider>(context, listen: true).imgList[index]
+                              left: Provider.of<FolderCoverImageProvider>(
+                                              context,
+                                              listen: true)
+                                          .selectedfolderString ==
+                                      Provider.of<FolderCoverImageProvider>(
+                                              context,
+                                              listen: true)
+                                          .imgList[index]
                                   ? 24
                                   : 0,
-                              top: Provider.of<FolderCoverImageProvider>(context, listen: true).selectedfolderString == Provider.of<FolderCoverImageProvider>(context, listen: true).imgList[index]
+                              top: Provider.of<FolderCoverImageProvider>(
+                                              context,
+                                              listen: true)
+                                          .selectedfolderString ==
+                                      Provider.of<FolderCoverImageProvider>(
+                                              context,
+                                              listen: true)
+                                          .imgList[index]
                                   ? 22
                                   : 0,
                               child: SizedBox(
-                                width: Provider.of<FolderCoverImageProvider>(context, listen: true).selectedfolderString == Provider.of<FolderCoverImageProvider>(context, listen: true).imgList[index]
+                                width: Provider.of<FolderCoverImageProvider>(
+                                                context,
+                                                listen: true)
+                                            .selectedfolderString ==
+                                        Provider.of<FolderCoverImageProvider>(
+                                                context,
+                                                listen: true)
+                                            .imgList[index]
                                     ? 120
                                     : MediaQuery.of(context).size.width / 3 - 8,
-                                height: Provider.of<FolderCoverImageProvider>(context, listen: true).selectedfolderString == Provider.of<FolderCoverImageProvider>(context, listen: true).imgList[index]
+                                height: Provider.of<FolderCoverImageProvider>(
+                                                context,
+                                                listen: true)
+                                            .selectedfolderString ==
+                                        Provider.of<FolderCoverImageProvider>(
+                                                context,
+                                                listen: true)
+                                            .imgList[index]
                                     ? 120
                                     : 150,
                                 child: Image.asset(
@@ -144,7 +203,13 @@ class _AlbumCoversState extends State<AlbumCovers> {
                                 left: customcover ? 10 : 0,
                                 top: customcover ? 3 : 0,
                                 child: Icon(
-                                  Provider.of<FolderCoverImageProvider>(context, listen: true).selectedfolderString == Provider.of<FolderCoverImageProvider>(context, listen: true).imgList[index]
+                                  Provider.of<FolderCoverImageProvider>(context,
+                                                  listen: true)
+                                              .selectedfolderString ==
+                                          Provider.of<FolderCoverImageProvider>(
+                                                  context,
+                                                  listen: true)
+                                              .imgList[index]
                                       ? Icons.check_circle_rounded
                                       : null,
                                   color: klightBlueAccent,

@@ -18,7 +18,7 @@ class _ReEnterPinState extends State<ReEnterPin> {
   final TextEditingController controler_re_enter_pin = TextEditingController();
 
   bool backspacecolorchange = false;
-  final user = FirebaseAuth.instance.currentUser!;
+
   bool newpin_nuber = true;
 
   @override
@@ -211,7 +211,7 @@ class _ReEnterPinState extends State<ReEnterPin> {
                                 fontWeight: FontWeight.w600),
                           ),
                           const SizedBox(
-                            width: 190,
+                            width: 173,
                           ),
                           PinKeyPad(
                               keypad: '0',
@@ -224,40 +224,51 @@ class _ReEnterPinState extends State<ReEnterPin> {
                                 });
                               }),
                           const SizedBox(
-                            width: 115,
+                            width: 85,
                           ),
-                          IconButton(
-                            onPressed: () async {
-                              if (controler_re_enter_pin.text ==
-                                  widget.controler_pin.text) {
-                                final pinNumber = controler_re_enter_pin.text;
-                                final username = user.displayName;
-                                final useremail = user.email;
-                                final userpasward = user.uid;
-                                createuser(
-                                  pin: pinNumber,
-                                  name: username.toString(),
-                                  email: user.email.toString(),
-                                  uid: user.uid.toString(),
-                                );
-                                // readUsers();
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(45),
+                                color: Colors.brown),
+                            width: 65,
+                            height: 65,
+                            child: IconButton(
+                              onPressed: () async {
+                                final user = FirebaseAuth.instance.currentUser!;
 
-                                await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => UserPIn(
-                                         ),
-                                    ));
-                              } else {
-                                setState(() {
-                                  newpin_nuber = false;
-                                });
-                              }
-                            },
-                            icon: Icon(
-                              Icons.check_circle,
-                              color: kwhite,
-                              size: 50,
+                                print('mmmmmmmmmmmmmmmmm');
+
+                                if (controler_re_enter_pin.text ==
+                                    widget.controler_pin.text) {
+                                  print(user.email);
+                                  final pinNumber = controler_re_enter_pin.text;
+                                  final username = user.displayName;
+                                  final useremail = user.email;
+                                  final userpasward = user.uid;
+                                  createuser(
+                                    pin: pinNumber,
+                                    name: username.toString(),
+                                    email: user.email.toString(),
+                                    uid: user.uid.toString(),
+                                  );
+                                  // readUsers();
+
+                                  await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => UserPIn(),
+                                      ));
+                                } else {
+                                  setState(() {
+                                    newpin_nuber = false;
+                                  });
+                                }
+                              },
+                              icon: Icon(
+                                Icons.check_circle,
+                                color: kwhite,
+                                size: 50,
+                              ),
                             ),
                           )
                         ],

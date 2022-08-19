@@ -25,7 +25,7 @@ class _splashState extends State<splash> {
     super.initState();
 
     Future.delayed(
-      const Duration(seconds: 3),
+      const Duration(seconds: 1),
       () {
         loadbool();
       },
@@ -39,10 +39,7 @@ class _splashState extends State<splash> {
       if (ownerlogin == true) {
         Navigator.push(
           context,
-          MaterialPageRoute(
-              builder: (context) => UserPIn(
-                   
-                  )),
+          MaterialPageRoute(builder: (context) => UserPIn()),
         );
       } else {
         Navigator.push(

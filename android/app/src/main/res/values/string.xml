@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string name="app_name">darshanapp</string>
-<string name="facebook_app_id">1454333518400866</string>
-<string name="fb_login_protocol_scheme">fb1454333518400866</string>
-<string name="facebook_client_token">6d24ce974d43a2571a5728ee8ba28466</string>
+<string name="facebook_app_id">1114818139107970</string>
+<string name="fb_login_protocol_scheme">fb1114818139107970</string>
+<string name="facebook_client_token">b3c6b483b1e0d68926977110d2395fb6</string>
 </resources>

@@ -213,7 +213,7 @@ class _NewAccountLogingState extends State<NewAccountLoging> {
                                 fontWeight: FontWeight.w600),
                           ),
                           const SizedBox(
-                            width: 190,
+                            width: 173,
                           ),
                           PinKeyPad(
                               keypad: '0',
@@ -225,50 +225,58 @@ class _NewAccountLogingState extends State<NewAccountLoging> {
                                 });
                               }),
                           const SizedBox(
-                            width: 115,
+                            width: 85,
                           ),
-                          IconButton(
-                            onPressed: () async {
-                              getDocs();
-                              FirebaseFirestore.instance
-                                  .collection('newusers')
-                                  .doc();
-                              getDocs();
-                              print(controler_pin.text);
-                              await FirebaseFirestore.instance
-                                  .collection('newusers')
-                                  .get()
-                                  .then((QuerySnapshot querySnapshot) {
-                                for (var doc in querySnapshot.docs) {
-                                  String pinNum = doc['foldername'].toString();
-                                  if (pinNum == controler_pin.text) {
-                                    print(querySnapshot.docs);
-                                    print(pinNum);
-                                    if (user.uid == doc['uid']) {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                NewAccountGalleryHome(
-                                                    controler_pin:
-                                                        controler_pin.text),
-                                          ));
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(45),
+                                color: Colors.brown),
+                            width: 65,
+                            height: 65,
+                            child: IconButton(
+                              onPressed: () async {
+                                getDocs();
+                                FirebaseFirestore.instance
+                                    .collection('newusers')
+                                    .doc();
+                                getDocs();
+                                print(controler_pin.text);
+                                await FirebaseFirestore.instance
+                                    .collection('newusers')
+                                    .get()
+                                    .then((QuerySnapshot querySnapshot) {
+                                  for (var doc in querySnapshot.docs) {
+                                    String pinNum =
+                                        doc['foldername'].toString();
+                                    if (pinNum == controler_pin.text) {
+                                      print(querySnapshot.docs);
+                                      print(pinNum);
+                                      if (user.uid == doc['uid']) {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  NewAccountGalleryHome(
+                                                      controler_pin:
+                                                          controler_pin.text),
+                                            ));
+                                      }
+                                      print(controler_pin.text);
+                                    } else {
+                                      setState(() {
+                                        confirm_pin = false;
+                                      });
                                     }
-                                    print(controler_pin.text);
-                                  } else {
-                                    setState(() {
-                                      confirm_pin = false;
-                                    });
                                   }
-                                }
-                              });
-                              getData();
-                              loaddata();
-                            },
-                            icon: Icon(
-                              Icons.check_circle,
-                              color: kwhite,
-                              size: 50,
+                                });
+                                getData();
+                                loaddata();
+                              },
+                              icon: Icon(
+                                Icons.check_circle,
+                                color: kwhite,
+                                size: 50,
+                              ),
                             ),
                           )
                         ],

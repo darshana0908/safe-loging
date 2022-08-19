@@ -23,6 +23,7 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreen extends State<AuthScreen> {
   String userEmail = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,55 +71,55 @@ class _AuthScreen extends State<AuthScreen> {
                           padding: const EdgeInsets.all(8.0),
                           child: SocialLoginButton(
                             buttonType: SocialLoginButtonType.facebook,
-                            // onPressed: () async {
-                            //   final LoginResult result =
-                            //       await FacebookAuth.instance.login(
-                            //     permissions: ['email'],
-                            //     loginBehavior: LoginBehavior.webOnly,
-                            //   );
+                            onPressed: () async {
+                              final LoginResult result =
+                                  await FacebookAuth.instance.login(
+                                permissions: ['email'],
+                                loginBehavior: LoginBehavior.webOnly,
+                              );
 
-                            //   if (result.status == LoginStatus.success) {
-                            //     // Login Success
+                              if (result.status == LoginStatus.success) {
+                                // Login Success
 
-                            //     FacebookAuth.instance
-                            //         .getUserData()
-                            //         .then((value) async {
-                            //       print(value['email']);
-                            //       Navigator.push(
-                            //         context,
-                            //         MaterialPageRoute(
-                            //             builder: (context) =>
-                            //                 const Welcomepage()),
-                            //       );
+                                FacebookAuth.instance
+                                    .getUserData()
+                                    .then((value) async {
+                                  print(value['email']);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const FirstPinNumber()),
+                                  );
 
-                            //       // Logger().w(value['email']);
-                            //       // if (isfromSignup) {
-                            //       //   await checkEmail(context, value['email']);
-                            //       // } else {
-                            //       //   await loginWithEmail(context, value['email']);
-                            //       // }
-                            //     });
+                                  // Logger().w(value['email']);
+                                  // if (isfromSignup) {
+                                  //   await checkEmail(context, value['email']);
+                                  // } else {
+                                  //   await loginWithEmail(context, value['email']);
+                                  // }
+                                });
 
-                            //     // isLoadingFb = false;
-                            //   } else if (result.status ==
-                            //       LoginStatus.operationInProgress) {
-                            //     // Login Process Ongoing
-                            //   } else if (result.status == LoginStatus.failed) {
-                            //     // Login Failed
-                            //     // isLoadingFb = false;
+                                // isLoadingFb = false;
+                              } else if (result.status ==
+                                  LoginStatus.operationInProgress) {
+                                // Login Process Ongoing
+                              } else if (result.status == LoginStatus.failed) {
+                                // Login Failed
+                                // isLoadingFb = false;
 
-                            //     // DialogBoxes.showSnackBarDialog(context, 'Login failed !', color: kRed);
-                            //   } else if (result.status ==
-                            //       LoginStatus.cancelled) {
-                            //     // Login Cancelled
-                            //     // isLoadingFb = false;
+                                // DialogBoxes.showSnackBarDialog(context, 'Login failed !', color: kRed);
+                              } else if (result.status ==
+                                  LoginStatus.cancelled) {
+                                // Login Cancelled
+                                // isLoadingFb = false;
 
-                            //     // DialogBoxes.showSnackBarDialog(context, 'Login Cancelled !', color: kRed);
-                            //   }
-                            // },
-                            onPressed: () {
-                              signInWithFacebook();
+                                // DialogBoxes.showSnackBarDialog(context, 'Login Cancelled !', color: kRed);
+                              }
                             },
+                            // onPressed: () {
+                            //   signInWithFacebook();
+                            // },
                           ),
                         ),
                         Padding(
@@ -165,8 +166,9 @@ class _AuthScreen extends State<AuthScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        const GalleryHome(isFake: true, )),
+                                    builder: (context) => const GalleryHome(
+                                          isFake: true,
+                                        )),
                               );
                             },
                           ),
@@ -228,12 +230,14 @@ class _AuthScreen extends State<AuthScreen> {
   // }
   Future<UserCredential> signInWithFacebook() async {
     // Trigger the sign-in flow
+
     final LoginResult loginResult = await FacebookAuth.instance.login();
 
     // Create a credential from the access token
     final OAuthCredential facebookAuthCredential =
         FacebookAuthProvider.credential(loginResult.accessToken!.token);
-
+    print(loginResult);
+    print('ggggggggggggggggggggggggggg');
     // Once signed in, return the UserCredential
 
     return FirebaseAuth.instance

@@ -12,14 +12,16 @@ class PlatformAlbum extends StatefulWidget {
   final String album;
   final Image image;
 
-  const PlatformAlbum({
-    Key? key,
-    required this.image,
-    required this.title,
-    required this.isDelete,
-    required this.path,
-    required this.album,
-  }) : super(key: key);
+
+  PlatformAlbum(
+      {Key? key,
+      required this.image,
+      required this.title,
+      required this.isDelete,
+      required this.path,
+      required this.album,
+  })
+      : super(key: key);
 
   @override
   State<PlatformAlbum> createState() => _PlatformAlbumState();
@@ -92,11 +94,10 @@ class _PlatformAlbumState extends State<PlatformAlbum> {
                                               debugPrint(
                                                   'Dialog Dissmiss from callback $type');
                                             },
-                                            btnOkOnPress: () {
-                                              setState(() {
-                                                delete(widget.path);
-                                              });
-                                              Navigator.pushNamed(
+                                            btnOkOnPress: () async {
+                                              delete(widget.path);
+
+                                              await Navigator.pushNamed(
                                                   context, "Setting");
                                             },
                                           ).show();

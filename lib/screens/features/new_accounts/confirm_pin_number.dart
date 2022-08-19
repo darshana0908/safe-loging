@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:safe_encrypt/constants/colors.dart';
-import 'package:safe_encrypt/screens/features/new_accounts/new_account_gallery_home.dart';
 import 'package:safe_encrypt/screens/features/new_accounts/pin_key_pad.dart';
 
 import 'new_account_pin_nuber.dart';
@@ -50,7 +49,7 @@ class _ConfirmPinState extends State<ConfirmPin> {
                     children: [
                       Text(
                         confirm_pin
-                            ? "Please confirm your pin to \n continuehbvhvv."
+                            ? "Please confirm your pin to \n continue."
                             : "wrong pin Try Again",
                         style: const TextStyle(
                             color: Colors.white,
@@ -214,7 +213,7 @@ class _ConfirmPinState extends State<ConfirmPin> {
                                 fontWeight: FontWeight.w600),
                           ),
                           const SizedBox(
-                            width: 190,
+                            width: 173,
                           ),
                           PinKeyPad(
                               keypad: '0',
@@ -226,40 +225,47 @@ class _ConfirmPinState extends State<ConfirmPin> {
                                 });
                               }),
                           const SizedBox(
-                            width: 115,
+                            width: 85,
                           ),
-                          IconButton(
-                            onPressed: () {
-                              FirebaseFirestore.instance
-                                  .collection('users')
-                                  .get()
-                                  .then((QuerySnapshot querySnapshot) {
-                                for (var doc in querySnapshot.docs) {
-                                  String pinNum = doc['pin'].toString();
-                                  if (pinNum == controler_pin.text) {
-                                    print(controler_pin.text);
-                                    print(pinNum);
-                                    if (user.uid == doc['uid']) {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const NewAccountPin(),
-                                          ));
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(45),
+                                color: Colors.brown),
+                            width: 65,
+                            height: 65,
+                            child: IconButton(
+                              onPressed: () async {
+                                await FirebaseFirestore.instance
+                                    .collection('users')
+                                    .get()
+                                    .then((QuerySnapshot querySnapshot) {
+                                  for (var doc in querySnapshot.docs) {
+                                    String pinNum = doc['pin'].toString();
+                                    if (pinNum == controler_pin.text) {
+                                      print(controler_pin.text);
+                                      print(pinNum);
+                                      if (user.uid == doc['uid']) {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const NewAccountPin(),
+                                            ));
+                                      }
+                                      print(controler_pin.text);
+                                    } else {
+                                      setState(() {
+                                        confirm_pin = false;
+                                      });
                                     }
-                                    print(controler_pin.text);
-                                  } else {
-                                    setState(() {
-                                      confirm_pin = false;
-                                    });
                                   }
-                                }
-                              });
-                            },
-                            icon: Icon(
-                              Icons.check_circle,
-                              color: kwhite,
-                              size: 50,
+                                });
+                              },
+                              icon: Icon(
+                                Icons.check_circle,
+                                color: kwhite,
+                                size: 50,
+                              ),
                             ),
                           )
                         ],
