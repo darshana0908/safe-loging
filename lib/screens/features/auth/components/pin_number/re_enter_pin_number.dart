@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 import 'package:safe_encrypt/screens/features/auth/components/pin_number/user_pin.dart';
 
@@ -234,17 +235,36 @@ class _ReEnterPinState extends State<ReEnterPin> {
                             height: 65,
                             child: IconButton(
                               onPressed: () async {
-                                final user = FirebaseAuth.instance.currentUser!;
-
-                                print('mmmmmmmmmmmmmmmmm');
-
                                 if (controler_re_enter_pin.text ==
                                     widget.controler_pin.text) {
-                                  print(user.email);
+                                  FacebookAuth.instance
+                                      .getUserData()
+                                      .then((value) async {
+                                    final pinNumber =
+                                        controler_re_enter_pin.text;
+
+                                    createuser(
+                                      pin: pinNumber,
+                                      name: value['name'].toString(),
+                                      email: value['email'].toString(),
+                                      uid: value['id'].toString(),
+                                    );
+                                    // readUsers();
+
+                                    await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => UserPIn(),
+                                        ));
+                                  });
+                                }
+                                if (controler_re_enter_pin.text ==
+                                    widget.controler_pin.text) {
+                                  final user =
+                                      FirebaseAuth.instance.currentUser!;
                                   final pinNumber = controler_re_enter_pin.text;
                                   final username = user.displayName;
-                                  final useremail = user.email;
-                                  final userpasward = user.uid;
+
                                   createuser(
                                     pin: pinNumber,
                                     name: username.toString(),

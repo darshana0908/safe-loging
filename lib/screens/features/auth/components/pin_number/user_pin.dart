@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 import 'package:safe_encrypt/screens/features/gallery/gallery_home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,7 +29,7 @@ class UserPIn extends StatefulWidget {
 class _UserPInState extends State<UserPIn> {
   final TextEditingController controler_re_enter_pin = TextEditingController();
   bool backspacecolorchange = false;
-  final user = FirebaseAuth.instance.currentUser!;
+
   bool newpin_nuber = true;
   String usern = '';
   String pas = '';
@@ -267,34 +268,104 @@ class _UserPInState extends State<UserPIn> {
                             height: 65,
                             child: IconButton(
                               onPressed: () async {
-                                await FirebaseFirestore.instance
-                                    .collection('users')
-                                    .get()
-                                    .then((QuerySnapshot querySnapshot) {
-                                  for (var doc in querySnapshot.docs) {
-                                    String pinNum = doc['pin'].toString();
-                                    if (pinNum == controler_re_enter_pin.text) {
-                                      print(controler_re_enter_pin.text);
-                                      print(pinNum);
-                                      if (user.uid == doc['uid']) {
-                                        savebool();
+                                setState(() async {
+                                  getData();
+                                  getDocs();
+                                  await FirebaseFirestore.instance
+                                      .collection('users')
+                                      .get()
+                                      .then((QuerySnapshot querySnapshot) {
+                                    for (var doc in querySnapshot.docs) {
+                                      String pinNum = doc['pin'].toString();
+                                      if (pinNum ==
+                                          controler_re_enter_pin.text) {
+                                        if (pinNum ==
+                                            controler_re_enter_pin.text) {
+                                          FacebookAuth.instance
+                                              .getUserData()
+                                              .then((value) async {
+                                            if (value['id'] == doc['uid']) {
+                                              savebool();
 
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const GalleryHome(),
-                                            ));
+                                              await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const GalleryHome(),
+                                                  ));
+                                            }
+                                          });
+                                        }
+                                        if (pinNum ==
+                                            controler_re_enter_pin.text) {
+                                          final user = FirebaseAuth
+                                              .instance.currentUser!;
+                                          if (user.uid == doc['uid']) {
+                                            savebool();
+                                            nave() async {
+                                              await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const GalleryHome(),
+                                                  ));
+                                            }
+                                          }
+
+                                          print(controler_re_enter_pin.text);
+                                        }
+                                      } else {
+                                        setState(() {
+                                          confirm_pin = false;
+                                        });
                                       }
-                                      print(controler_re_enter_pin.text);
-                                    } else {
-                                      setState(() {
-                                        confirm_pin = false;
-                                      });
                                     }
-                                  }
+                                  });
                                 });
                               },
+
+                              //   await FirebaseFirestore.instance
+                              //       .collection('users')
+                              //       .get()
+                              //       .then((QuerySnapshot querySnapshot) {
+                              //     for (var doc in querySnapshot.docs) {
+                              //       String pinNum = doc['pin'].toString();
+                              //       if (pinNum == controler_re_enter_pin.text) {
+                              //         print(controler_re_enter_pin.text);
+                              //         print(pinNum);
+                              //         if (user.uid == doc['uid']) {
+                              //           savebool();
+
+                              //           Navigator.push(
+                              //               context,
+                              //               MaterialPageRoute(
+                              //                 builder: (context) =>
+                              //                     const GalleryHome(),
+                              //               ));
+                              //         }
+                              //         print(controler_re_enter_pin.text);
+                              //       } else {
+                              //         setState(() {
+                              //           confirm_pin = false;
+                              //         });
+                              //       }
+                              //     }
+                              //   });
+
+                              // },
+
+                              //    FacebookAuth.instance
+                              //   .getUserData()
+                              //   .then((value) async {
+                              // print(value['email']);
+
+                              // // Logger().w(value['email']);
+                              // // if (isfromSignup) {
+                              // //   await checkEmail(context, value['email']);
+                              // // } else {
+                              // //   await loginWithEmail(context, value['email']);
+                              // // }
+                              //   };
                               icon: Icon(
                                 Icons.check_circle,
                                 color: kwhite,
@@ -336,21 +407,21 @@ final _fireStore = FirebaseFirestore.instance;
 CollectionReference _collectionRef =
     FirebaseFirestore.instance.collection('users');
 
-// Future<void> getData() async {
-//   // Get docs from collection reference
-//   QuerySnapshot querySnapshot = await _collectionRef.get();
+Future<void> getData() async {
+  // Get docs from collection reference
+  QuerySnapshot querySnapshot = await _collectionRef.get();
 
-//   // Get data from docs and convert map to List
-//   final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-//   querySnapshot.docs
-//       .map((doc) => print(doc["name"])
-//           // ListTile(
-//           //     title: Text(doc["name"]), subtitle: Text(doc["amount"].toString()))
-//           )
-//       .toList();
-//   print(allData);
-//   allData.length;
-// }
+  // Get data from docs and convert map to List
+  final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+  querySnapshot.docs
+      .map((doc) => print(doc["name"])
+          // ListTile(
+          //     title: Text(doc["name"]), subtitle: Text(doc["amount"].toString()))
+          )
+      .toList();
+  print(allData);
+  allData.length;
+}
 
 Future getDocs() async {
   List doc = ['pin', 'pin'];
