@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
@@ -31,28 +32,30 @@ class GalleryHome extends StatefulWidget {
 class _GalleryHomeState extends State<GalleryHome> {
   final TextEditingController _folderName = TextEditingController();
   List<FileSystemEntity> folderList = [];
-
-  final user = FirebaseAuth.instance.currentUser!;
-
+  Timer? timer;
   @override
   void initState() {
+    _keepAlive(true);
     requestPermission(Permission.storage);
     getFolderList();
-    Future.delayed(
-      const Duration(seconds: 60),
-      () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => UserPIn(),
-            ));
-      },
-    );
+    // timer = Timer(
+    //   const Duration(seconds: 20),
+    //   () {
+    //     /// Navigate to seconds screen when timer callback in executed
+    //     Navigator.push(
+    //       context,
+    //       MaterialPageRoute(
+    //         builder: (context) => UserPIn(),
+    //       ),
+    //     );
+    //   },
+    // );
     super.initState();
   }
 
   @override
   void dispose() {
+    timer?.cancel();
     _folderName.dispose();
 
     super.dispose();
@@ -60,211 +63,218 @@ class _GalleryHomeState extends State<GalleryHome> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () {
-        exit(0); 
+    return GestureDetector(
+      onTap: () {
+        startKeepAlive();
       },
-      child: Scaffold(
-        appBar: AppBar(
-          // title: const Text('keepsafe'),
-          backgroundColor: kdarkblue,
-          // automaticallyImplyLeading: false,
-          // leading: const Icon(Icons.account_circle),
-          actions: <Widget>[
-            IconButton(
-                icon: const Icon(Icons.delete, color: Colors.white54),
-                onPressed: () {}),
-            IconButton(
-                icon: const Icon(Icons.cloud, color: Colors.white),
-                onPressed: () {}),
-            PopupMenuButton(
-              itemBuilder: (context) => [
-                PopupMenuItem(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width / 2,
-                    child: Column(
-                      children: [
-                        Container(
-                          alignment: Alignment.topLeft,
-                          child: TextButton(
-                            autofocus: true,
-                            child: Text('Settings',
-                                style: TextStyle(color: kblack, fontSize: 17)),
-                            onPressed: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const Settings())),
+      child: WillPopScope(
+        onWillPop: () {
+          exit(0);
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            // title: const Text('keepsafe'),
+            backgroundColor: kdarkblue,
+            // automaticallyImplyLeading: false,
+            // leading: const Icon(Icons.account_circle),
+            actions: <Widget>[
+              IconButton(
+                  icon: const Icon(Icons.delete, color: Colors.white54),
+                  onPressed: () {}),
+              IconButton(
+                  icon: const Icon(Icons.cloud, color: Colors.white),
+                  onPressed: () {}),
+              PopupMenuButton(
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width / 2,
+                      child: Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.topLeft,
+                            child: TextButton(
+                              autofocus: true,
+                              child: Text('Settings',
+                                  style:
+                                      TextStyle(color: kblack, fontSize: 17)),
+                              onPressed: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const Settings())),
+                            ),
                           ),
-                        ),
-                        Container(
-                          alignment: Alignment.topLeft,
-                          child: TextButton(
-                            autofocus: true,
-                            child: Text('Help',
-                                style: TextStyle(color: kblack, fontSize: 17)),
-                            onPressed: () {},
+                          Container(
+                            alignment: Alignment.topLeft,
+                            child: TextButton(
+                              autofocus: true,
+                              child: Text('Help',
+                                  style:
+                                      TextStyle(color: kblack, fontSize: 17)),
+                              onPressed: () {},
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            )
-          ],
-        ),
-        drawer: Drawer(
-          child: ListView(
-            padding: const EdgeInsets.all(0),
-            children: [
-              DrawerHeader(
-                decoration: BoxDecoration(
-                  color: kdarkblue,
-                ), //BoxDecoration
-                child: UserAccountsDrawerHeader(
-                  decoration: BoxDecoration(color: kdarkblue),
-                  accountName: Text(
-                    user.displayName!.toString(),
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                  accountEmail: Text(user.email!),
-                  currentAccountPictureSize: const Size.square(50),
-                  currentAccountPicture: const CircleAvatar(
-                    backgroundColor: Color.fromARGB(255, 165, 255, 137),
-                    child: Text(
-                      "A",
-                      style: TextStyle(fontSize: 30.0, color: Colors.blue),
-                    ), //Text
-                  ), //circleAvatar
-                ), //UserAccountDrawerHeader
-              ), //DrawerHeader
-              ListTile(
-                leading: const Icon(Icons.person),
-                title: const Text(' My Profile '),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.book),
-                title: const Text(' Create New Account'),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ConfirmPin(),
-                      ));
-                },
-              ),
-
-              ListTile(
-                leading: const Icon(Icons.book),
-                title: const Text(' New Account Loging'),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const NewAccountLoging(),
-                      ));
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.workspace_premium),
-                title: const Text(' Go Premium '),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.video_label),
-                title: const Text(' Saved Videos '),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.edit),
-                title: const Text(' Edit Profile '),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.logout),
-                title: const Text('LogOut'),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
+                ],
+              )
             ],
           ),
-        ),
-        body: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: HawkFabMenu(
-            blur: 155.8,
-            backgroundColor: kliteblue,
-            openIcon: Icons.add,
-            closeIcon: Icons.close,
-            items: [
-              HawkFabMenuItem(
-                  label: 'Add album',
-                  ontap: () async => showCreateFolderDialog(context),
-                  icon: const Icon(Icons.add_to_photos_rounded),
-                  color: Colors.black38,
-                  labelColor: Colors.white,
-                  labelBackgroundColor: kliteblue),
-              HawkFabMenuItem(
-                  label: 'Import photos',
-                  ontap: () async =>
-                      ImageService(isFake: widget.isFake).importPhotos(),
-                  icon: const Icon(Icons.photo),
-                  color: const Color.fromRGBO(0, 0, 0, 0.38),
-                  labelColor: Colors.white,
-                  labelBackgroundColor: kliteblue),
-              HawkFabMenuItem(
-                label: 'Take photo',
-                ontap: () async =>
-                    ImageService(isFake: widget.isFake).takePhoto(),
-                icon: const Icon(Icons.camera_alt),
-                color: Colors.black38,
-                labelColor: Colors.white,
-                labelBackgroundColor: kliteblue,
-              ),
-            ],
-            body: GridView.builder(
-                itemCount: folderList.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 4.0,
-                    mainAxisSpacing: 4.0),
-                itemBuilder: (BuildContext context, index) {
-                  String oneEntity = folderList[index].toString();
-                  String folderName =
-                      oneEntity.split('/').last.replaceAll("'", '');
-
-                  return InkWell(
-                    child: PlatformAlbum(
-                 
-
-                        // selected image of folder cover
-                        // use provider (FolderCoverImageProvider)
-                        image: Image.asset(
-                            Provider.of<FolderCoverImageProvider>(context,
-                                    listen: false)
-                                .imgList[index],
-                            fit: BoxFit.fill),
-                        title: folderName,
-                        album: 'Album Settings',
-                        isDelete: index == 0 ? false : true,
-                        path: folderList[index].path),
-                    onTap: () => Navigator.push(
+          drawer: Drawer(
+            child: ListView(
+              padding: const EdgeInsets.all(0),
+              children: [
+                DrawerHeader(
+                  decoration: BoxDecoration(
+                    color: kdarkblue,
+                  ), //BoxDecoration
+                  child: UserAccountsDrawerHeader(
+                    decoration: BoxDecoration(color: kdarkblue),
+                    accountName: Text(
+                      '',
+                      // user.displayName!.toString(),
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                    accountEmail: Text(''),
+                    currentAccountPictureSize: const Size.square(50),
+                    currentAccountPicture: const CircleAvatar(
+                      backgroundColor: Color.fromARGB(255, 165, 255, 137),
+                      child: Text(
+                        "A",
+                        style: TextStyle(fontSize: 30.0, color: Colors.blue),
+                      ), //Text
+                    ), //circleAvatar
+                  ), //UserAccountDrawerHeader
+                ), //DrawerHeader
+                ListTile(
+                  leading: const Icon(Icons.person),
+                  title: const Text(' My Profile '),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.book),
+                  title: const Text(' Create New Account'),
+                  onTap: () {
+                    Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (_) =>
-                                ImageScreen(path: folderList[index].path))),
-                  );
-                }),
+                          builder: (context) => const ConfirmPin(),
+                        ));
+                  },
+                ),
+
+                ListTile(
+                  leading: const Icon(Icons.book),
+                  title: const Text(' New Account Loging'),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const NewAccountLoging(),
+                        ));
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.workspace_premium),
+                  title: const Text(' Go Premium '),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.video_label),
+                  title: const Text(' Saved Videos '),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.edit),
+                  title: const Text(' Edit Profile '),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.logout),
+                  title: const Text('LogOut'),
+                  onTap: () {
+                    exit(0);
+                  },
+                ),
+              ],
+            ),
+          ),
+          body: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: HawkFabMenu(
+              blur: 155.8,
+              backgroundColor: kliteblue,
+              openIcon: Icons.add,
+              closeIcon: Icons.close,
+              items: [
+                HawkFabMenuItem(
+                    label: 'Add album',
+                    ontap: () async => showCreateFolderDialog(context),
+                    icon: const Icon(Icons.add_to_photos_rounded),
+                    color: Colors.black38,
+                    labelColor: Colors.white,
+                    labelBackgroundColor: kliteblue),
+                HawkFabMenuItem(
+                    label: 'Import photos',
+                    ontap: () async =>
+                        ImageService(isFake: widget.isFake).importPhotos(),
+                    icon: const Icon(Icons.photo),
+                    color: const Color.fromRGBO(0, 0, 0, 0.38),
+                    labelColor: Colors.white,
+                    labelBackgroundColor: kliteblue),
+                HawkFabMenuItem(
+                  label: 'Take photo',
+                  ontap: () async =>
+                      ImageService(isFake: widget.isFake).takePhoto(),
+                  icon: const Icon(Icons.camera_alt),
+                  color: Colors.black38,
+                  labelColor: Colors.white,
+                  labelBackgroundColor: kliteblue,
+                ),
+              ],
+              body: GridView.builder(
+                  itemCount: folderList.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 4.0,
+                      mainAxisSpacing: 4.0),
+                  itemBuilder: (BuildContext context, index) {
+                    String oneEntity = folderList[index].toString();
+                    String folderName =
+                        oneEntity.split('/').last.replaceAll("'", '');
+
+                    return InkWell(
+                      child: PlatformAlbum(
+
+                          // selected image of folder cover
+                          // use provider (FolderCoverImageProvider)
+                          image: Image.asset(
+                              Provider.of<FolderCoverImageProvider>(context,
+                                      listen: false)
+                                  .imgList[index],
+                              fit: BoxFit.fill),
+                          title: folderName,
+                          album: 'Album Settings',
+                          isDelete: index == 0 ? false : true,
+                          path: folderList[index].path),
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) =>
+                                  ImageScreen(path: folderList[index].path))),
+                    );
+                  }),
+            ),
           ),
         ),
       ),
@@ -400,4 +410,48 @@ class _GalleryHomeState extends State<GalleryHome> {
     }
     return false;
   }
+
+  void timeOutCallBack() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) {
+        return UserPIn();
+      }),
+    );
+  }
+}
+
+Timer? _keepAliveTimer;
+
+const _inactivityTimeout = Duration(seconds: 10);
+void _keepAlive(bool visible) {
+  _keepAliveTimer?.cancel();
+  if (visible) {
+    _keepAliveTimer = null;
+  } else {
+    _keepAliveTimer = Timer(_inactivityTimeout, () => exit(0));
+  }
+}
+
+class _KeepAliveObserver extends WidgetsBindingObserver {
+  @override
+  didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        _keepAlive(true);
+        break;
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.paused:
+      case AppLifecycleState.detached:
+        _keepAlive(false); // Conservatively set a timer on all three
+        break;
+    }
+  }
+}
+
+/// Must be called only when app is visible, and exactly once
+void startKeepAlive() {
+  assert(_keepAliveTimer == null);
+  _keepAlive(true);
+  WidgetsBinding.instance.addObserver(_KeepAliveObserver());
 }
