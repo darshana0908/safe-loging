@@ -9,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:safe_encrypt/constants/colors.dart';
+import 'package:safe_encrypt/screens/features/auth/components/pin_number/re_enter_pin_number.dart';
 import 'package:safe_encrypt/screens/features/gallery/gallery_home.dart';
 
 import '../../../services/new_account_image_services.dart';
@@ -32,8 +33,6 @@ class NewAccountGalleryHome extends StatefulWidget {
 class _NewAccountGalleryHomeState extends State<NewAccountGalleryHome> {
   final TextEditingController _folderName = TextEditingController();
   List<FileSystemEntity> folderList = [];
-
-  final user = FirebaseAuth.instance.currentUser!;
 
   @override
   void initState() {
@@ -63,7 +62,7 @@ class _NewAccountGalleryHomeState extends State<NewAccountGalleryHome> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-       throw  Navigator.push(
+        throw Navigator.push(
             context, MaterialPageRoute(builder: (_) => GalleryHome()));
       },
       child: Scaffold(
@@ -126,10 +125,14 @@ class _NewAccountGalleryHomeState extends State<NewAccountGalleryHome> {
                 child: UserAccountsDrawerHeader(
                   decoration: BoxDecoration(color: kdarkblue),
                   accountName: Text(
-                    user.displayName!.toString(),
+                    '',
+                    // user.displayName!.toString(),
                     style: const TextStyle(fontSize: 18),
                   ),
-                  accountEmail: Text(user.email!),
+                  accountEmail: Text(''
+                      // user.email!
+
+                      ),
                   currentAccountPictureSize: const Size.square(50),
                   currentAccountPicture: const CircleAvatar(
                     backgroundColor: Color.fromARGB(255, 165, 255, 137),
@@ -174,7 +177,7 @@ class _NewAccountGalleryHomeState extends State<NewAccountGalleryHome> {
                 leading: const Icon(Icons.logout),
                 title: const Text('LogOut'),
                 onTap: () {
-                  Navigator.pop(context);
+                  exit(0);
                 },
               ),
             ],

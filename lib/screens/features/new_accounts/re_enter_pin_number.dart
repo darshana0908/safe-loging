@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:safe_encrypt/constants/colors.dart';
@@ -24,7 +25,7 @@ class ReEnterPinNumber extends StatefulWidget {
 class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
   final TextEditingController controler_pin = TextEditingController();
   bool backspacecolorchange = false;
-  final user = FirebaseAuth.instance.currentUser!;
+  // final user = FirebaseAuth.instance.currentUser!;
 
   final Directory _directory = Directory(
       '/storage/emulated/0/Android/data/com.example.safe_encrypt/files');
@@ -246,25 +247,61 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
                             height: 65,
                             child: IconButton(
                               onPressed: () async {
-                                print(controler_pin.text);
                                 if (controler_pin.text ==
                                     widget.controler_pin_new.text) {
+                                  FacebookAuth.instance
+                                      .getUserData()
+                                      .then((value) async {
+                                    final pinNumber = controler_pin.text;
+                                    final username = value['name'];
+                                    final useremail = value['email'];
+                                    final userpasward = value['id'];
+                                    await createFolder(
+                                        widget.controler_pin_new.text);
+                                    createuser(
+                                      foldername: controler_pin.text,
+                                      pin: pinNumber,
+                                      name: value['name'].toString(),
+                                      email: value['email'].toString(),
+                                      uid: value['id'].toString(),
+                                    );
+                                    // readUsers();
+
+                                    await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              NewAccountGalleryHome(
+                                            controler_pin: controler_pin.text,
+                                          ),
+                                        ));
+                                  });
+                                  {
+                                    setState(() {});
+                                  }
+                                }
+
+                                if (controler_pin.text ==
+                                    widget.controler_pin_new.text) {
+                                  final user =
+                                      FirebaseAuth.instance.currentUser!;
                                   final pinNumber = controler_pin.text;
+
                                   final username = user.displayName;
                                   final useremail = user.email;
                                   final userpasward = user.uid;
-                                  createuser(
-                                      pin: pinNumber,
-                                      name: username.toString(),
-                                      email: user.email.toString(),
-                                      uid: user.uid.toString(),
-                                      foldername: controler_pin.text);
-                                  print(controler_pin.text);
-
                                   await createFolder(
                                       widget.controler_pin_new.text);
+                                  createuser(
+                                    pin: pinNumber,
+                                    name: username.toString(),
+                                    email: user.email.toString(),
+                                    uid: user.uid.toString(),
+                                    foldername: controler_pin.text,
+                                  );
+                                  // readUsers();
 
-                                  Navigator.push(
+                                  await Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
@@ -272,15 +309,46 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
                                                 controler_pin:
                                                     controler_pin.text,
                                               )));
+                                } else {
+                                  setState(() {});
                                 }
-
-                                //   if (controler_pin.text == key) {
-                                //     main();
-                                //     print('okkkkkk');
-                                //   } else {
-                                //     print('qqqqqqqqqqqqqqqqqqqq');
-                                //   }
                               },
+
+                              //   print(controler_pin.text);
+                              //   if (controler_pin.text ==
+                              //       widget.controler_pin_new.text) {
+                              //     final pinNumber = controler_pin.text;
+                              //     final username = user.displayName;
+                              //     final useremail = user.email;
+                              //     final userpasward = user.uid;
+                              //     createuser(
+                              //         pin: pinNumber,
+                              //         name: username.toString(),
+                              //         email: user.email.toString(),
+                              //         uid: user.uid.toString(),
+                              //         foldername: controler_pin.text);
+                              //     print(controler_pin.text);
+
+                              //     await createFolder(
+                              //         widget.controler_pin_new.text);
+
+                              //     Navigator.push(
+                              //         context,
+                              //         MaterialPageRoute(
+                              //             builder: (context) =>
+                              //                 NewAccountGalleryHome(
+                              //                   controler_pin:
+                              //                       controler_pin.text,
+                              //                 )));
+                              //   }
+
+                              //   //   if (controler_pin.text == key) {
+                              //   //     main();
+                              //   //     print('okkkkkk');
+                              //   //   } else {
+                              //   //     print('qqqqqqqqqqqqqqqqqqqq');
+                              //   //   }
+                              // },
                               icon: Icon(
                                 Icons.check_circle,
                                 color: kwhite,

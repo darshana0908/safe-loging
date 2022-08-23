@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 import 'package:safe_encrypt/screens/features/new_accounts/pin_key_pad.dart';
 
@@ -15,7 +16,7 @@ class ConfirmPin extends StatefulWidget {
 
 class _ConfirmPinState extends State<ConfirmPin> {
   final TextEditingController controler_pin = TextEditingController();
-  final user = FirebaseAuth.instance.currentUser!;
+
   bool backspacecolorchange = false;
 
   String ff = 'f';
@@ -242,8 +243,23 @@ class _ConfirmPinState extends State<ConfirmPin> {
                                   for (var doc in querySnapshot.docs) {
                                     String pinNum = doc['pin'].toString();
                                     if (pinNum == controler_pin.text) {
-                                      print(controler_pin.text);
-                                      print(pinNum);
+                                      if (pinNum == controler_pin.text) {
+                                        FacebookAuth.instance
+                                            .getUserData()
+                                            .then((value) async {
+                                          print(value['email']);
+                                          if (value['id'] == doc['uid']) {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const NewAccountPin(), 
+                                                ));
+                                          }
+                                        });
+                                      }
+                                      final user =
+                                          FirebaseAuth.instance.currentUser!;
                                       if (user.uid == doc['uid']) {
                                         Navigator.push(
                                             context,
@@ -252,15 +268,43 @@ class _ConfirmPinState extends State<ConfirmPin> {
                                                   const NewAccountPin(),
                                             ));
                                       }
+
                                       print(controler_pin.text);
                                     } else {
-                                      setState(() {
+                                      setState(() async {
                                         confirm_pin = false;
                                       });
                                     }
                                   }
                                 });
                               },
+
+                              // await FirebaseFirestore.instance
+                              //     .collection('users')
+                              //     .get()
+                              //     .then((QuerySnapshot querySnapshot) {
+                              //   for (var doc in querySnapshot.docs) {
+                              //     String pinNum = doc['pin'].toString();
+                              //     if (pinNum == controler_pin.text) {
+                              //       print(controler_pin.text);
+                              //       print(pinNum);
+                              //       if (user.uid == doc['uid']) {
+                              //         Navigator.push(
+                              //             context,
+                              //             MaterialPageRoute(
+                              //               builder: (context) =>
+                              //                   const NewAccountPin(),
+                              //             ));
+                              //       }
+                              //       print(controler_pin.text);
+                              //     } else {
+                              //       setState(() {
+                              //         confirm_pin = false;
+                              //       });
+                              //     }
+                              //   }
+                              // });
+
                               icon: Icon(
                                 Icons.check_circle,
                                 color: kwhite,

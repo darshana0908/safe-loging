@@ -84,8 +84,12 @@ class _ImageScreenState extends State<ImageScreen> {
 
             return GestureDetector(
               onDoubleTap: () => delete(imgPath),
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ImageDetails(path: imgPath))),
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) {
+                return ImageDetails(path: imgPath);
+                
+              })),
               child: Card(elevation: 8.0, child: Hero(tag: imgPath, child: Image.file(File(imgPath), fit: BoxFit.fill))),
+             
             );
           },
         ),

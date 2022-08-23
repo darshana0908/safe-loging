@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 import 'package:safe_encrypt/screens/features/new_accounts/pin_key_pad.dart';
 
@@ -15,13 +16,13 @@ class NewAccountLoging extends StatefulWidget {
 
 class _NewAccountLogingState extends State<NewAccountLoging> {
   final TextEditingController controler_pin = TextEditingController();
-  final user = FirebaseAuth.instance.currentUser!;
+
   bool backspacecolorchange = false;
 
   String ff = 'f';
   bool confirm_pin = true;
   final CollectionReference _firebaseFirestore =
-      FirebaseFirestore.instance.collection('users');
+      FirebaseFirestore.instance.collection('newusers');
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
@@ -235,12 +236,8 @@ class _NewAccountLogingState extends State<NewAccountLoging> {
                             height: 65,
                             child: IconButton(
                               onPressed: () async {
-                                getDocs();
-                                FirebaseFirestore.instance
-                                    .collection('newusers')
-                                    .doc();
-                                getDocs();
-                                print(controler_pin.text);
+                                loaddata();
+                                getData();
                                 await FirebaseFirestore.instance
                                     .collection('newusers')
                                     .get()
@@ -249,19 +246,42 @@ class _NewAccountLogingState extends State<NewAccountLoging> {
                                     String pinNum =
                                         doc['foldername'].toString();
                                     if (pinNum == controler_pin.text) {
-                                      print(querySnapshot.docs);
-                                      print(pinNum);
-                                      if (user.uid == doc['uid']) {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  NewAccountGalleryHome(
-                                                      controler_pin:
-                                                          controler_pin.text),
-                                            ));
+                                      if (pinNum == controler_pin.text) {
+                                        FacebookAuth.instance
+                                            .getUserData()
+                                            .then((value) async {
+                                          if (value['id'] == doc['uid']) {
+                                            await Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      NewAccountGalleryHome(
+                                                    controler_pin:
+                                                        controler_pin.text,
+                                                  ),
+                                                ));
+                                          }
+                                        });
                                       }
-                                      print(controler_pin.text);
+                                      if (pinNum == controler_pin.text) {
+                                        final user =
+                                            FirebaseAuth.instance.currentUser!;
+                                        if (user.uid == doc['uid']) {
+                                          if (user.email == doc['email']) {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      NewAccountGalleryHome(
+                                                    controler_pin:
+                                                        controler_pin.text,
+                                                  ),
+                                                ));
+                                          }
+                                        }
+
+                                        print(controler_pin.text);
+                                      }
                                     } else {
                                       setState(() {
                                         confirm_pin = false;
@@ -269,8 +289,60 @@ class _NewAccountLogingState extends State<NewAccountLoging> {
                                     }
                                   }
                                 });
-                                getData();
-                                loaddata();
+
+                                // print(controler_pin.text);
+                                // await FirebaseFirestore.instance
+                                //     .collection('newusers')
+                                //     .get()
+                                //     .then((QuerySnapshot querySnapshot) {
+                                //   for (var doc in querySnapshot.docs) {
+                                //     String foldername =
+                                //         doc['foldername'].toString();
+
+                                //     String umail = doc['email'].toString();
+                                //     if (foldername == controler_pin.text) {
+                                //       if (foldername == controler_pin.text) {
+                                //         FacebookAuth.instance
+                                //             .getUserData()
+                                //             .then((value) async {
+                                //           String userid =
+                                //               value['id'].toString();
+                                //           if (userid == doc['uid']) {
+                                //             Navigator.push(
+                                //                 context,
+                                //                 MaterialPageRoute(
+                                //                   builder: (context) =>
+                                //                       NewAccountGalleryHome(
+                                //                     controler_pin:
+                                //                         controler_pin.text,
+                                //                   ),
+                                //                 ));
+                                //           }
+                                //         });
+                                //       }
+                                //       if (foldername == controler_pin.text) {
+                                //         final user =
+                                //             FirebaseAuth.instance.currentUser!;
+                                //         if (user.uid == doc['uid']) {
+                                //           print(user.uid);
+                                //           Navigator.push(
+                                //               context,
+                                //               MaterialPageRoute(
+                                //                 builder: (context) =>
+                                //                     NewAccountGalleryHome(
+                                //                   controler_pin:
+                                //                       controler_pin.text,
+                                //                 ),
+                                //               ));
+                                //         }
+
+                                //         print(controler_pin.text);
+                                //       }
+                                //     } else {
+                                //       confirm_pin = false;
+                                //     }
+                                //   }
+                                // });
                               },
                               icon: Icon(
                                 Icons.check_circle,
@@ -325,6 +397,7 @@ class _NewAccountLogingState extends State<NewAccountLoging> {
 
     // Get data from docs and convert map to List
     final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    print(allData);
   }
 
   Future getDocs() async {
