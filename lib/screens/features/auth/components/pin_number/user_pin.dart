@@ -413,14 +413,8 @@ Future<void> getData() async {
 
   // Get data from docs and convert map to List
   final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-  querySnapshot.docs
-      .map((doc) => print(doc["name"])
-          // ListTile(
-          //     title: Text(doc["name"]), subtitle: Text(doc["amount"].toString()))
-          )
-      .toList();
+
   print(allData);
-  allData.length;
 }
 
 Future getDocs() async {
