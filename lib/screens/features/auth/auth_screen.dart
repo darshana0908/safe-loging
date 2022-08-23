@@ -85,6 +85,7 @@ class _AuthScreen extends State<AuthScreen> {
                                     .getUserData()
                                     .then((value) async {
                                   print(value['email']);
+                                  print(value['']);
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
