@@ -23,11 +23,12 @@ class _ImageScreenState extends State<ImageScreen> {
   bool _isLoading = false;
   final ImagePicker _picker = ImagePicker();
   List<String> decryptedImages = [];
+  int _countOfReload = 0;
 
   @override
   void initState() {
     decryptImages();
-
+    loadPhotos();
     super.initState();
   }
 
@@ -64,7 +65,9 @@ class _ImageScreenState extends State<ImageScreen> {
                   labelBackgroundColor: kliteblue,
                 ),
               ],
-              body: _isLoading ? const Center(child: CircularProgressIndicator()) : loadPhotos()),
+              body: _isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : loadPhotos()),
         ),
       ),
     );
@@ -76,7 +79,8 @@ class _ImageScreenState extends State<ImageScreen> {
       return Container(
         padding: const EdgeInsets.only(bottom: 60.0),
         child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2),
           padding: const EdgeInsets.all(8.0),
           itemCount: decryptedImages.length,
           itemBuilder: (context, index) {
@@ -84,12 +88,15 @@ class _ImageScreenState extends State<ImageScreen> {
 
             return GestureDetector(
               onDoubleTap: () => delete(imgPath),
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) {
+              onTap: () =>
+                  Navigator.push(context, MaterialPageRoute(builder: (_) {
                 return ImageDetails(path: imgPath);
-                
               })),
-              child: Card(elevation: 8.0, child: Hero(tag: imgPath, child: Image.file(File(imgPath), fit: BoxFit.fill))),
-             
+              child: Card(
+                  elevation: 8.0,
+                  child: Hero(
+                      tag: imgPath,
+                      child: Image.file(File(imgPath), fit: BoxFit.fill))),
             );
           },
         ),
@@ -98,7 +105,8 @@ class _ImageScreenState extends State<ImageScreen> {
       return Center(
         child: Container(
           padding: const EdgeInsets.only(bottom: 60.0),
-          child: const Text("Sorry, no images were found.", style: TextStyle(fontSize: 18.0)),
+          child: const Text("Sorry, no images were found.",
+              style: TextStyle(fontSize: 18.0)),
         ),
       );
     }
@@ -115,7 +123,8 @@ class _ImageScreenState extends State<ImageScreen> {
     if (imageList != null) {
       for (XFile image in imageList) {
         fileType = path.extension(image.path);
-        imageName = '${DateTime.now().microsecondsSinceEpoch.toString()}$fileType';
+        imageName =
+            '${DateTime.now().microsecondsSinceEpoch.toString()}$fileType';
 
         File fileToSave = File(image.path);
         fileToSave.copy('${widget.path}/$imageName');
@@ -135,7 +144,8 @@ class _ImageScreenState extends State<ImageScreen> {
 
     if (image != null) {
       fileType = path.extension(image.path);
-      imageName = '${DateTime.now().microsecondsSinceEpoch.toString()}$fileType';
+      imageName =
+          '${DateTime.now().microsecondsSinceEpoch.toString()}$fileType';
 
       File fileToSave = File(image.path);
       fileToSave.copy('${widget.path}/$imageName');
@@ -149,19 +159,25 @@ class _ImageScreenState extends State<ImageScreen> {
   void decryptImages() async {
     setState(() => _isLoading = true);
 
-    FileCryptor fileCryptor = FileCryptor(key: 'Your 32 bit key.................', iv: 16, dir: widget.path);
+    FileCryptor fileCryptor = FileCryptor(
+        key: 'Your 32 bit key.................', iv: 16, dir: widget.path);
     String currentDirectory = fileCryptor.getCurrentDir();
     String imageName;
     String outputName;
 
-    Directory _openedFolder = Directory(widget.path);
-    List<String> encryptedImages = _openedFolder.listSync().map((item) => item.path).where((item) => item.endsWith(".aes")).toList(growable: true);
+    Directory openedFolder = Directory(widget.path);
+    List<String> encryptedImages = openedFolder
+        .listSync()
+        .map((item) => item.path)
+        .where((item) => item.endsWith(".aes"))
+        .toList(growable: true);
 
     if (encryptedImages.isNotEmpty) {
       for (var image in encryptedImages) {
         imageName = image.replaceAll('$currentDirectory/', '');
         outputName = imageName.replaceAll('.aes', '');
-        File decryptedFile =  await fileCryptor.decrypt(inputFile: imageName, outputFile: outputName);
+        File decryptedFile = await fileCryptor.decrypt(
+            inputFile: imageName, outputFile: outputName);
         decryptedImages.add(decryptedFile.path);
       }
 
@@ -189,6 +205,13 @@ class _ImageScreenState extends State<ImageScreen> {
       decryptedImages.remove(path);
       decryptedDir.deleteSync(recursive: true);
       encryptedDir.deleteSync(recursive: true);
+    });
+  }
+
+  @override
+  void autoReload() {
+    setState(() {
+      _countOfReload = _countOfReload + 1;
     });
   }
 }

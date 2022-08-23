@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 
 import '../../../constants/colors.dart';
 
@@ -13,6 +14,13 @@ class ImageDetails extends StatefulWidget {
 }
 
 class _ImageDetailsState extends State<ImageDetails> {
+  @override
+  void initState() {
+    // TODO: implement
+    delete(widget.path);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +38,7 @@ class _ImageDetailsState extends State<ImageDetails> {
                     //load system image
                     File(widget.path), //system image path
                     width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height / 3 * 2.4,
+                    height: MediaQuery.of(context).size.height / 3 * 2,
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -38,10 +46,61 @@ class _ImageDetailsState extends State<ImageDetails> {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Icon(
-                          Icons.share,
-                          color: kblue,
-                          size: 50,
+                        IconButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Expanded(
+                                  child: AlertDialog(
+                                    content: SizedBox(
+                                      height: 250,
+                                      child: Column(
+                                        children: [
+                                          IconButton(
+                                            onPressed: () {},
+                                            icon: const Icon(
+                                                Icons.whatsapp_sharp),
+                                            iconSize: 100,
+                                            color: Colors.green,
+                                          ),
+                                          IconButton(
+                                            onPressed: () async {
+                                              final Email email = Email(
+                                                body: 'Email body',
+                                                subject: 'Email subject',
+                                                recipients: [
+                                                  'example@example.com'
+                                                ],
+                                                cc: ['cc@example.com'],
+                                                bcc: ['bcc@example.com'],
+                                                attachmentPaths: [
+                                                  '/path/to/attachment'
+                                                ],
+                                                isHTML: false,
+                                              );
+
+                                              await FlutterEmailSender.send(
+                                                  email);
+                                            },
+                                            icon: const Icon(
+                                                Icons.email_outlined),
+                                            iconSize: 100,
+                                            color: Colors.red,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          icon: Icon(
+                            Icons.share,
+                            color: kblue,
+                          ),
+                          iconSize: 50,
                         ),
                         Icon(
                           Icons.rotate_90_degrees_ccw_outlined,
@@ -49,8 +108,10 @@ class _ImageDetailsState extends State<ImageDetails> {
                           size: 50,
                         ),
                         InkWell(
-                          onTap: () {
-                            delete(widget.path);
+                          onTap: () async {
+                            setState(() {
+                              delete(widget.path);
+                            });
                           },
                           child: Icon(
                             Icons.delete_forever,
@@ -66,13 +127,14 @@ class _ImageDetailsState extends State<ImageDetails> {
         ));
   }
 
-  void delete(String path) {
+  void delete(String path) async {
     final decryptedDir = Directory(path);
     final encryptedDir = Directory('$path.aes');
 
-    setState(() {
+    setState(() async {
       encryptedDir.deleteSync(recursive: true);
       decryptedDir.deleteSync(recursive: true);
     });
+    initState();
   }
 }
