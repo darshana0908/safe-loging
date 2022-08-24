@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../../constants/colors.dart';
+
+import 'package:share_plus/share_plus.dart';
 
 class ImageDetails extends StatefulWidget {
   final String path;
@@ -17,7 +19,7 @@ class _ImageDetailsState extends State<ImageDetails> {
   @override
   void initState() {
     // TODO: implement
-    delete(widget.path);
+
     super.initState();
   }
 
@@ -47,54 +49,69 @@ class _ImageDetailsState extends State<ImageDetails> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         IconButton(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return Expanded(
-                                  child: AlertDialog(
-                                    content: SizedBox(
-                                      height: 250,
-                                      child: Column(
-                                        children: [
-                                          IconButton(
-                                            onPressed: () {},
-                                            icon: const Icon(
-                                                Icons.whatsapp_sharp),
-                                            iconSize: 100,
-                                            color: Colors.green,
-                                          ),
-                                          IconButton(
-                                            onPressed: () async {
-                                              final Email email = Email(
-                                                body: 'Email body',
-                                                subject: 'Email subject',
-                                                recipients: [
-                                                  'example@example.com'
-                                                ],
-                                                cc: ['cc@example.com'],
-                                                bcc: ['bcc@example.com'],
-                                                attachmentPaths: [
-                                                  '/path/to/attachment'
-                                                ],
-                                                isHTML: false,
-                                              );
+                          onPressed: () async {
+                            print(widget.path);
+                            final temp = await getTemporaryDirectory();
+                            final path = '${temp.path}/ ';
 
-                                              await FlutterEmailSender.send(
-                                                  email);
-                                            },
-                                            icon: const Icon(
-                                                Icons.email_outlined),
-                                            iconSize: 100,
-                                            color: Colors.red,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
+                            await Share.shareFiles([widget.path],
+                                text:
+                                    'check out my Apps https://Safeloging.com');
+
+                            // showDialog(
+                            //   context: context,
+                            //   builder: (BuildContext context) {
+                            //     return Expanded(
+                            //       child: AlertDialog(
+                            //         content: SizedBox(
+                            //           height: 250,
+                            //           child: Column(
+                            //             children: [
+                            //               IconButton(
+                            //                 onPressed: () async {
+
+                            //                   // Navigator.push(
+                            //                   //     context,
+                            //                   //     MaterialPageRoute(
+                            //                   //       builder: (context) =>
+                            //                   //           ImageShare(),
+                            //                   //     ));
+                            //                 },
+                            //                 icon: const Icon(
+                            //                     Icons.whatsapp_sharp),
+                            //                 iconSize: 100,
+                            //                 color: Colors.green,
+                            //               ),
+                            //               IconButton(
+                            //                 onPressed: () async {
+                            //                   // final Email email = Email(
+                            //                   //   body: 'Email body',
+                            //                   //   subject: 'Email subject',
+                            //                   //   recipients: [
+                            //                   //     'example@example.com'
+                            //                   //   ],
+                            //                   //   cc: ['cc@example.com'],
+                            //                   //   bcc: ['bcc@example.com'],
+                            //                   //   attachmentPaths: [
+                            //                   //     (widget.path)
+                            //                   //   ],
+                            //                   //   isHTML: false,
+
+                            //                   // await FlutterEmailSender.send(
+                            //                   //     email);
+                            //                 },
+                            //                 icon: const Icon(
+                            //                     Icons.email_outlined),
+                            //                 iconSize: 100,
+                            //                 color: Colors.red,
+                            //               )
+                            //             ],
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     );
+                            //   },
+                            // );
                           },
                           icon: Icon(
                             Icons.share,

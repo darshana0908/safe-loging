@@ -268,60 +268,8 @@ class _UserPInState extends State<UserPIn> {
                             height: 65,
                             child: IconButton(
                               onPressed: () async {
-                                setState(() async {
-                                  getData();
-                                  getDocs();
-                                  await FirebaseFirestore.instance
-                                      .collection('users')
-                                      .get()
-                                      .then((QuerySnapshot querySnapshot) {
-                                    for (var doc in querySnapshot.docs) {
-                                      String pinNum = doc['pin'].toString();
-                                      if (pinNum ==
-                                          controler_re_enter_pin.text) {
-                                        if (pinNum ==
-                                            controler_re_enter_pin.text) {
-                                          FacebookAuth.instance
-                                              .getUserData()
-                                              .then((value) async {
-                                            if (value['id'] == doc['uid']) {
-                                              savebool();
-
-                                              await Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const GalleryHome(),
-                                                  ));
-                                            }
-                                          });
-                                        }
-                                        if (pinNum ==
-                                            controler_re_enter_pin.text) {
-                                          final user = FirebaseAuth
-                                              .instance.currentUser!;
-                                          if (user.uid == doc['uid']) {
-                                            savebool();
-                                            nave() async {
-                                              await Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const GalleryHome(),
-                                                  ));
-                                            }
-                                          }
-
-                                          print(controler_re_enter_pin.text);
-                                        }
-                                      } else {
-                                        setState(() {
-                                          confirm_pin = false;
-                                        });
-                                      }
-                                    }
-                                  });
-                                });
+                                FirebaseFirestore.instance.collection('users');
+                                loaddata();
                               },
 
                               //   await FirebaseFirestore.instance
@@ -384,46 +332,74 @@ class _UserPInState extends State<UserPIn> {
     );
   }
 
-  Future createuser({
-    required String pin,
-    required String name,
-    required String email,
-    required String uid,
-  }) async {
-    final docUser = FirebaseFirestore.instance.collection('users').doc();
-    final json = {
-      'pin': pin,
-      'name': name,
-      'email': email,
-      'uid': uid,
-    };
+  loaddata() async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      for (var doc in querySnapshot.docs) {
+        String pinNum = doc['pin'].toString();
+        if (pinNum == controler_re_enter_pin.text) {
+          if (pinNum == controler_re_enter_pin.text) {
+            FacebookAuth.instance.getUserData().then((value) async {
+              if (value['id'].toString() == doc['uid'].toString()) {
+                // savebool();
 
-    await docUser.set(json);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const GalleryHome(),
+                    ));
+              }
+            });
+          }
+          if (pinNum == controler_re_enter_pin.text) {
+            final user = FirebaseAuth.instance.currentUser!;
+            if (user.uid == doc['uid'].toString()) {
+              // savebool();
+              nave() async {
+                await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const GalleryHome(),
+                    ));
+              }
+            }
+
+            print(controler_re_enter_pin.text);
+          }
+        } else {
+          setState(() {
+            confirm_pin = false;
+          });
+        }
+      }
+    });
   }
-}
 
-final _fireStore = FirebaseFirestore.instance;
+//
 
-CollectionReference _collectionRef =
-    FirebaseFirestore.instance.collection('users');
+// CollectionReference _collectionRef =
+//     FirebaseFirestore.instance.collection('users');
 
-Future<void> getData() async {
-  // Get docs from collection reference
-  QuerySnapshot querySnapshot = await _collectionRef.get();
+// Future<void> getData() async {
+//   // Get docs from collection reference
+//   QuerySnapshot querySnapshot = await _collectionRef.get();
 
-  // Get data from docs and convert map to List
-  final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+//   // Get data from docs and convert map to List
+//   final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
 
-  print(allData);
-}
+//   print(allData);
+// }
 
-Future getDocs() async {
-  List doc = ['pin', 'pin'];
-  QuerySnapshot querySnapshot =
-      await FirebaseFirestore.instance.collection("users").get();
-  for (int i = 0; i < querySnapshot.docs.length; i++) {
-    var a = querySnapshot.docs[i];
-    print(a.data);
-    print(doc[1]);
-  }
+// Future getDocs() async {
+//   List doc = ['pin'];
+//   QuerySnapshot querySnapshot =
+//       await FirebaseFirestore.instance.collection("users").get();
+//   for (int i = 0; i < querySnapshot.docs.length; i++) {
+//     var a = querySnapshot.docs[i];
+//     print(a.data);
+//     print(doc);
+//   }
+// }
 }
