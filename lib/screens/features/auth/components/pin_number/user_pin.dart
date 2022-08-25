@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:safe_encrypt/constants/colors.dart';
@@ -21,6 +22,7 @@ class UserPIn extends StatefulWidget {
       FirebaseFirestore.instance.collection('users');
   List documents = [];
   bool owner = false;
+  bool isLoading = true;
 
   @override
   State<UserPIn> createState() => _UserPInState();
@@ -38,6 +40,7 @@ class _UserPInState extends State<UserPIn> {
   bool confirm_pin = true;
   String name = '';
   bool ownerlogin = true;
+  bool isLoading = true;
 
   late SharedPreferences preferences;
   @override
@@ -268,8 +271,89 @@ class _UserPInState extends State<UserPIn> {
                             height: 65,
                             child: IconButton(
                               onPressed: () async {
-                                FirebaseFirestore.instance.collection('users');
-                                loaddata();
+                                await FirebaseFirestore.instance
+                                    .collection('users')
+                                    .get()
+                                    .then((QuerySnapshot querySnapshot) {
+                                  for (var doc in querySnapshot.docs) {
+                                    String pinNum = doc['pin'].toString();
+                                    if (pinNum == controler_re_enter_pin.text) {
+                                      if (pinNum ==
+                                          controler_re_enter_pin.text) {
+                                        FacebookAuth.instance
+                                            .getUserData()
+                                            .then((value) async {
+                                          if (value['id'].toString() ==
+                                              doc['uid'].toString()) {
+                                            savebool();
+                                            setState(() {
+                                              isLoading = false;
+                                            });
+                                            //loading widget goes here
+                                            return isLoading
+                                                ? const Scaffold(
+                                                    body: Center(
+                                                    child: SizedBox(
+                                                        width: 40.0,
+                                                        height: 40.0,
+                                                        child: CircularProgressIndicator(
+                                                            backgroundColor:
+                                                                Colors.black,
+                                                            valueColor:
+                                                                AlwaysStoppedAnimation<
+                                                                        Color>(
+                                                                    Colors
+                                                                        .red))),
+                                                  ))                  
+                                                : Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const GalleryHome(),
+                                                    ));
+                                          }
+                                        });
+                                      }
+                                      if (pinNum ==
+                                          controler_re_enter_pin.text) {
+                                        final user =
+                                            FirebaseAuth.instance.currentUser!;
+                                        if (user.uid == doc['uid'].toString()) {
+                                          savebool();
+                                          setState(() {
+                                            isLoading = false;
+                                          });
+                                          return isLoading
+                                              ? const Scaffold(
+                                                  body: Center(
+                                                  child: SizedBox(
+                                                      width: 40.0,
+                                                      height: 40.0,
+                                                      child: CircularProgressIndicator(
+                                                          backgroundColor:
+                                                              Colors.black,
+                                                          valueColor:
+                                                              AlwaysStoppedAnimation<
+                                                                      Color>(
+                                                                  Colors.red))),
+                                                ))
+                                              : Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const GalleryHome(),
+                                                  ));
+                                        }
+
+                                        print(controler_re_enter_pin.text);
+                                      }
+                                    } else {
+                                      setState(() {
+                                        confirm_pin = false;
+                                      });
+                                    }
+                                  }
+                                });
                               },
 
                               //   await FirebaseFirestore.instance
@@ -343,8 +427,6 @@ class _UserPInState extends State<UserPIn> {
           if (pinNum == controler_re_enter_pin.text) {
             FacebookAuth.instance.getUserData().then((value) async {
               if (value['id'].toString() == doc['uid'].toString()) {
-                // savebool();
-
                 Navigator.push(
                     context,
                     MaterialPageRoute(

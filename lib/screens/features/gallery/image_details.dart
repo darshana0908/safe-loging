@@ -52,7 +52,6 @@ class _ImageDetailsState extends State<ImageDetails> {
                           onPressed: () async {
                             print(widget.path);
                             final temp = await getTemporaryDirectory();
-                            final path = '${temp.path}/ ';
 
                             await Share.shareFiles([widget.path],
                                 text:

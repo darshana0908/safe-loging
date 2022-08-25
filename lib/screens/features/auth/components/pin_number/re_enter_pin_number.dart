@@ -325,6 +325,7 @@ class _ReEnterPinState extends State<ReEnterPin> {
   //         Text(user.uid),
   //       ],
   //     );
+
   Future createuser({
     required String pin,
     required String name,
@@ -386,12 +387,12 @@ class _ReEnterPinState extends State<ReEnterPin> {
 // }
 }
 
-class extEditingController extends ChangeNotifier {
-  TextEditingController controler_pin = TextEditingController();
+// class extEditingController extends ChangeNotifier {
+//   TextEditingController controler_pin = TextEditingController();
 
-  TextEditingController get getcontroler_pin => controler_pin;
-  setcontroler() {
-    controler_pin.text;
-    notifyListeners();
-  }
-}
+//   TextEditingController get getcontroler_pin => controler_pin;
+//   setcontroler() {
+//     controler_pin.text;
+//     notifyListeners();
+//   }
+// }
