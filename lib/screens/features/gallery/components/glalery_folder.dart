@@ -12,22 +12,26 @@ class PlatformAlbum extends StatefulWidget {
   final String album;
   final Image image;
 
-
-  PlatformAlbum(
-      {Key? key,
-      required this.image,
-      required this.title,
-      required this.isDelete,
-      required this.path,
-      required this.album,
-  })
-      : super(key: key);
+  const PlatformAlbum({
+    Key? key,
+    required this.image,
+    required this.title,
+    required this.isDelete,
+    required this.path,
+    required this.album,
+  }) : super(key: key);
 
   @override
   State<PlatformAlbum> createState() => _PlatformAlbumState();
 }
 
 class _PlatformAlbumState extends State<PlatformAlbum> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -95,7 +99,9 @@ class _PlatformAlbumState extends State<PlatformAlbum> {
                                                   'Dialog Dissmiss from callback $type');
                                             },
                                             btnOkOnPress: () async {
-                                              delete(widget.path);
+                                              setState(() {
+                                                delete(widget.path);
+                                              });
 
                                               await Navigator.pushNamed(
                                                   context, "Setting");
@@ -180,7 +186,8 @@ class _PlatformAlbumState extends State<PlatformAlbum> {
 
   void delete(String path) {
     final dir = Directory(path);
-
-    dir.deleteSync(recursive: true);
+    setState(() {
+      dir.deleteSync(recursive: true);
+    });
   }
 }

@@ -40,7 +40,7 @@ class _ImageDetailsState extends State<ImageDetails> {
                     //load system image
                     File(widget.path), //system image path
                     width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height / 3 * 2,
+                    height: MediaQuery.of(context).size.height / 3 * 1.5,
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -50,67 +50,11 @@ class _ImageDetailsState extends State<ImageDetails> {
                       children: [
                         IconButton(
                           onPressed: () async {
-                            print(widget.path);
                             final temp = await getTemporaryDirectory();
 
                             await Share.shareFiles([widget.path],
                                 text:
                                     'check out my Apps https://Safeloging.com');
-
-                            // showDialog(
-                            //   context: context,
-                            //   builder: (BuildContext context) {
-                            //     return Expanded(
-                            //       child: AlertDialog(
-                            //         content: SizedBox(
-                            //           height: 250,
-                            //           child: Column(
-                            //             children: [
-                            //               IconButton(
-                            //                 onPressed: () async {
-
-                            //                   // Navigator.push(
-                            //                   //     context,
-                            //                   //     MaterialPageRoute(
-                            //                   //       builder: (context) =>
-                            //                   //           ImageShare(),
-                            //                   //     ));
-                            //                 },
-                            //                 icon: const Icon(
-                            //                     Icons.whatsapp_sharp),
-                            //                 iconSize: 100,
-                            //                 color: Colors.green,
-                            //               ),
-                            //               IconButton(
-                            //                 onPressed: () async {
-                            //                   // final Email email = Email(
-                            //                   //   body: 'Email body',
-                            //                   //   subject: 'Email subject',
-                            //                   //   recipients: [
-                            //                   //     'example@example.com'
-                            //                   //   ],
-                            //                   //   cc: ['cc@example.com'],
-                            //                   //   bcc: ['bcc@example.com'],
-                            //                   //   attachmentPaths: [
-                            //                   //     (widget.path)
-                            //                   //   ],
-                            //                   //   isHTML: false,
-
-                            //                   // await FlutterEmailSender.send(
-                            //                   //     email);
-                            //                 },
-                            //                 icon: const Icon(
-                            //                     Icons.email_outlined),
-                            //                 iconSize: 100,
-                            //                 color: Colors.red,
-                            //               )
-                            //             ],
-                            //           ),
-                            //         ),
-                            //       ),
-                            //     );
-                            //   },
-                            // );
                           },
                           icon: Icon(
                             Icons.share,
@@ -118,10 +62,13 @@ class _ImageDetailsState extends State<ImageDetails> {
                           ),
                           iconSize: 50,
                         ),
-                        Icon(
-                          Icons.rotate_90_degrees_ccw_outlined,
-                          color: kblue,
-                          size: 50,
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.rotate_90_degrees_ccw_outlined,
+                            color: kblue,
+                          ),
+                          iconSize: 50,
                         ),
                         InkWell(
                           onTap: () async {
@@ -151,6 +98,5 @@ class _ImageDetailsState extends State<ImageDetails> {
       encryptedDir.deleteSync(recursive: true);
       decryptedDir.deleteSync(recursive: true);
     });
-    initState();
   }
 }
