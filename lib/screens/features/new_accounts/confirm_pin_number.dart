@@ -18,6 +18,7 @@ class _ConfirmPinState extends State<ConfirmPin> {
   final TextEditingController controler_pin = TextEditingController();
 
   bool backspacecolorchange = false;
+  bool isloading = true;
 
   String ff = 'f';
   bool confirm_pin = true;
@@ -249,29 +250,45 @@ class _ConfirmPinState extends State<ConfirmPin> {
                                             .then((value) async {
                                           print(value['email']);
                                           if (value['id'] == doc['uid']) {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const NewAccountPin(), 
-                                                ));
+                                            setState(() {
+                                              isloading = false;
+                                            });
+                                            isloading
+                                                ? const Center(
+                                                    child:
+                                                        CircularProgressIndicator())
+                                                : Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const NewAccountPin(),
+                                                    ));
                                           }
                                         });
                                       }
-                                      final user =
-                                          FirebaseAuth.instance.currentUser!;
-                                      if (user.uid == doc['uid']) {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const NewAccountPin(),
-                                            ));
+                                      if (pinNum == controler_pin.text) {
+                                        final user =
+                                            FirebaseAuth.instance.currentUser!;
+                                        if (user.uid == doc['uid']) {
+                                          setState(() {
+                                            isloading = false;
+                                          });
+                                          isloading
+                                              ? const Center(
+                                                  child:
+                                                      CircularProgressIndicator())
+                                              : Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const NewAccountPin(),
+                                                  ));
+                                        }
                                       }
 
                                       print(controler_pin.text);
                                     } else {
-                                      setState(() async {
+                                      setState(() {
                                         confirm_pin = false;
                                       });
                                     }
