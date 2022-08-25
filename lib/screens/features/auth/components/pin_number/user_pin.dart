@@ -271,6 +271,17 @@ class _UserPInState extends State<UserPIn> {
                             height: 65,
                             child: IconButton(
                               onPressed: () async {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return const Center(
+                                      child: CupertinoActivityIndicator(
+                                        radius: 55,
+                                        color: Colors.red,
+                                      ),
+                                    );
+                                  },
+                                );
                                 await FirebaseFirestore.instance
                                     .collection('users')
                                     .get()
@@ -286,31 +297,15 @@ class _UserPInState extends State<UserPIn> {
                                           if (value['id'].toString() ==
                                               doc['uid'].toString()) {
                                             savebool();
-                                            setState(() {
-                                              isLoading = false;
-                                            });
+
                                             //loading widget goes here
-                                            return isLoading
-                                                ? const Scaffold(
-                                                    body: Center(
-                                                    child: SizedBox(
-                                                        width: 40.0,
-                                                        height: 40.0,
-                                                        child: CircularProgressIndicator(
-                                                            backgroundColor:
-                                                                Colors.black,
-                                                            valueColor:
-                                                                AlwaysStoppedAnimation<
-                                                                        Color>(
-                                                                    Colors
-                                                                        .red))),
-                                                  ))                  
-                                                : Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          const GalleryHome(),
-                                                    ));
+
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const GalleryHome(),
+                                                ));
                                           }
                                         });
                                       }
@@ -320,37 +315,34 @@ class _UserPInState extends State<UserPIn> {
                                             FirebaseAuth.instance.currentUser!;
                                         if (user.uid == doc['uid'].toString()) {
                                           savebool();
-                                          setState(() {
-                                            isLoading = false;
-                                          });
-                                          return isLoading
-                                              ? const Scaffold(
-                                                  body: Center(
-                                                  child: SizedBox(
-                                                      width: 40.0,
-                                                      height: 40.0,
-                                                      child: CircularProgressIndicator(
-                                                          backgroundColor:
-                                                              Colors.black,
-                                                          valueColor:
-                                                              AlwaysStoppedAnimation<
-                                                                      Color>(
-                                                                  Colors.red))),
-                                                ))
-                                              : Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const GalleryHome(),
-                                                  ));
+
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const GalleryHome(),
+                                              ));
                                         }
 
                                         print(controler_re_enter_pin.text);
                                       }
                                     } else {
-                                      setState(() {
-                                        confirm_pin = false;
-                                      });
+                                      return const Scaffold(
+                                          body: Center(
+                                        child: SizedBox(
+                                            width: 40.0,
+                                            height: 40.0,
+                                            child: CircularProgressIndicator(
+                                                backgroundColor: Colors.black,
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                        Color>(Colors.red))),
+                                      ));
+                                      // } else {
+                                      //   setState(() {
+                                      //     confirm_pin = false;
+                                      //   });
+                                      // }
                                     }
                                   }
                                 });
