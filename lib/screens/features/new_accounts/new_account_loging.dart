@@ -1,7 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 import 'package:safe_encrypt/screens/features/new_accounts/pin_key_pad.dart';
 
@@ -236,59 +236,78 @@ class _NewAccountLogingState extends State<NewAccountLoging> {
                             height: 65,
                             child: IconButton(
                               onPressed: () async {
-                                loaddata();
-                                getData();
-                                await FirebaseFirestore.instance
-                                    .collection('newusers')
-                                    .get()
-                                    .then((QuerySnapshot querySnapshot) {
-                                  for (var doc in querySnapshot.docs) {
-                                    String pinNum =
-                                        doc['foldername'].toString();
-                                    if (pinNum == controler_pin.text) {
-                                      if (pinNum == controler_pin.text) {
-                                        FacebookAuth.instance
-                                            .getUserData()
-                                            .then((value) async {
-                                          if (value['id'] == doc['uid']) {
-                                            await Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      NewAccountGalleryHome(
-                                                    controler_pin:
-                                                        controler_pin.text,
-                                                  ),
-                                                ));
-                                          }
-                                        });
-                                      }
-                                      if (pinNum == controler_pin.text) {
-                                        final user =
-                                            FirebaseAuth.instance.currentUser!;
-                                        if (user.uid == doc['uid']) {
-                                          if (user.email == doc['email']) {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      NewAccountGalleryHome(
-                                                    controler_pin:
-                                                        controler_pin.text,
-                                                  ),
-                                                ));
-                                          }
-                                        }
+                                String path =
+                                    "/storage/emulated/0/Android/data/com.example.safe_encrypt/files/file/${controler_pin.text}";
+                                bool directoryExists =
+                                    await Directory(path).exists();
+                                bool fileExists = await File(path).exists();
+                                if (directoryExists || fileExists) {
+                                  // ignore: use_build_context_synchronously
+                                  await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            NewAccountGalleryHome(
+                                          controler_pin: controler_pin.text,
+                                        ),
+                                      ));
+                                } else {
+                                  setState(() {
+                                    confirm_pin = false;
+                                  });
+                                }
 
-                                        print(controler_pin.text);
-                                      }
-                                    } else {
-                                      setState(() {
-                                        confirm_pin = false;
-                                      });
-                                    }
-                                  }
-                                });
+                                // await FirebaseFirestore.instance
+                                //     .collection('newusers')
+                                //     .get()
+                                //     .then((QuerySnapshot querySnapshot) {
+                                //   for (var doc in querySnapshot.docs) {
+                                //     String pinNum =
+                                //         doc['foldername'].toString();
+
+                                //     FacebookAuth.instance
+                                //         .getUserData()
+                                //         .then((value) async {
+                                //       if (value['id'].toString() ==
+                                //           doc['uid'].toString()) {
+                                //         if (controler_pin.text == pinNum) {
+                                //           await Navigator.push(
+                                //               context,
+                                //               MaterialPageRoute(
+                                //                 builder: (context) =>
+                                //                     NewAccountGalleryHome(
+                                //                   controler_pin:
+                                //                       controler_pin.text,
+                                //                 ),
+                                //               ));
+                                //         }
+                                //       }
+                                //     });
+
+                                //     final user =
+                                //         FirebaseAuth.instance.currentUser!;
+                                //     if (user.uid == doc['uid'].toString()) {
+                                //       if (user.email ==
+                                //           doc['email'].toString()) {
+                                //         if (controler_pin.text == pinNum) {
+                                //           Navigator.push(
+                                //               context,
+                                //               MaterialPageRoute(
+                                //                 builder: (context) =>
+                                //                     NewAccountGalleryHome(
+                                //                   controler_pin:
+                                //                       controler_pin.text,
+                                //                 ),
+                                //               ));
+                                //         }
+                                //       }
+                                //     } else {
+                                //       setState(() {
+                                //         confirm_pin = false;
+                                //       });
+                                //     }
+                                //   }
+                                // });
 
                                 // print(controler_pin.text);
                                 // await FirebaseFirestore.instance
