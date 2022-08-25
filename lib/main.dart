@@ -3,8 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:safe_encrypt/providers/google_sign_provider.dart';
 
-import 'screens/features/auth/components/pin_number/re_enter_pin_number.dart';
-import 'screens/features/auth/components/pin_number/user_pin.dart';
 import 'screens/features/gallery/album_covers.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -18,7 +16,7 @@ Future main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => FolderCoverImageProvider()),
         ChangeNotifierProvider(create: (_) => GoogleSignInProvider()),
-        ChangeNotifierProvider(create: (_) => extEditingController()),
+        // ChangeNotifierProvider(create: (_) => extEditingController()),
       ],
       child: const MyApp(),
     ),
