@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,10 +29,10 @@ class _AlbumCoversState extends State<AlbumCovers> {
   ];
 
   String selectedfolderString = '';
-  saveimg(String imgname) async {
+  saveimg(String selectedfolderString) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('imgname', imgname);
-    print(imgname);
+    await prefs.setString('imgname', selectedfolderString);
+    print(selectedfolderString);
   }
 
   @override
@@ -105,18 +104,19 @@ class _AlbumCoversState extends State<AlbumCovers> {
                         ? () {
                             setState(() {
                               // use provider (FolderCoverImageProvider) load folder cover image list
-                              Provider.of<FolderCoverImageProvider>(context,
-                                      listen: false)
-                                  .changecovername(index);
+                              // Provider.of<FolderCoverImageProvider>(context,
+                              //         listen: false)
+                              //     .changecovername(index);
 
-                              imgname = Provider.of<FolderCoverImageProvider>(
-                                      context,
-                                      listen: false)
-                                  .imgList[index];
-                              print(imgname);
-
+                              // imgname = Provider.of<FolderCoverImageProvider>(
+                              //         context,
+                              //         listen: false)
+                              //     .imgList[index];
+                              // print(imgname);
+                              selectedfolderString = imgList[index];
                               selectedfolder = true;
-                              saveimg(imgname);
+
+                              saveimg(selectedfolderString);
                             });
                           }
                         : () {
@@ -129,68 +129,78 @@ class _AlbumCoversState extends State<AlbumCovers> {
                         child: Stack(
                           children: [
                             SizedBox(
-                              // width: selectedfolderString == imgList[index]
-                              width: Provider.of<FolderCoverImageProvider>(
-                                              context,
-                                              listen: true)
-                                          .selectedfolderString ==
-                                      Provider.of<FolderCoverImageProvider>(
-                                              context,
-                                              listen: true)
-                                          .imgList[index]
+                              width: selectedfolderString == imgList[index]
+                                  // width: Provider.of<FolderCoverImageProvider>(
+                                  //                 context,
+                                  //                 listen: true)
+                                  //             .selectedfolderString ==
+                                  //         Provider.of<FolderCoverImageProvider>(
+                                  //                 context,
+                                  //                 listen: true)
+                                  //             .imgList[index]
                                   ? MediaQuery.of(context).size.width
                                   : 0,
-                              height: Provider.of<FolderCoverImageProvider>(
-                                              context,
-                                              listen: true)
-                                          .selectedfolderString ==
-                                      Provider.of<FolderCoverImageProvider>(
-                                              context,
-                                              listen: true)
-                                          .imgList[index]
+                              // height: Provider.of<FolderCoverImageProvider>(
+                              //                 context,
+                              //                 listen: true)
+                              //             .selectedfolderString ==
+                              //         Provider.of<FolderCoverImageProvider>(
+                              //                 context,
+                              //                 listen: true)
+                              //             .imgList[index]
+                              height: selectedfolderString == imgList[index]
                                   ? MediaQuery.of(context).size.height
                                   : 0,
                             ),
                             Positioned(
-                              left: Provider.of<FolderCoverImageProvider>(
-                                              context,
-                                              listen: true)
-                                          .selectedfolderString ==
-                                      Provider.of<FolderCoverImageProvider>(
-                                              context,
-                                              listen: true)
-                                          .imgList[index]
+                              // left: Provider.of<FolderCoverImageProvider>(
+                              //                 context,
+                              //                 listen: true)
+                              //             .selectedfolderString ==
+                              //         Provider.of<FolderCoverImageProvider>(
+                              //                 context,
+                              //                 listen: true)
+                              //             .imgList[index]
+
+                              left: selectedfolderString == imgList[index]
                                   ? 24
                                   : 0,
-                              top: Provider.of<FolderCoverImageProvider>(
-                                              context,
-                                              listen: true)
-                                          .selectedfolderString ==
-                                      Provider.of<FolderCoverImageProvider>(
-                                              context,
-                                              listen: true)
-                                          .imgList[index]
+                              top: selectedfolderString == imgList[index]
+
+                                  // Provider.of<FolderCoverImageProvider>(
+                                  //                 context,
+                                  //                 listen: true)
+                                  //             .selectedfolderString ==
+                                  //         Provider.of<FolderCoverImageProvider>(
+                                  //                 context,
+                                  //                 listen: true)
+                                  //             .imgList[index]
+                                  //
                                   ? 22
                                   : 0,
                               child: SizedBox(
-                                width: Provider.of<FolderCoverImageProvider>(
-                                                context,
-                                                listen: true)
-                                            .selectedfolderString ==
-                                        Provider.of<FolderCoverImageProvider>(
-                                                context,
-                                                listen: true)
-                                            .imgList[index]
+                                width: selectedfolderString == imgList[index]
+
+                                    // Provider.of<FolderCoverImageProvider>(
+                                    //                 context,
+                                    //                 listen: true)
+                                    //             .selectedfolderString ==
+                                    //         Provider.of<FolderCoverImageProvider>(
+                                    //                 context,
+                                    //                 listen: true)
+                                    //             .imgList[index]
                                     ? 120
                                     : MediaQuery.of(context).size.width / 3 - 8,
-                                height: Provider.of<FolderCoverImageProvider>(
-                                                context,
-                                                listen: true)
-                                            .selectedfolderString ==
-                                        Provider.of<FolderCoverImageProvider>(
-                                                context,
-                                                listen: true)
-                                            .imgList[index]
+                                height: selectedfolderString == imgList[index]
+
+                                    // Provider.of<FolderCoverImageProvider>(
+                                    //                 context,
+                                    //                 listen: true)
+                                    //             .selectedfolderString ==
+                                    //         Provider.of<FolderCoverImageProvider>(
+                                    //                 context,
+                                    //                 listen: true)
+                                    //             .imgList[index]
                                     ? 120
                                     : 150,
                                 child: Image.asset(
@@ -203,13 +213,14 @@ class _AlbumCoversState extends State<AlbumCovers> {
                                 left: customcover ? 10 : 0,
                                 top: customcover ? 3 : 0,
                                 child: Icon(
-                                  Provider.of<FolderCoverImageProvider>(context,
-                                                  listen: true)
-                                              .selectedfolderString ==
-                                          Provider.of<FolderCoverImageProvider>(
-                                                  context,
-                                                  listen: true)
-                                              .imgList[index]
+                                  selectedfolderString == imgList[index]
+                                      // Provider.of<FolderCoverImageProvider>(context,
+                                      //                 listen: true)
+                                      //             .selectedfolderString ==
+                                      //         Provider.of<FolderCoverImageProvider>(
+                                      //                 context,
+                                      //                 listen: true)
+                                      //             .imgList[index]
                                       ? Icons.check_circle_rounded
                                       : null,
                                   color: klightBlueAccent,

@@ -11,6 +11,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 import 'package:safe_encrypt/services/image_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../utils/helper_methods.dart';
 import '../auth/components/pin_number/user_pin.dart';
@@ -38,6 +39,8 @@ class _GalleryHomeState extends State<GalleryHome> {
     _keepAlive(true);
     requestPermission(Permission.storage);
     getFolderList();
+    loadig();
+    print(imgload);
     // timer = Timer(
     //   const Duration(seconds: 20),
     //   () {
@@ -59,6 +62,15 @@ class _GalleryHomeState extends State<GalleryHome> {
     _folderName.dispose();
 
     super.dispose();
+  }
+
+  String? imgload = '';
+  loadig() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    imgload = prefs.getString(
+      'imgname',
+    );
+    print(imgload);
   }
 
   @override
@@ -258,11 +270,13 @@ class _GalleryHomeState extends State<GalleryHome> {
 
                           // selected image of folder cover
                           // use provider (FolderCoverImageProvider)
-                          image: Image.asset(
-                              Provider.of<FolderCoverImageProvider>(context,
-                                      listen: false)
-                                  .imgList[index],
-                              fit: BoxFit.fill),
+                          image: Image.asset(imgload.toString()),
+
+                          // Image.asset(
+                          //     Provider.of<FolderCoverImageProvider>(context,
+                          //             listen: false)
+                          //         .imgList[index],
+                          //     fit: BoxFit.fill),
                           title: folderName,
                           album: 'Album Settings',
                           isDelete: index == 0 ? false : true,
