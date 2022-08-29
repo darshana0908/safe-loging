@@ -40,7 +40,11 @@ class _ImageScreenState extends State<ImageScreen> {
         return true;
       },
       child: Scaffold(
-        appBar: AppBar(title: const Text('Images')),
+        backgroundColor: kblack,
+        appBar: AppBar(
+          title: const Text('Images'),
+          backgroundColor: kdarkblue,
+        ),
         body: SizedBox(
           height: MediaQuery.of(context).size.height,
           child: HawkFabMenu(
@@ -80,7 +84,7 @@ class _ImageScreenState extends State<ImageScreen> {
         padding: const EdgeInsets.only(bottom: 60.0),
         child: GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2),
+              crossAxisCount: 6),
           padding: const EdgeInsets.all(8.0),
           itemCount: decryptedImages.length,
           itemBuilder: (context, index) {
