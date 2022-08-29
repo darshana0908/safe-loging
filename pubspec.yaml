@@ -52,6 +52,7 @@ dependencies:
   auto_reload: ^1.0.0
   flutter_share_me: ^1.3.0
   share_plus: ^4.0.10+1
+  galleryimage: ^1.2.0
   
   
   # webview_flutter: ^3.0.4
