@@ -1,26 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:safe_encrypt/constants/colors.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'album_covers.dart';
 
 class AlbumSettings extends StatefulWidget {
-  const AlbumSettings({Key? key}) : super(key: key);
-
+  const AlbumSettings({Key? key, required this.foldernames}) : super(key: key);
+  final String foldernames;
   @override
   State<AlbumSettings> createState() => _AlbumSettingsState();
 }
 
 class _AlbumSettingsState extends State<AlbumSettings> {
-  
   @override
   void initState() {
-  
     // TODO: implement initState
     super.initState();
   }
-
- 
 
   @override
   Widget build(BuildContext context) {
@@ -120,8 +115,12 @@ class _AlbumSettingsState extends State<AlbumSettings> {
                   ),
                 ),
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => const AlbumCovers()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => AlbumCovers(
+                                foldersname: widget.foldernames,
+                              )));
                 },
               ),
               const SizedBox(

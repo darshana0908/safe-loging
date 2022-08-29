@@ -3,8 +3,8 @@ import 'package:safe_encrypt/constants/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AlbumCovers extends StatefulWidget {
-  const AlbumCovers({Key? key}) : super(key: key);
-
+  const AlbumCovers({Key? key, required this.foldersname}) : super(key: key);
+  final String foldersname;
   @override
   State<AlbumCovers> createState() => _AlbumCoversState();
 }
@@ -31,8 +31,13 @@ class _AlbumCoversState extends State<AlbumCovers> {
   String selectedfolderString = '';
   saveimg(String selectedfolderString) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
     await prefs.setString('imgname', selectedfolderString);
+    await prefs.setString('faldername', widget.foldersname);
+
     print(selectedfolderString);
+    print('fffffffffffffffff');
+    print(widget.foldersname);
   }
 
   @override

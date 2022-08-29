@@ -289,13 +289,14 @@ class _UserPInState extends State<UserPIn> {
                                   for (var doc in querySnapshot.docs) {
                                     String pinNum = doc['pin'].toString();
                                     if (pinNum == controler_re_enter_pin.text) {
-                                      if (pinNum ==
-                                          controler_re_enter_pin.text) {
+                                      
                                         FacebookAuth.instance
                                             .getUserData()
                                             .then((value) async {
-                                          if (value['id'].toString() ==
-                                              doc['uid'].toString()) {
+                                          if (value['id'] == doc['uid']) {
+                                            print(value['id']);
+                                            print(doc['uid'].toString());
+
                                             savebool();
 
                                             //loading widget goes here
@@ -308,7 +309,7 @@ class _UserPInState extends State<UserPIn> {
                                                 ));
                                           }
                                         });
-                                      }
+                                      
                                       if (pinNum ==
                                           controler_re_enter_pin.text) {
                                         final user =

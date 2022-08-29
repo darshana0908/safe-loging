@@ -65,12 +65,16 @@ class _GalleryHomeState extends State<GalleryHome> {
   }
 
   String? imgload = '';
+  String? faldername = '';
+
   loadig() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     imgload = prefs.getString(
       'imgname',
     );
+    faldername = prefs.getString('faldername');
     print(imgload);
+      print(faldername);
   }
 
   @override
@@ -270,7 +274,7 @@ class _GalleryHomeState extends State<GalleryHome> {
 
                           // selected image of folder cover
                           // use provider (FolderCoverImageProvider)
-                          image: Image.asset(imgload.toString()),
+                          image: Image.asset('assets/Capture9.JPG',fit: BoxFit.fill,),
 
                           // Image.asset(
                           //     Provider.of<FolderCoverImageProvider>(context,
