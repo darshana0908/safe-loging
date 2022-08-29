@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:safe_encrypt/screens/features/gallery/album_settings.dart';
+import 'package:safe_encrypt/screens/features/gallery/gallery_home.dart';
 import '../../../../constants/colors.dart';
 
 class PlatformAlbum extends StatefulWidget {
@@ -82,31 +83,37 @@ class _PlatformAlbumState extends State<PlatformAlbum> {
                                             style: TextStyle(
                                                 color: kblack, fontSize: 17)),
                                         onPressed: () {
+                                          setState(() {
+                                            delete(widget.path);
+                                          });
                                           AwesomeDialog(
-                                            context: context,
-                                            dialogType: DialogType.WARNING,
-                                            headerAnimationLoop: false,
-                                            animType: AnimType.TOPSLIDE,
-                                            showCloseIcon: true,
-                                            closeIcon: const Icon(Icons
-                                                .close_fullscreen_outlined),
-                                            title: 'Warning',
-                                            desc:
-                                                'Are you sure want to delete folder',
-                                            btnCancelOnPress: () {},
-                                            onDissmissCallback: (type) {
-                                              debugPrint(
-                                                  'Dialog Dissmiss from callback $type');
-                                            },
-                                            btnOkOnPress: () async {
-                                              setState(() {
-                                                delete(widget.path);
-                                              });
+                                              context: context,
+                                              dialogType: DialogType.WARNING,
+                                              headerAnimationLoop: false,
+                                              animType: AnimType.TOPSLIDE,
+                                              showCloseIcon: true,
+                                              closeIcon: const Icon(Icons
+                                                  .close_fullscreen_outlined),
+                                              title: 'Warning',
+                                              desc:
+                                                  'Are you sure want to delete folder',
+                                              btnCancelOnPress: () {},
+                                              onDissmissCallback: (type) {
+                                                debugPrint(
+                                                    'Dialog Dissmiss from callback $type');
+                                              },
+                                              btnOkOnPress: () async {
+                                                setState(() {
+                                                  delete(widget.path);
+                                                });
 
-                                              await Navigator.pushNamed(
-                                                  context, "Setting");
-                                            },
-                                          ).show();
+                                                Navigator.pushReplacement(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (BuildContext
+                                                                context) =>
+                                                            const GalleryHome()));
+                                              }).show();
                                           // showAlertDialog(context, widget.path);
                                         }),
                                   ),
@@ -124,8 +131,9 @@ class _PlatformAlbumState extends State<PlatformAlbum> {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (_) =>
-                                                  const AlbumSettings()));
+                                              builder: (_) => AlbumSettings(
+                                                    foldernames: widget.title,
+                                                  )));
                                     },
                                   ),
                                 ),
@@ -185,8 +193,8 @@ class _PlatformAlbumState extends State<PlatformAlbum> {
   // }
 
   void delete(String path) {
-    final dir = Directory(path);
     setState(() {
+      final dir = Directory(path);
       dir.deleteSync(recursive: true);
     });
   }
