@@ -243,7 +243,7 @@ class _GalleryHomeState extends State<GalleryHome> {
                 HawkFabMenuItem(
                     label: 'Import photos',
                     ontap: () async =>
-                        ImageService(isFake: widget.isFake).importPhotos(),
+                        ImageService().importPhotos(),
                     icon: const Icon(Icons.photo),
                     color: const Color.fromRGBO(0, 0, 0, 0.38),
                     labelColor: Colors.white,
@@ -289,7 +289,7 @@ class _GalleryHomeState extends State<GalleryHome> {
                           context,
                           MaterialPageRoute(
                               builder: (_) =>
-                                  ImageScreen(path: folderList[index].path))),
+                                  ImageScreen(title: folderName, path: folderList[index].path,))),
                     );
                   }),
             ),
