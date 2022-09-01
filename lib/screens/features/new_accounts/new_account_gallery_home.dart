@@ -246,8 +246,8 @@ class _NewAccountGalleryHomeState extends State<NewAccountGalleryHome> {
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (_) =>
-                                ImageScreen(path: folderList[index].path))),
+                            builder: (_) => 
+                                ImageScreen(  title: folderName, path: folderList[index].path))),
                   );
                 }),
           ),
