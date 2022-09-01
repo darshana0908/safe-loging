@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:safe_encrypt/providers/google_sign_provider.dart';
+import 'package:safe_encrypt/screens/features/gallery/image_screen.dart';
 
 import 'screens/features/gallery/album_covers.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -16,7 +17,7 @@ Future main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => FolderCoverImageProvider()),
         ChangeNotifierProvider(create: (_) => GoogleSignInProvider()),
-        // ChangeNotifierProvider(create: (_) => extEditingController()),
+        ChangeNotifierProvider(create: (_) => imgload()),
       ],
       child: const MyApp(),
     ),
