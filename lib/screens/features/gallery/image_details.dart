@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:safe_encrypt/screens/features/gallery/gallery_home.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../constants/colors.dart';
@@ -14,12 +15,23 @@ class ImageDetails extends StatefulWidget {
   State<ImageDetails> createState() => _ImageDetailsState();
 }
 
-class _ImageDetailsState extends State<ImageDetails> {
+class _ImageDetailsState extends State<ImageDetails>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
   @override
   void initState() {
     // TODO: implement
-
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 5000),
+      vsync: this,
+    );
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -31,14 +43,18 @@ class _ImageDetailsState extends State<ImageDetails> {
         backgroundColor: kblack,
         body: Column(
           children: [
-            Center(
+            RotationTransition(
+              turns: Tween(begin: 0.0, end: 0.25).animate(_controller),
               child: Image.file(
-                //load system image
                 File(widget.path), //system image path
-
                 fit: BoxFit.cover,
               ),
             ),
+            // Center(
+            //     child: Image.file(
+            //   File(widget.path), //system image path
+            //   fit: BoxFit.cover,
+            // )),
           ],
         ),
         bottomNavigationBar: BottomAppBar(
@@ -59,18 +75,26 @@ class _ImageDetailsState extends State<ImageDetails> {
               iconSize: 30,
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                _controller.forward();
+              },
               icon: Icon(
                 Icons.rotate_90_degrees_ccw_outlined,
                 color: kwhite,
               ),
               iconSize: 30,
             ),
+            ElevatedButton(
+              child: const Text("reset"),
+              onPressed: () => _controller.reset(),
+            ),
             InkWell(
               onTap: () async {
                 setState(() {
                   delete(widget.path);
                 });
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const GalleryHome()));
               },
               child: Icon(
                 Icons.delete_forever,
@@ -83,10 +107,9 @@ class _ImageDetailsState extends State<ImageDetails> {
   }
 
   void delete(String path) async {
-    final decryptedDir = Directory(path);
-    final encryptedDir = Directory('$path.aes');
-
     setState(() async {
+      final decryptedDir = Directory(path);
+      final encryptedDir = Directory('$path.aes');
       encryptedDir.deleteSync(recursive: true);
       decryptedDir.deleteSync(recursive: true);
     });
