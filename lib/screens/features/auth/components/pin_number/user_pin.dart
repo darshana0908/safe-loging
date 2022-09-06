@@ -77,7 +77,7 @@ class _UserPInState extends State<UserPIn> {
                   Navigator.pop(context);
                 }),
             Padding(
-              padding: const EdgeInsets.all(40.0),
+              padding: const EdgeInsets.symmetric(horizontal: 40),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: Column(
@@ -289,27 +289,26 @@ class _UserPInState extends State<UserPIn> {
                                   for (var doc in querySnapshot.docs) {
                                     String pinNum = doc['pin'].toString();
                                     if (pinNum == controler_re_enter_pin.text) {
-                                      
-                                        FacebookAuth.instance
-                                            .getUserData()
-                                            .then((value) async {
-                                          if (value['id'] == doc['uid']) {
-                                            print(value['id']);
-                                            print(doc['uid'].toString());
+                                      FacebookAuth.instance
+                                          .getUserData()
+                                          .then((value) async {
+                                        if (value['id'] == doc['uid']) {
+                                          print(value['id']);
+                                          print(doc['uid'].toString());
 
-                                            savebool();
+                                          savebool();
 
-                                            //loading widget goes here
+                                          //loading widget goes here
 
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const GalleryHome(),
-                                                ));
-                                          }
-                                        });
-                                      
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const GalleryHome(),
+                                              ));
+                                        }
+                                      });
+
                                       if (pinNum ==
                                           controler_re_enter_pin.text) {
                                         final user =

@@ -32,7 +32,7 @@ class _FirstPinNumberState extends State<FirstPinNumber> {
                   Navigator.pop(context);
                 }),
             Padding(
-              padding: const EdgeInsets.all(40.0),
+              padding: const EdgeInsets.symmetric(horizontal: 40),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: Column(
@@ -80,7 +80,7 @@ class _FirstPinNumberState extends State<FirstPinNumber> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '1';
+                                        '${controler_pin.text}1';
                                   });
                                 }),
                             PinKeyPad(
@@ -90,7 +90,7 @@ class _FirstPinNumberState extends State<FirstPinNumber> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '2';
+                                        '${controler_pin.text}2';
                                   });
                                 }),
                             PinKeyPad(
@@ -100,7 +100,7 @@ class _FirstPinNumberState extends State<FirstPinNumber> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '3';
+                                        '${controler_pin.text}3';
                                   });
                                 }),
                           ],
@@ -121,7 +121,7 @@ class _FirstPinNumberState extends State<FirstPinNumber> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '4';
+                                        '${controler_pin.text}4';
                                   });
                                 }),
                             PinKeyPad(
@@ -131,7 +131,7 @@ class _FirstPinNumberState extends State<FirstPinNumber> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '5';
+                                        '${controler_pin.text}5';
                                   });
                                 }),
                             PinKeyPad(
@@ -141,7 +141,7 @@ class _FirstPinNumberState extends State<FirstPinNumber> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '6';
+                                        '${controler_pin.text}6';
                                   });
                                 }),
                           ],
@@ -162,7 +162,7 @@ class _FirstPinNumberState extends State<FirstPinNumber> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '7';
+                                        '${controler_pin.text}7';
                                   });
                                 }),
                             PinKeyPad(
@@ -172,7 +172,7 @@ class _FirstPinNumberState extends State<FirstPinNumber> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '8';
+                                        '${controler_pin.text}8';
                                   });
                                 }),
                             PinKeyPad(
@@ -182,7 +182,7 @@ class _FirstPinNumberState extends State<FirstPinNumber> {
                                     backspacecolorchange = false;
 
                                     controler_pin.text =
-                                        controler_pin.text + '9';
+                                        '${controler_pin.text}9';
                                   });
                                 }),
                           ],
@@ -210,7 +210,7 @@ class _FirstPinNumberState extends State<FirstPinNumber> {
                                 setState(() {
                                   backspacecolorchange = false;
 
-                                  controler_pin.text = controler_pin.text + '0';
+                                  controler_pin.text = '${controler_pin.text}0';
                                 });
                               }),
                           const SizedBox(

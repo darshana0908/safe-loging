@@ -39,7 +39,7 @@ class _ReEnterPinState extends State<ReEnterPin> {
                   Navigator.pop(context);
                 }),
             Padding(
-              padding: const EdgeInsets.all(40.0),
+              padding: const EdgeInsets.symmetric(horizontal: 40),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: Column(
