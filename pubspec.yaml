@@ -54,6 +54,7 @@ dependencies:
   share_plus: ^4.0.10+1
   galleryimage: ^1.2.0
   photo_view: ^0.14.0
+  http: ^0.13.5
   
   
   # webview_flutter: ^3.0.4
