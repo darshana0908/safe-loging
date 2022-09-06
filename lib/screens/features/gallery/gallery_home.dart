@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 
+import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +25,7 @@ import 'components/glalery_folder.dart';
 import 'image_screen.dart';
 
 class GalleryHome extends StatefulWidget {
+  final String title = "Flutter Data Table";
   final bool isFake;
   const GalleryHome({Key? key, this.isFake = false}) : super(key: key);
 
@@ -34,6 +37,27 @@ class _GalleryHomeState extends State<GalleryHome> {
   final TextEditingController _folderName = TextEditingController();
   List<FileSystemEntity> folderList = [];
   Timer? timer;
+  Future insertData(foldername) async {
+    setState(() {});
+
+    var url = "http://localhost/flutter/insertdata.php";
+    var response = await http.post(
+      Uri.parse(url),
+      body: {
+        "folder_name": _folderName.text.toString(),
+      },
+    );
+    print(foldername);  
+    var res;
+    var message = jsonDecode(res.body);
+    if (message == "true") {
+      print("Successful " + message);
+    } else {
+      print("Error: " + message);
+    }
+  }
+  // User? user = FirebaseAuth.instance.currentUser;
+
   @override
   void initState() {
     _keepAlive(true);
@@ -74,7 +98,7 @@ class _GalleryHomeState extends State<GalleryHome> {
     );
     faldername = prefs.getString('faldername');
     print(imgload);
-      print(faldername);
+    print(faldername);
   }
 
   @override
@@ -155,10 +179,11 @@ class _GalleryHomeState extends State<GalleryHome> {
                     ),
                     accountEmail: Text(''),
                     currentAccountPictureSize: const Size.square(50),
-                    currentAccountPicture: const CircleAvatar(
+                    currentAccountPicture: CircleAvatar(
                       backgroundColor: Color.fromARGB(255, 165, 255, 137),
                       child: Text(
-                        "A",
+                        //  user!.email!,
+                        '',
                         style: TextStyle(fontSize: 30.0, color: Colors.blue),
                       ), //Text
                     ), //circleAvatar
@@ -242,8 +267,7 @@ class _GalleryHomeState extends State<GalleryHome> {
                     labelBackgroundColor: kliteblue),
                 HawkFabMenuItem(
                     label: 'Import photos',
-                    ontap: () async =>
-                        ImageService().importPhotos(),
+                    ontap: () async => ImageService().importPhotos(),
                     icon: const Icon(Icons.photo),
                     color: const Color.fromRGBO(0, 0, 0, 0.38),
                     labelColor: Colors.white,
@@ -274,7 +298,10 @@ class _GalleryHomeState extends State<GalleryHome> {
 
                           // selected image of folder cover
                           // use provider (FolderCoverImageProvider)
-                          image: Image.asset('assets/Capture9.JPG',fit: BoxFit.fill,),
+                          image: Image.asset(
+                            'assets/Capture9.JPG',
+                            fit: BoxFit.fill,
+                          ),
 
                           // Image.asset(
                           //     Provider.of<FolderCoverImageProvider>(context,
@@ -288,8 +315,10 @@ class _GalleryHomeState extends State<GalleryHome> {
                       onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (_) =>
-                                  ImageScreen(title: folderName, path: folderList[index].path,))),
+                              builder: (_) => ImageScreen(
+                                    title: folderName,
+                                    path: folderList[index].path,
+                                  ))),
                     );
                   }),
             ),
@@ -326,6 +355,8 @@ class _GalleryHomeState extends State<GalleryHome> {
                             createFolder(_folderName.text);
                             await getFolderList();
                             _folderName.clear();
+                            senddata();
+                            insertData(_folderName.text);
                           });
                         },
                         child: const Text('CREATE')),
@@ -427,6 +458,15 @@ class _GalleryHomeState extends State<GalleryHome> {
       log(e.toString());
     }
     return false;
+  }
+
+  senddata() async {
+    final response = await http
+        .post(Uri.parse("http://localhost/flutter/insertdata.php"), body: {
+      'folder_name': _folderName.text,
+      "grant_type": "authorization_code",
+    });
+    print(_folderName.text);
   }
 
   void timeOutCallBack() {

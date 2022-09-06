@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import 'profile.dart';
+import 'package:safe_encrypt/screens/features/auth/components/pin_number/first_pin_number.dart';
 
 class GmailLogin extends StatefulWidget {
   const GmailLogin({Key? key}) : super(key: key);
@@ -22,7 +21,8 @@ class _GmailLoginState extends State<GmailLogin> {
             child: CircularProgressIndicator(),
           );
         } else if (snapshot.hasData) {
-          return const UserProfile();
+          print(snapshot.hasData);
+          return const FirstPinNumber();
         } else if (snapshot.hasError) {
           return const Center(
             child: Text('Something went wrong'),
