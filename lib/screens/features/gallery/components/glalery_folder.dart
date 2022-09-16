@@ -105,14 +105,13 @@ class _PlatformAlbumState extends State<PlatformAlbum> {
                                               btnOkOnPress: () async {
                                                 setState(() {
                                                   delete(widget.path);
-                                                });
 
-                                                Navigator.pushReplacement(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (BuildContext
-                                                                context) =>
-                                                            const GalleryHome()));
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (_) =>
+                                                              const GalleryHome()));
+                                                });
                                               }).show();
                                           // showAlertDialog(context, widget.path);
                                         }),
@@ -152,45 +151,6 @@ class _PlatformAlbumState extends State<PlatformAlbum> {
       ),
     );
   }
-
-  // showAlertDialog(BuildContext context, String path) {
-  //   // set up the buttons
-  //   Widget cancelButton = TextButton(
-  //     child: const Text("Cancel"),
-  //     onPressed: () {
-  //       Navigator.pop(context);
-  //     },
-  //   );
-  //   Widget continueButton = TextButton(
-  //     child: const Text("Yes"),
-  //     onPressed: () {
-  //       setState(() {
-  //         delete(path);
-  //         Navigator.pop(context, true);
-  //         Navigator.push(
-  //             context,
-  //             MaterialPageRoute(
-  //               builder: (_) => const Home(),
-  //             ));
-  //       });
-  //     },
-  //   );
-
-  //   // set up the AlertDialog
-  //   AlertDialog alert = AlertDialog(
-  //     title: const Text("Confirm"),
-  //     content: const Text("Are you sure you want to move this album to Trash?"),
-  //     actions: [cancelButton, continueButton],
-  //   );
-
-  //   // show the dialog
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return alert;
-  //     },
-  //   );
-  // }
 
   void delete(String path) {
     setState(() {
