@@ -217,17 +217,28 @@ class _ImageScreenState extends State<ImageScreen> {
                   elevation: 8.0,
                   child: Hero(
                       tag: imgPath,
-                      child: Image.file(File(imgPath), fit: BoxFit.fill,))),
+                      child: Image.file(
+                        File(imgPath),
+                        fit: BoxFit.fill,
+                      ))),
             );
           },
         ),
       );
     } else {
-      return Center(
-        child: Container(
-          padding: const EdgeInsets.only(bottom: 60.0),
-          child: const Text("Sorry, no images were found.",
-              style: TextStyle(fontSize: 18.0)),
+      return Padding(
+        padding: const EdgeInsets.only(top: 150),
+        child: Center(
+          child: Column(
+            children: [
+              Center(
+                  child: Icon(Icons.photo_library_rounded,
+                      size: 50, color: Colors.grey[400])),
+              const SizedBox(height: 50),
+              Text("This album is empty.",
+                  style: TextStyle(fontSize: 18.0, color: Colors.grey[500])),
+            ],
+          ),
         ),
       );
     }
