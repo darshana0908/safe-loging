@@ -1,10 +1,11 @@
 import 'dart:async';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:safe_encrypt/constants/colors.dart';
@@ -33,6 +34,7 @@ class _AuthScreen extends State<AuthScreen> {
         child: SafeArea(
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -49,30 +51,48 @@ class _AuthScreen extends State<AuthScreen> {
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 100),
-                        SvgPicture.asset(
-                          'assets/pramisson_1.svg',
-                          color: Colors.limeAccent,
-                          width: 150,
-                        ),
-                        const SizedBox(height: 100),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height / 6 * 1),
+                        Image.asset("assets/ic2.JPG"),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height / 6 * 1),
                         Text(
                           ' Welcome To Keepsafe ',
-                          style: TextStyle(fontSize: 25, color: kwhite),
+                          style: TextStyle(
+                              fontSize: 29,
+                              color: kwhite,
+                              fontWeight: FontWeight.w500),
                           textAlign: TextAlign.start,
                         ),
                         const SizedBox(height: 15),
                         Text(
                           'A safe place for your privet photos.',
-                          style: TextStyle(fontSize: 17, color: kgray),
+                          style: TextStyle(
+                              fontSize: 19,
+                              color: kgray,
+                              fontWeight: FontWeight.w500),
                           textAlign: TextAlign.start,
                         ),
                         const SizedBox(height: 55),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: SocialLoginButton(
+                            fontSize: 17,
+
+                            height: 40,
                             buttonType: SocialLoginButtonType.facebook,
                             onPressed: () async {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const Center(
+                                    child: CupertinoActivityIndicator(
+                                      radius: 55,
+                                      color: Colors.red,
+                                    ),
+                                  );
+                                },
+                              );
                               final LoginResult result =
                                   await FacebookAuth.instance.login(
                                 permissions: ['email'],
@@ -81,26 +101,35 @@ class _AuthScreen extends State<AuthScreen> {
 
                               if (result.status == LoginStatus.success) {
                                 // Login Success
+                                await FirebaseFirestore.instance
+                                    .collection('users')
+                                    .get()
+                                    .then(
+                                  (QuerySnapshot querySnapshot) {
+                                    for (var doc in querySnapshot.docs) {
+                                      FacebookAuth.instance
+                                          .getUserData()
+                                          .then((value) async {
+                                        print(value['email']);
 
-                                FacebookAuth.instance
-                                    .getUserData()
-                                    .then((value) async {
-                                  print(value['email']);
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const FirstPinNumber()),
+                                        );
 
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const FirstPinNumber()),
-                                  );
-
-                                  // Logger().w(value['email']);
-                                  // if (isfromSignup) {
-                                  //   await checkEmail(context, value['email']);
-                                  // } else {
-                                  //   await loginWithEmail(context, value['email']);
-                                  // }
-                                });
+                                        // Logger().w(value['email']);
+                                        // if (isfromSignup) {
+                                        //   await checkEmail(context, value['email']);
+                                        // } else {
+                                        //   await loginWithEmail(context, value['email']);
+                                        // }
+                                      });
+                                      print(doc['email']);
+                                    }
+                                  },
+                                );
 
                                 // isLoadingFb = false;
                               } else if (result.status ==
@@ -127,14 +156,28 @@ class _AuthScreen extends State<AuthScreen> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: SocialLoginButton(
+                            fontSize: 17,
+                            height: 40,
                             buttonType: SocialLoginButtonType.google,
                             onPressed: () async {
+                              // showDialog(
+                              //   context: context,
+                              //   builder: (context) {
+                              //     return const Center(
+                              //       child: CupertinoActivityIndicator(
+                              //         radius: 55,
+                              //         color: Colors.red,
+                              //       ),
+                              //     );
+                              //   },
+                              // );
                               signInWithGoogle(context: context);
                               final provider =
                                   Provider.of<GoogleSignInProvider>(context,
                                       listen: false);
                               provider.googleLogin();
-                              await Navigator.push(
+
+                              Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
@@ -148,7 +191,7 @@ class _AuthScreen extends State<AuthScreen> {
                             child: Container(
                               alignment: Alignment.center,
                               color: kblue,
-                              height: 55,
+                              height: 40,
                               width: MediaQuery.of(context).size.width,
                               child: Text(
                                 'NEW? SIGN UP HERE',
@@ -191,46 +234,6 @@ class _AuthScreen extends State<AuthScreen> {
     );
   }
 
-  // Future<void> signInWithGoogle(
-  //   void Function(String errorMessage) errorCallback,
-  // ) async {
-  //   try {
-  //     var googleSignIn;
-  //     final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-  //     final GoogleSignInAuthentication? googleAuth =
-  //         await googleUser!.authentication;
-  //     final credential = GoogleAuthProvider.credential(
-  //       accessToken: googleAuth!.accessToken,
-  //       idToken: googleAuth.idToken,
-  //     );
-  //     await FirebaseAuth.instance.signInWithCredential(credential);
-  //   } on PlatformException catch (e) {
-  //     if (e.code == GoogleSignIn.kNetworkError) {
-  //       String errorMessage =
-  //           "A network error (such as timeout, interrupted connection or unreachable host) has occurred.";
-  //       errorCallback(errorMessage);
-  //     } else {
-  //       String errorMessage = "Something went wrong.";
-  //       errorCallback(errorMessage);
-  //     }
-  //   }
-  // }
-
-  // Future<UserCredential> signInWithFacebook() async {
-  //   // Trigger the sign-in flow
-  //   final LoginResult loginResult = await FacebookAuth.instance
-  //       .login(permissions: ['email', 'public_profile']);
-
-  //   // Create a credential from the access token
-  //   final OAuthCredential facebookAuthCredential =
-  //       FacebookAuthProvider.credential(loginResult.accessToken!.token);
-  //   final userData = await FacebookAuth.instance.getUserData();
-  //   userEmail = userData['email'];
-  //   print(userEmail);
-
-  //   // Once signed in, return the UserCredential
-  //   return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-  // }
   Future<UserCredential> signInWithFacebook() async {
     // Trigger the sign-in flow
 
