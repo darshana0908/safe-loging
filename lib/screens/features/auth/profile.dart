@@ -12,9 +12,10 @@ class UserProfile extends StatefulWidget {
   _UserProfileState createState() => _UserProfileState();
 }
 
-class _UserProfileState extends State<UserProfile> {
-  User? user = FirebaseAuth.instance.currentUser;
+FirebaseAuth auth = FirebaseAuth.instance;
+final user = auth.currentUser;
 
+class _UserProfileState extends State<UserProfile> {
   @override
   void initState() {
     // TODO: implement initState
@@ -64,7 +65,7 @@ class _UserProfileState extends State<UserProfile> {
                 const SizedBox(
                   height: 20,
                 ),
-                Text(user!.email!.toString(),
+                Text(user!.email!,
                     style: const TextStyle(
                         fontSize: 17,
                         color: Colors.white60,

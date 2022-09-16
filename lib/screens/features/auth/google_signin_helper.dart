@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:safe_encrypt/screens/features/auth/components/pin_number/first_pin_number.dart';
@@ -21,8 +22,8 @@ class _GmailLoginState extends State<GmailLogin> {
             child: CircularProgressIndicator(),
           );
         } else if (snapshot.hasData) {
-          print(snapshot.hasData);
           return const FirstPinNumber();
+          print(snapshot.hasData);
         } else if (snapshot.hasError) {
           return const Center(
             child: Text('Something went wrong'),
@@ -38,6 +39,19 @@ class _GmailLoginState extends State<GmailLogin> {
   }
 }
 
+gmaildata() async {
+  await FirebaseFirestore.instance
+      .collection('users')
+      .get()
+      .then((QuerySnapshot querySnapshot) {
+    for (var doc in querySnapshot.docs) {
+      final user = FirebaseAuth.instance.currentUser!;
+      if (user.uid == doc['uid']) {
+        return print('ggggggggggggggggggggggggg');
+      }
+    }
+  });
+}
 // class New extends StatefulWidget {
 //   const New({Key? key}) : super(key: key);
 
