@@ -23,6 +23,7 @@ import '../settings/settings.dart';
 import 'album_covers.dart';
 import 'components/glalery_folder.dart';
 import 'image_screen.dart';
+import 'dart:convert' as convert;
 
 class GalleryHome extends StatefulWidget {
   final String title = "Flutter Data Table";
@@ -37,23 +38,26 @@ class _GalleryHomeState extends State<GalleryHome> {
   final TextEditingController _folderName = TextEditingController();
   List<FileSystemEntity> folderList = [];
   Timer? timer;
-  Future insertData(foldername) async {
-    setState(() {});
+  var jsonResponse = convert.jsonDecode('{"data": []}') as Map<String, dynamic>;
 
-    var url = "http://localhost/flutter/insertdata.php";
-    var response = await http.post(
-      Uri.parse(url),
-      body: {
-        "folder_name": _folderName.text.toString(),
-      },
-    );
-    print(foldername);  
-    var res;
-    var message = jsonDecode(res.body);
-    if (message == "true") {
-      print("Successful " + message);
+  void getData() async {
+    var url = Uri.https(
+        'dl.dropboxusercontent.com', '/s/6nt7fkdt7ck0lue/hotels.json');
+
+    // Await the http get response, then decode the json-formatted response.
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      setState(() {
+        jsonResponse =
+            convert.jsonDecode(response.body) as Map<String, dynamic>;
+
+        var itemCount = jsonResponse['data'];
+        // print('Number of books about http: $itemCount.');
+
+        print(jsonResponse['data'].length);
+      });
     } else {
-      print("Error: " + message);
+      print('Request failed with status: ${response.statusCode}.');
     }
   }
   // User? user = FirebaseAuth.instance.currentUser;
@@ -113,6 +117,7 @@ class _GalleryHomeState extends State<GalleryHome> {
         },
         child: Scaffold(
           appBar: AppBar(
+            title: Text('Keepsafe'),
             // title: const Text('keepsafe'),
             backgroundColor: kdarkblue,
             // automaticallyImplyLeading: false,
@@ -163,7 +168,10 @@ class _GalleryHomeState extends State<GalleryHome> {
             ],
           ),
           drawer: Drawer(
+
+
             child: ListView(
+              
               padding: const EdgeInsets.all(0),
               children: [
                 DrawerHeader(
@@ -173,8 +181,8 @@ class _GalleryHomeState extends State<GalleryHome> {
                   child: UserAccountsDrawerHeader(
                     decoration: BoxDecoration(color: kdarkblue),
                     accountName: Text(
-                      '',
-                      // user.displayName!.toString(),
+                   '',
+                  
                       style: const TextStyle(fontSize: 18),
                     ),
                     accountEmail: Text(''),
@@ -182,8 +190,8 @@ class _GalleryHomeState extends State<GalleryHome> {
                     currentAccountPicture: CircleAvatar(
                       backgroundColor: Color.fromARGB(255, 165, 255, 137),
                       child: Text(
-                        //  user!.email!,
-                        '',
+                          '',
+                      
                         style: TextStyle(fontSize: 30.0, color: Colors.blue),
                       ), //Text
                     ), //circleAvatar
@@ -257,6 +265,7 @@ class _GalleryHomeState extends State<GalleryHome> {
               backgroundColor: kliteblue,
               openIcon: Icons.add,
               closeIcon: Icons.close,
+              
               items: [
                 HawkFabMenuItem(
                     label: 'Add album',
@@ -274,8 +283,9 @@ class _GalleryHomeState extends State<GalleryHome> {
                     labelBackgroundColor: kliteblue),
                 HawkFabMenuItem(
                   label: 'Take photo',
-                  ontap: () async =>
-                      ImageService(isFake: widget.isFake).takePhoto(),
+                  ontap: () async {
+                    return ImageService(isFake: widget.isFake).takePhoto();
+                  },
                   icon: const Icon(Icons.camera_alt),
                   color: Colors.black38,
                   labelColor: Colors.white,
@@ -356,7 +366,7 @@ class _GalleryHomeState extends State<GalleryHome> {
                             await getFolderList();
                             _folderName.clear();
                             senddata();
-                            insertData(_folderName.text);
+                          
                           });
                         },
                         child: const Text('CREATE')),
