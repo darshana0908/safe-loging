@@ -83,9 +83,9 @@ class _PlatformAlbumState extends State<PlatformAlbum> {
                                             style: TextStyle(
                                                 color: kblack, fontSize: 17)),
                                         onPressed: () {
-                                          setState(() {
-                                            delete(widget.path);
-                                          });
+                                          // setState(() {
+                                          //   delete(widget.path);
+                                          // });
                                           AwesomeDialog(
                                               context: context,
                                               dialogType: DialogType.WARNING,

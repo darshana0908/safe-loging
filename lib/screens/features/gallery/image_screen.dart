@@ -38,7 +38,10 @@ class _ImageScreenState extends State<ImageScreen> {
   @override
   void initState() {
     decryptImages();
-    loadPhotos();
+    setState(() {
+        loadPhotos();
+    });
+  
     super.initState();
   }
 
@@ -114,11 +117,11 @@ class _ImageScreenState extends State<ImageScreen> {
                                       File(
                                         decryptedImages.last,
                                       ),
-                                      fit: BoxFit.fill,
+                                      fit: BoxFit.cover,
                                     )
                                   : Image.asset(
                                       'assets/Capture5.JPG',
-                                      fit: BoxFit.fill,
+                                      fit: BoxFit.cover,
                                     )
 
                               // Image.asset(
@@ -219,7 +222,7 @@ class _ImageScreenState extends State<ImageScreen> {
                       tag: imgPath,
                       child: Image.file(
                         File(imgPath),
-                        fit: BoxFit.fill,
+                        fit: BoxFit.cover,
                       ))),
             );
           },
