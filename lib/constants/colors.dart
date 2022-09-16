@@ -11,3 +11,4 @@ Color kyellow = const Color(0xffFFD200);
 Color kindigo = const Color.fromRGBO(166, 132, 165, 0.593);
 Color kdarkblue = const Color(0xff371989);
 Color kliteblue = const Color(0xff09afed);
+Color kred = const Color.fromARGB(255, 203, 5, 35);
