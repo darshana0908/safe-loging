@@ -25,6 +25,7 @@ class _ImageDetailsState extends State<ImageDetails>
       duration: const Duration(milliseconds: 5000),
       vsync: this,
     );
+
     super.initState();
   }
 
@@ -43,11 +44,17 @@ class _ImageDetailsState extends State<ImageDetails>
         backgroundColor: kblack,
         body: Column(
           children: [
-            RotationTransition(
-              turns: Tween(begin: 0.0, end: 0.25).animate(_controller),
-              child: Image.file(
-                File(widget.path), //system image path
-                fit: BoxFit.cover,
+            SizedBox(
+              height: MediaQuery.of(context).size.height - 200,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: RotationTransition(
+                  turns: Tween(begin: 0.0, end: 0.25).animate(_controller),
+                  child: Image.file(
+                    File(widget.path), //system image path
+                    fit: BoxFit.scaleDown,
+                  ),
+                ),
               ),
             ),
             // Center(
@@ -106,11 +113,12 @@ class _ImageDetailsState extends State<ImageDetails>
         ));
   }
 
-  void delete(String path) async {
-    setState(() async {
-      final decryptedDir = Directory(path);
-      final encryptedDir = Directory('$path.aes');
+  void delete(String path) {
+    final decryptedDir = Directory(path);
+    final encryptedDir = Directory('$path.aes');
+    setState(() {
       encryptedDir.deleteSync(recursive: true);
+
       decryptedDir.deleteSync(recursive: true);
     });
   }
