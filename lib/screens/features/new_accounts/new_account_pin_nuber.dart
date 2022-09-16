@@ -56,7 +56,11 @@ class _NewAccountPinState extends State<NewAccountPin> {
                         height: 50,
                       ),
                       TextField(
-                        style: TextStyle(color: kwhite, fontSize: 35),
+                        textAlign: TextAlign.center,
+                        obscureText: true,
+                        enableSuggestions: false,
+                        autocorrect: false,
+                        style: TextStyle(color: kwhite, fontSize: 60),
                         controller: controler_pin,
                         keyboardType: TextInputType.none,
                         decoration: InputDecoration(
