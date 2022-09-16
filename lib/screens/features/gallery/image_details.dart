@@ -50,9 +50,11 @@ class _ImageDetailsState extends State<ImageDetails>
                 padding: const EdgeInsets.all(8.0),
                 child: RotationTransition(
                   turns: Tween(begin: 0.0, end: 0.25).animate(_controller),
-                  child: Image.file(
-                    File(widget.path), //system image path
-                    fit: BoxFit.scaleDown,
+                  child: Center(
+                    child: Image.file(
+                      File(widget.path), //system image path
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
               ),
