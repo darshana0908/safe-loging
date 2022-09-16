@@ -13,20 +13,21 @@ class PinKeyPad extends StatefulWidget {
 class _PinKeyPadState extends State<PinKeyPad> {
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
       onTap: widget.click,
       child: Container(
         alignment: Alignment.center,
-        width: 55,
-        height: 55,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(45),
-          color: Colors.deepPurple,
-        ),
+        width: 45,
+        height: 45,
+        // decoration: BoxDecoration(
+        //   borderRadius: BorderRadius.circular(45),
+        //   color: Colors.deepPurple,
+        // ),
         child: Text(
           widget.keypad,
           style: const TextStyle(
-              color: Colors.white, fontSize: 45, fontWeight: FontWeight.w600),
+              color: Colors.white, fontSize: 40, fontWeight: FontWeight.w400),
         ),
       ),
     );
