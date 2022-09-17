@@ -37,7 +37,7 @@ dependencies:
   permission_handler: ^10.0.0
   responsive_framework: ^0.2.0
   file_cryptor: ^0.0.3
-  
+
   provider: ^6.0.3
   social_login_buttons: ^1.0.6+2
   file_picker: ^4.6.1
@@ -55,8 +55,9 @@ dependencies:
   galleryimage: ^1.2.0
   photo_view: ^0.14.0
   http: ^0.13.5
-  
-  
+  flutter_speed_dial: ^6.0.0
+  progress_indicators: ^1.0.0
+
   # webview_flutter: ^3.0.4
 
   awesome_dialog: ^2.2.1
@@ -104,4 +105,3 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
- 
