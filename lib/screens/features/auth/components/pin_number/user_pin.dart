@@ -1,10 +1,13 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:progress_indicators/progress_indicators.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 import 'package:safe_encrypt/screens/features/gallery/gallery_home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -293,11 +296,12 @@ class _UserPInState extends State<UserPIn> {
                                       ? showDialog(
                                           context: context,
                                           builder: (context) {
-                                            return const Center(
-                                              child: CupertinoActivityIndicator(
-                                                radius: 55,
-                                                color: Colors.red,
-                                              ),
+                                            return  Center(
+                                              // child: CupertinoActivityIndicator(
+                                              //   radius: 55,
+                                              //   color: Colors.red,
+                                              // ),
+                                              child: FadingText('Loading...',style: TextStyle(color: kwhite,fontSize: 22 ),),
                                             );
                                           },
                                         )

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'dart:io';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:http/http.dart' as http;
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -116,6 +117,76 @@ class _GalleryHomeState extends State<GalleryHome> {
           exit(0);
         },
         child: Scaffold(
+          floatingActionButton: Padding(
+            padding: const EdgeInsets.only(bottom: 50),
+            child: SpeedDial(
+              buttonSize: Size(70.0, 70.0),
+              childrenButtonSize: Size(55.0, 55.0),
+              // animatedIcon:AnimatedIcons.add_event ,
+
+              overlayColor: Color(0xff00aeed),
+              overlayOpacity: 1.0,
+              activeIcon: Icons.close,
+              foregroundColor: kwhite,
+              activeForegroundColor: kblack,
+              backgroundColor: kblue,
+              activeBackgroundColor: kwhite,
+              spacing: 20,
+              spaceBetweenChildren: 15,
+
+              icon: Icons.add,
+              children: [
+                SpeedDialChild(
+                  labelWidget: Padding(
+                    padding: const EdgeInsets.only(right: 20),
+                    child: Text(
+                      'Take photo',
+                      style: TextStyle(
+                          color: kwhite,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  onTap: () async {
+                    return ImageService(isFake: widget.isFake).takePhoto();
+                  },
+                  elevation: 150,
+                  backgroundColor: Colors.black38,
+                  child: Icon(Icons.camera_alt, color: kwhite, size: 30),
+                  labelBackgroundColor: Color(0xff00aeed),
+                ),
+                SpeedDialChild(
+                    child: Icon(Icons.photo, color: kwhite, size: 30),
+                    labelWidget: Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: Text('Import photos',
+                          style: TextStyle(
+                              color: kwhite,
+                              fontSize: 22,
+                              fontWeight: FontWeight.w500)),
+                    ),
+                    onTap: () async => ImageService().importPhotos(),
+                    backgroundColor: Colors.black38),
+                SpeedDialChild(
+                  child: Icon(Icons.add_to_photos_rounded,
+                      color: kwhite, size: 30),
+                  labelWidget: Padding(
+                    padding: const EdgeInsets.only(right: 20),
+                    child: Text('Add album',
+                        style: TextStyle(
+                            color: kwhite,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w500)),
+                  ),
+                  elevation: 20,
+                  backgroundColor: Colors.black38,
+                  onTap: () async {
+                    return showCreateFolderDialog(context);
+                  },
+                )
+              ],
+            ),
+          ),
           appBar: AppBar(
             title: Text('Keepsafe'),
             // title: const Text('keepsafe'),
@@ -168,10 +239,7 @@ class _GalleryHomeState extends State<GalleryHome> {
             ],
           ),
           drawer: Drawer(
-
-
             child: ListView(
-              
               padding: const EdgeInsets.all(0),
               children: [
                 DrawerHeader(
@@ -181,8 +249,7 @@ class _GalleryHomeState extends State<GalleryHome> {
                   child: UserAccountsDrawerHeader(
                     decoration: BoxDecoration(color: kdarkblue),
                     accountName: Text(
-                   '',
-                  
+                      '',
                       style: const TextStyle(fontSize: 18),
                     ),
                     accountEmail: Text(''),
@@ -190,8 +257,7 @@ class _GalleryHomeState extends State<GalleryHome> {
                     currentAccountPicture: CircleAvatar(
                       backgroundColor: Color.fromARGB(255, 165, 255, 137),
                       child: Text(
-                          '',
-                      
+                        '',
                         style: TextStyle(fontSize: 30.0, color: Colors.blue),
                       ), //Text
                     ), //circleAvatar
@@ -258,84 +324,89 @@ class _GalleryHomeState extends State<GalleryHome> {
               ],
             ),
           ),
-          body: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: HawkFabMenu(
-              blur: 155.8,
-              backgroundColor: kliteblue,
-              openIcon: Icons.add,
-              closeIcon: Icons.close,
-              
-              items: [
-                HawkFabMenuItem(
-                    label: 'Add album',
-                    ontap: () async => showCreateFolderDialog(context),
-                    icon: const Icon(Icons.add_to_photos_rounded),
-                    color: Colors.black38,
-                    labelColor: Colors.white,
-                    labelBackgroundColor: kliteblue),
-                HawkFabMenuItem(
-                    label: 'Import photos',
-                    ontap: () async => ImageService().importPhotos(),
-                    icon: const Icon(Icons.photo),
-                    color: const Color.fromRGBO(0, 0, 0, 0.38),
-                    labelColor: Colors.white,
-                    labelBackgroundColor: kliteblue),
-                HawkFabMenuItem(
-                  label: 'Take photo',
-                  ontap: () async {
-                    return ImageService(isFake: widget.isFake).takePhoto();
-                  },
-                  icon: const Icon(Icons.camera_alt),
-                  color: Colors.black38,
-                  labelColor: Colors.white,
-                  labelBackgroundColor: kliteblue,
-                ),
-              ],
-              body: GridView.builder(
-                  itemCount: folderList.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 4.0,
-                      mainAxisSpacing: 4.0),
-                  itemBuilder: (BuildContext context, index) {
-                    String oneEntity = folderList[index].toString();
-                    String folderName =
-                        oneEntity.split('/').last.replaceAll("'", '');
+          // body: SizedBox(
+          //   height: MediaQuery.of(context).size.height,
+          //   child: HawkFabMenu(
+          //     blur: 155.8,
+          //     backgroundColor: kliteblue,
+          //     openIcon: Icons.add,
+          //     closeIcon: Icons.close,
 
-                    return InkWell(
-                      child: PlatformAlbum(
+          //     items: [
+          //       HawkFabMenuItem(
+          //         heroTag: 'ggggg',
+          //           label: 'Add album',
+          //           ontap: () async => showCreateFolderDialog(context),
+          //           icon: const Icon(Icons.add_to_photos_rounded,size: 50),
+          //           color: Colors.black38,
+          //           labelColor: Colors.white,
+          //           labelBackgroundColor: kliteblue),
 
-                          // selected image of folder cover
-                          // use provider (FolderCoverImageProvider)
-                          image: Image.asset(
-                            'assets/Capture9.JPG',
-                            fit: BoxFit.fill,
-                          ),
+          //       HawkFabMenuItem(
+          //         buttonBorder:BorderSide(
+          //               width: 65.0, color: Colors.black12),
+          //           label: 'Import photos',
+          //           ontap: () async => ImageService().importPhotos(),
+          //           icon: const Icon(Icons.photo),
+          //           color: const Color.fromRGBO(0, 0, 0, 0.38),
+          //           labelColor: Colors.white,
+          //           labelBackgroundColor: kliteblue),
 
-                          // Image.asset(
-                          //     Provider.of<FolderCoverImageProvider>(context,
-                          //             listen: false)
-                          //         .imgList[index],
-                          //     fit: BoxFit.fill),
-                          title: folderName,
-                          album: 'Album Settings',
-                          isDelete: index == 0 ? false : true,
-                          path: folderList[index].path),
-                      onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => ImageScreen(
-                                    title: folderName,
-                                    path: folderList[index].path,
-                                  ))),
-                    );
-                  }),
-            ),
-          ),
+          //       HawkFabMenuItem(
+          //         label: 'Take photo',
+          //         ontap: () async {
+          //           return ImageService(isFake: widget.isFake).takePhoto();
+          //         },
+          //         icon: const Icon(Icons.camera_alt),
+          //         color: Colors.black38,
+          //         labelColor: Colors.white,
+          //         labelBackgroundColor: kliteblue,
+          //       ),
+          //     ],
+          body: GridView.builder(
+              itemCount: folderList.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 4.0,
+                  mainAxisSpacing: 4.0),
+              itemBuilder: (BuildContext context, index) {
+                String oneEntity = folderList[index].toString();
+                String folderName =
+                    oneEntity.split('/').last.replaceAll("'", '');
+
+                return InkWell(
+                  child: PlatformAlbum(
+
+                      // selected image of folder cover
+                      // use provider (FolderCoverImageProvider)
+                      image: Image.asset(
+                        'assets/Capture9.JPG',
+                        fit: BoxFit.fill,
+                      ),
+
+                      // Image.asset(
+                      //     Provider.of<FolderCoverImageProvider>(context,
+                      //             listen: false)
+                      //         .imgList[index],
+                      //     fit: BoxFit.fill),
+                      title: folderName,
+                      album: 'Album Settings',
+                      isDelete: index == 0 ? false : true,
+                      path: folderList[index].path),
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => ImageScreen(
+                                title: folderName,
+                                path: folderList[index].path,
+                              ))),
+                );
+              }),
         ),
       ),
     );
+
+    // );  ),
   }
 
   // create folder dialog
@@ -366,7 +437,7 @@ class _GalleryHomeState extends State<GalleryHome> {
                             await getFolderList();
                             _folderName.clear();
                             senddata();
-                          
+                            Navigator.pop(context);
                           });
                         },
                         child: const Text('CREATE')),
@@ -416,7 +487,6 @@ class _GalleryHomeState extends State<GalleryHome> {
 
           directory = Directory(newPath);
           log(directory.path);
-          getFolderList();
         } else {
           return false;
         }
@@ -430,8 +500,12 @@ class _GalleryHomeState extends State<GalleryHome> {
 
       if (!await directory.exists()) {
         await directory.create(recursive: true).whenComplete(
-              () {},
-            );
+          () {
+            setState(() {
+              getFolderList();
+            });
+          },
+        );
       }
       if (await directory.exists().whenComplete(
         () {
