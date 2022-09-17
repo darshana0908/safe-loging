@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:file_cryptor/file_cryptor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hawk_fab_menu/hawk_fab_menu.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 
@@ -39,158 +39,196 @@ class _ImageScreenState extends State<ImageScreen> {
   void initState() {
     decryptImages();
     setState(() {
-        loadPhotos();
+      loadPhotos();
     });
-  
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        deleteDecryptedImages(decryptedImages);
-        return true;
-      },
-      child: SafeArea(
-        child: Scaffold(
-            backgroundColor: kwhite,
-            body: Stack(
-              children: [
-                Container(
-                  height: MediaQuery.of(context).size.height,
-                  color: kwhite,
-                ),
-                Stack(
-                  children: [
-                    CustomScrollView(
-                      physics: const PageScrollPhysics(),
-                      slivers: [
-                        SliverAppBar(
-                          backgroundColor: kdarkblue,
-                          actions: [
-                            IconButton(
-                              icon: Icon(x == 1
-                                  ? Icons.view_list
-                                  : x == 2
-                                      ? Icons.view_module
-                                      : Icons.view_comfortable),
-                              padding: EdgeInsets.zero,
-                              onPressed: () {
-                                setState(() {
-                                  if (x == 1) {
-                                    setState(() {
-                                      x = 2;
-                                    });
-                                  } else if (x == 2) {
-                                    x = 3;
-                                  } else {
-                                    x = 1;
-                                  }
-                                });
-                              },
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.more_vert),
-                              onPressed: () {},
-                            ),
-                          ],
-                          flexibleSpace: FlexibleSpaceBar(
-                              title: SizedBox(
-                                width: 250,
-                                height: 50,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(widget.title),
-                                    Text(
-                                      '${decryptedImages.length.toString()} Photos',
-                                      style:
-                                          TextStyle(color: kgray, fontSize: 11),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              background: imgload
-                                  ? Image.file(
-                                      File(
-                                        decryptedImages.last,
-                                      ),
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Image.asset(
-                                      'assets/Capture5.JPG',
-                                      fit: BoxFit.cover,
-                                    )
+        onWillPop: () async {
+          deleteDecryptedImages(decryptedImages);
+          return true;
+        },
+        child: SafeArea(
+          child: Scaffold(
+            floatingActionButton: Padding(
+              padding: const EdgeInsets.only(bottom: 50),
+              child: SpeedDial(
+                buttonSize: Size(70.0, 70.0),
+                childrenButtonSize: Size(55.0, 55.0),
+                // animatedIcon:AnimatedIcons.add_event ,
 
-                              // Image.asset(
-                              //   '${widget.path}/$imageName',
-                              //   fit: BoxFit.fill,
-                              // ),
-                              ),
-                          floating: false,
-                          pinned: true,
-                          expandedHeight:
-                              MediaQuery.of(context).size.height * 0.305,
-                        ),
-                        SliverList(
-                            delegate: SliverChildListDelegate([
-                          SizedBox(
-                            height: 800,
-                            child: _isLoading
-                                ? const Center(
-                                    child: CupertinoActivityIndicator(
-                                      radius: 55,
-                                      color: Colors.red,
-                                    ),
-                                  )
-                                : loadPhotos(),
-                          ),
-                        ]))
-                      ],
-                    ),
-                    Positioned(
-                      child: SizedBox(
-                        height: double.infinity,
-                        width: double.infinity,
-                        child: HawkFabMenu(
-                          blur: 155.8,
-                          backgroundColor: kliteblue,
-                          openIcon: Icons.add,
-                          closeIcon: Icons.close,
-                          items: [
-                            HawkFabMenuItem(
-                                label: 'Import photos',
-                                ontap: () async => importPhotos(),
-                                icon: const Icon(Icons.photo),
-                                color: const Color.fromRGBO(0, 0, 0, 0.38),
-                                labelColor: Colors.white,
-                                labelBackgroundColor: kliteblue),
-                            HawkFabMenuItem(
-                              label: 'Take photo',
-                              ontap: () async => takePhoto(),
-                              icon: const Icon(Icons.camera_alt),
-                              color: Colors.black38,
-                              labelColor: Colors.white,
-                              labelBackgroundColor: kliteblue,
-                            ),
-                          ],
-                          body: const SizedBox(
-                              // child: _isLoading
-                              // ? const Center(
-                              //     child: CircularProgressIndicator())
-                              // : loadPhotos()),
-                              ),
-                        ),
+                overlayColor: Color(0xff00aeed),
+                overlayOpacity: 1.0,
+                activeIcon: Icons.close,
+                foregroundColor: kwhite,
+                activeForegroundColor: kblack,
+                backgroundColor: kblue,
+                activeBackgroundColor: kwhite,
+                spacing: 20,
+                spaceBetweenChildren: 15,
+
+                icon: Icons.add,
+                children: [
+                  SpeedDialChild(
+                    labelWidget: Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: Text(
+                        'Take photo',
+                        style: TextStyle(
+                            color: kwhite,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w500),
                       ),
                     ),
+                    onTap: () async => takePhoto(),  
+                    elevation: 150,
+                    backgroundColor: Colors.black38,
+                    child: Icon(Icons.camera_alt, color: kwhite, size: 30),
+                    labelBackgroundColor: Color(0xff00aeed),
+                  ),
+                  SpeedDialChild(
+                      child: Icon(Icons.photo, color: kwhite, size: 30),
+                      labelWidget: Padding(
+                        padding: const EdgeInsets.only(right: 20),
+                        child: Text('Import photos',
+                            style: TextStyle(
+                                color: kwhite,
+                                fontSize: 22,
+                                fontWeight: FontWeight.w500)),
+                      ),
+                       onTap:  () async => importPhotos(),
+                      backgroundColor: Colors.black38),
+                 
+                ],
+              ),
+            ),
+            backgroundColor: kwhite,
+            body: CustomScrollView(
+              physics: const PageScrollPhysics(),
+              slivers: [
+                SliverAppBar(
+                  backgroundColor: kdarkblue,
+                  actions: [
+                    IconButton(
+                      icon: Icon(x == 1
+                          ? Icons.view_list
+                          : x == 2
+                              ? Icons.view_module
+                              : Icons.view_comfortable),
+                      padding: EdgeInsets.zero,
+                      onPressed: () {
+                        setState(() {
+                          if (x == 1) {
+                            setState(() {
+                              x = 2;
+                            });
+                          } else if (x == 2) {
+                            x = 3;
+                          } else {
+                            x = 1;
+                          }
+                        });
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.more_vert),
+                      onPressed: () {},
+                    ),
                   ],
+                  flexibleSpace: FlexibleSpaceBar(
+                      title: SizedBox(
+                        width: 250,
+                        height: 50,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(widget.title),
+                            Text(
+                              '${decryptedImages.length.toString()} Photos',
+                              style: TextStyle(color: kgray, fontSize: 11),
+                            ),
+                          ],
+                        ),
+                      ),
+                      background: imgload
+                          ? Image.file(
+                              File(
+                                decryptedImages.last,
+                              ),
+                              fit: BoxFit.cover,
+                            )
+                          : Image.asset(
+                              'assets/Capture5.JPG',
+                              fit: BoxFit.cover,
+                            )
+
+                      // Image.asset(
+                      //   '${widget.path}/$imageName',
+                      //   fit: BoxFit.fill,
+                      // ),
+                      ),
+                  floating: false,
+                  pinned: true,
+                  expandedHeight: MediaQuery.of(context).size.height * 0.305,
                 ),
+                SliverList(
+                    delegate: SliverChildListDelegate([
+                  SizedBox(
+                    height: 800,
+                    child: _isLoading
+                        ? const Center(
+                            child: CupertinoActivityIndicator(
+                              radius: 55,
+                              color: Colors.red,
+                            ),
+                          )
+                        : loadPhotos(),
+                  ),
+                ]))
               ],
-            )),
-      ),
-    );
+            ),
+            // Positioned(
+            //   child: SizedBox(
+            //     height: double.infinity,
+            //     width: double.infinity,
+            //     child: HawkFabMenu(
+            //       blur: 155.8,
+            //       backgroundColor: kliteblue,
+            //       openIcon: Icons.add,
+            //       closeIcon: Icons.close,
+            //       items: [
+            //         HawkFabMenuItem(
+            //             label: 'Import photos',
+            //             ontap: () async => importPhotos(),
+            //             icon: const Icon(Icons.photo),
+            //             color: const Color.fromRGBO(0, 0, 0, 0.38),
+            //             labelColor: Colors.white,
+            //             labelBackgroundColor: kliteblue),
+            //         HawkFabMenuItem(
+            //           label: 'Take photo',
+            //           ontap: () async => takePhoto(),
+            //           icon: const Icon(Icons.camera_alt),
+            //           color: Colors.black38,
+            //           labelColor: Colors.white,
+            //           labelBackgroundColor: kliteblue,
+            //         ),
+            //       ],
+            //       body: const SizedBox(
+            //           // child: _isLoading
+            //           // ? const Center(
+            //           //     child: CircularProgressIndicator())
+            //           // : loadPhotos()),
+            //           ),
+            //     ),
+            //   ),
+            // ),
+          ),
+        ));
   }
 
   // loading all photos in the folder
