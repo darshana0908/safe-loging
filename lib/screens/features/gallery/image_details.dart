@@ -47,7 +47,7 @@ class _ImageDetailsState extends State<ImageDetails>
             SizedBox(
               height: MediaQuery.of(context).size.height - 200,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(2.0),
                 child: RotationTransition(
                   turns: Tween(begin: 0.0, end: 0.25).animate(_controller),
                   child: Center(
