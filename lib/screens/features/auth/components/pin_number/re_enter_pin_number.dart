@@ -1,10 +1,12 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:safe_encrypt/constants/colors.dart';
-import 'package:safe_encrypt/screens/features/auth/components/pin_number/user_pin.dart';
-
+import 'package:http/http.dart' as http;
+import '../../../../../services/icon.dart';
 import '../pin_key_pad.dart';
 
 class ReEnterPin extends StatefulWidget {
@@ -23,6 +25,45 @@ class _ReEnterPinState extends State<ReEnterPin> {
   bool newpin_nuber = true;
   String login = 'fb';
   String gloging = 'gmail';
+
+  Future register() async {
+    if (controler_re_enter_pin.text == widget.controler_pin.text) {
+      FacebookAuth.instance.getUserData().then((value) async {
+        final pinNumber = controler_re_enter_pin.text;
+
+        var url =
+            Uri.http('192.168.1.160', '/flutter/register.php', {'q': '{http}'});
+        var response = await http.post(url, body: {
+          "status": login,
+          "pin": pinNumber,
+          "name": value['name'].toString(),
+          "email": value['email'].toString(),
+          "uid": value['id'].toString(),
+        });
+        var data = jsonDecode(response.body);
+      });
+    }
+    if (controler_re_enter_pin.text == widget.controler_pin.text) {
+      final user = FirebaseAuth.instance.currentUser!;
+
+      print(user.displayName);
+      print(user.email);
+      final pinNumber = controler_re_enter_pin.text;
+      final username = user.displayName;
+      String fb;
+      var url =
+          Uri.http('192.168.1.160', '/flutter/register.php', {'q': '{http}'});
+      var response = await http.post(url, body: {
+        "pin": controler_re_enter_pin.text,
+        "name": username.toString(),
+        "email": user.email.toString(),
+        "uid": user.uid.toString(),
+        "status": gloging,
+      });
+      // readUsers();
+
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +90,9 @@ class _ReEnterPinState extends State<ReEnterPin> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        const SizedBox(
+                          height: 20,
+                        ),
                         Text(
                           newpin_nuber
                               ? "Re Enter Pin Number."
@@ -93,218 +137,237 @@ class _ReEnterPinState extends State<ReEnterPin> {
                         const SizedBox(
                           height: 50,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 30),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              PinKeyPad(
-                                  keypad: '1',
-                                  click: () {
-                                    setState(() {
-                                      backspacecolorchange = false;
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            PinKeyPad(
+                                keypad: '1',
+                                click: () {
+                                  setState(() {
+                                    backspacecolorchange = false;
 
-                                      controler_re_enter_pin.text =
-                                          '${controler_re_enter_pin.text}1';
-                                    });
-                                  }),
-                              PinKeyPad(
-                                  keypad: '2',
-                                  click: () {
-                                    setState(() {
-                                      backspacecolorchange = false;
+                                    controler_re_enter_pin.text =
+                                        '${controler_re_enter_pin.text}1';
+                                  });
+                                }),
+                            PinKeyPad(
+                                keypad: '2',
+                                click: () {
+                                  setState(() {
+                                    backspacecolorchange = false;
 
-                                      controler_re_enter_pin.text =
-                                          '${controler_re_enter_pin.text}2';
-                                    });
-                                  }),
-                              PinKeyPad(
-                                  keypad: '3',
-                                  click: () {
-                                    setState(() {
-                                      backspacecolorchange = false;
+                                    controler_re_enter_pin.text =
+                                        '${controler_re_enter_pin.text}2';
+                                  });
+                                }),
+                            PinKeyPad(
+                                keypad: '3',
+                                click: () {
+                                  setState(() {
+                                    backspacecolorchange = false;
 
-                                      controler_re_enter_pin.text =
-                                          '${controler_re_enter_pin.text}3';
-                                    });
-                                  }),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(30),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              PinKeyPad(
-                                  keypad: '4',
-                                  click: () {
-                                    setState(() {
-                                      backspacecolorchange = false;
-
-                                      controler_re_enter_pin.text =
-                                          '${controler_re_enter_pin.text}4';
-                                    });
-                                  }),
-                              PinKeyPad(
-                                  keypad: '5',
-                                  click: () {
-                                    setState(() {
-                                      backspacecolorchange = false;
-
-                                      controler_re_enter_pin.text =
-                                          '${controler_re_enter_pin.text}5';
-                                    });
-                                  }),
-                              PinKeyPad(
-                                  keypad: '6',
-                                  click: () {
-                                    setState(() {
-                                      backspacecolorchange = false;
-
-                                      controler_re_enter_pin.text =
-                                          '${controler_re_enter_pin.text}6';
-                                    });
-                                  }),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 30),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              PinKeyPad(
-                                  keypad: '7',
-                                  click: () {
-                                    setState(() {
-                                      backspacecolorchange = false;
-
-                                      controler_re_enter_pin.text =
-                                          '${controler_re_enter_pin.text}7';
-                                    });
-                                  }),
-                              PinKeyPad(
-                                  keypad: '8',
-                                  click: () {
-                                    setState(() {
-                                      backspacecolorchange = false;
-
-                                      controler_re_enter_pin.text =
-                                          '${controler_re_enter_pin.text}8';
-                                    });
-                                  }),
-                              PinKeyPad(
-                                  keypad: '9',
-                                  click: () {
-                                    setState(() {
-                                      backspacecolorchange = false;
-
-                                      controler_re_enter_pin.text =
-                                          '${controler_re_enter_pin.text}9';
-                                    });
-                                  }),
-                            ],
-                          ),
+                                    controler_re_enter_pin.text =
+                                        '${controler_re_enter_pin.text}3';
+                                  });
+                                }),
+                          ],
                         ),
 
-                        Padding(
-                          padding: const EdgeInsets.all(35),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              const Text(
-                                '',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 35,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              const SizedBox(),
-                              PinKeyPad(
-                                  keypad: '0',
-                                  click: () {
-                                    setState(() {
-                                      backspacecolorchange = false;
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            PinKeyPad(
+                                keypad: '4',
+                                click: () {
+                                  setState(() {
+                                    backspacecolorchange = false;
 
-                                      controler_re_enter_pin.text =
-                                          '${controler_re_enter_pin.text}0';
-                                    });
-                                  }),
-                              const SizedBox(
-                                width: 95,
-                              ),
-                              IconButton(
-                                onPressed: () async {
-                                  if (controler_re_enter_pin.text ==
-                                      widget.controler_pin.text) {
-                                    FacebookAuth.instance
-                                        .getUserData()
-                                        .then((value) async {
-                                      final pinNumber =
-                                          controler_re_enter_pin.text;
+                                    controler_re_enter_pin.text =
+                                        '${controler_re_enter_pin.text}4';
+                                  });
+                                }),
+                            PinKeyPad(
+                                keypad: '5',
+                                click: () {
+                                  setState(() {
+                                    backspacecolorchange = false;
 
-                                      createuser(
-                                        status: login,
-                                        pin: pinNumber,
-                                        name: value['name'].toString(),
-                                        email: value['email'].toString(),
-                                        uid: value['id'].toString(),
-                                      );
-                                      // readUsers();
+                                    controler_re_enter_pin.text =
+                                        '${controler_re_enter_pin.text}5';
+                                  });
+                                }),
+                            PinKeyPad(
+                                keypad: '6',
+                                click: () {
+                                  setState(() {
+                                    backspacecolorchange = false;
 
-                                      await Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => UserPIn(),
-                                          ));
-                                    });
-                                  }
-                                  if (controler_re_enter_pin.text ==
-                                      widget.controler_pin.text) {
-                                    final user =
-                                        FirebaseAuth.instance.currentUser!;
+                                    controler_re_enter_pin.text =
+                                        '${controler_re_enter_pin.text}6';
+                                  });
+                                }),
+                          ],
+                        ),
 
-                                    print(user.displayName);
-                                    print(user.email);
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            PinKeyPad(
+                                keypad: '7',
+                                click: () {
+                                  setState(() {
+                                    backspacecolorchange = false;
+
+                                    controler_re_enter_pin.text =
+                                        '${controler_re_enter_pin.text}7';
+                                  });
+                                }),
+                            PinKeyPad(
+                                keypad: '8',
+                                click: () {
+                                  setState(() {
+                                    backspacecolorchange = false;
+
+                                    controler_re_enter_pin.text =
+                                        '${controler_re_enter_pin.text}8';
+                                  });
+                                }),
+                            PinKeyPad(
+                                keypad: '9',
+                                click: () {
+                                  setState(() {
+                                    backspacecolorchange = false;
+
+                                    controler_re_enter_pin.text =
+                                        '${controler_re_enter_pin.text}9';
+                                  });
+                                }),
+                          ],
+                        ),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            const Text(
+                              '',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 35,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            const SizedBox(),
+                            PinKeyPad(
+                                keypad: '0',
+                                click: () {
+                                  setState(() {
+                                    backspacecolorchange = false;
+
+                                    controler_re_enter_pin.text =
+                                        '${controler_re_enter_pin.text}0';
+                                  });
+                                }),
+                            const SizedBox(
+                              width: 65,
+                            ),
+                            IconButton(
+                              onPressed: () async {
+                                register();
+                                if (controler_re_enter_pin.text ==
+                                    widget.controler_pin.text) {
+                                  FacebookAuth.instance
+                                      .getUserData()
+                                      .then((value) async {
                                     final pinNumber =
                                         controler_re_enter_pin.text;
-                                    final username = user.displayName;
-                                    String fb;
-                                    createuser(
-                                      pin: pinNumber,
-                                      name: username.toString(),
-                                      email: user.email.toString(),
-                                      uid: user.uid.toString(),
-                                      status: gloging,
-                                    );
-                                    // readUsers();
 
-                                    await Navigator.push(
+                                    createuser(
+                                      status: login,
+                                      pin: pinNumber,
+                                      name: value['name'].toString(),
+                                      email: value['email'].toString(),
+                                      uid: value['id'].toString(),
+                                    );
+
+                                    // Future register() async {
+                                    //   var url = Uri.http(
+                                    //       "localhost/flutter/register.php",
+                                    //       'localhost/flutter/register.php',
+                                    //       {'q': '{http}'});
+                                    //   var response =
+                                    //       await http.post(url, body: {
+                                    //     "email": value['email'].toString(),
+                                    //     "name": value['name'].toString(),
+                                    //     "pin": pinNumber,
+                                    //     "status": login,
+                                    //     " uid": value['id'].toString(),
+                                    //   });
+                                    //   var data = json.decode(response.body);
+                                    //   if (data == "Error") {
+                                    //     Fluttertoast.showToast(
+                                    //       backgroundColor: Colors.orange,
+                                    //       textColor: Colors.white,
+                                    //       msg: 'User already exit!',
+                                    //       toastLength: Toast.LENGTH_SHORT,
+                                    //     );
+                                    //   } else {
+                                    //     Fluttertoast.showToast(
+                                    //       backgroundColor: Colors.green,
+                                    //       textColor: Colors.white,
+                                    //       msg: 'Registration Successful',
+                                    //       toastLength: Toast.LENGTH_SHORT,
+                                    //     );
+                                    //   }
+                                    // }
+
+                                    Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => UserPIn(),
+                                          builder: (context) => const AppIcon(),
                                         ));
-                                  } else {
-                                    setState(() {
-                                      newpin_nuber = false;
-                                    });
-                                  }
-                                },
-                                icon: const Icon(
-                                  Icons.check_circle,
-                                  color: Colors.white60,
-                                  size: 45,
-                                ),
-                              )
-                            ],
-                          ),
+
+                                    // readUsers();
+                                  });
+                                }
+                                if (controler_re_enter_pin.text ==
+                                    widget.controler_pin.text) {
+                                  final user =
+                                      FirebaseAuth.instance.currentUser!;
+
+                                  print(user.displayName);
+                                  print(user.email);
+                                  final pinNumber = controler_re_enter_pin.text;
+                                  final username = user.displayName;
+                                  String fb;
+                                  createuser(
+                                    pin: pinNumber,
+                                    name: username.toString(),
+                                    email: user.email.toString(),
+                                    uid: user.uid.toString(),
+                                    status: gloging,
+                                  );
+                                  // readUsers();
+
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const AppIcon(),
+                                      ));
+                                } else {
+                                  setState(() {
+                                    newpin_nuber = false;
+                                  });
+                                }
+                              },
+                              icon: const Icon(
+                                Icons.check_circle,
+                                color: Colors.white60,
+                                size: 45,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 30,
+                            )
+                          ],
                         ),
 
                         // StreamBuilder<List<User>>(
