@@ -18,8 +18,8 @@ class _PinKeyPadState extends State<PinKeyPad> {
       onTap: widget.click,
       child: Container(
         alignment: Alignment.center,
-        width: 45,
-        height: 45,
+        width: 105,
+        height: 105,
         // decoration: BoxDecoration(
         //   borderRadius: BorderRadius.circular(45),
         //   color: Colors.deepPurple,

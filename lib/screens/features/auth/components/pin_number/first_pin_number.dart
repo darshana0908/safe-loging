@@ -19,71 +19,74 @@ class _FirstPinNumberState extends State<FirstPinNumber> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kdarkblue,
-      body: SafeArea(
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              IconButton(
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: kwhite,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  }),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Let's get you set up.\n First, choose a PIN",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 25,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        SizedBox(
-                            height:
-                                MediaQuery.of(context).size.height / 6 * 0.5),
-                        Padding(
-                          padding: const EdgeInsets.all(30.0),
-                          child: TextField(
-                            textAlign: TextAlign.center,
-                            obscureText: true,
-                            enableSuggestions: false,
-                            autocorrect: false,
-                            style: TextStyle(color: kwhite, fontSize: 60),
-                            controller: controler_pin,
-                            keyboardType: TextInputType.none,
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  Icons.backspace_rounded,
-                                  color: backspacecolorchange
-                                      ? Colors.white60
-                                      : kwhite,
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                IconButton(
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: kwhite,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    }),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Text(
+                            "Let's get you set up.\n First, choose a PIN",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 25,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.height / 6 * 0.5),
+                          Padding(
+                            padding: const EdgeInsets.all(30.0),
+                            child: TextField(
+                              textAlign: TextAlign.center,
+                              obscureText: true,
+                              enableSuggestions: false,
+                              autocorrect: false,
+                              style: TextStyle(color: kwhite, fontSize: 60),
+                              controller: controler_pin,
+                              keyboardType: TextInputType.none,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    Icons.backspace_rounded,
+                                    color: backspacecolorchange
+                                        ? Colors.white60
+                                        : kwhite,
+                                  ),
+                                  onPressed: () {
+                                    controler_pin.text = controler_pin.text
+                                        .substring(
+                                            0, controler_pin.text.length - 1);
+                                  },
                                 ),
-                                onPressed: () {
-                                  controler_pin.text = controler_pin.text
-                                      .substring(
-                                          0, controler_pin.text.length - 1);
-                                },
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 30),
-                          child: Row(
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               PinKeyPad(
@@ -118,13 +121,7 @@ class _FirstPinNumberState extends State<FirstPinNumber> {
                                   }),
                             ],
                           ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(30.0),
-                          child: Row(
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               PinKeyPad(
@@ -159,13 +156,7 @@ class _FirstPinNumberState extends State<FirstPinNumber> {
                                   }),
                             ],
                           ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 30),
-                          child: Row(
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               PinKeyPad(
@@ -200,13 +191,7 @@ class _FirstPinNumberState extends State<FirstPinNumber> {
                                   }),
                             ],
                           ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(35.0),
-                          child: Row(
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               const Text(
@@ -228,7 +213,7 @@ class _FirstPinNumberState extends State<FirstPinNumber> {
                                     });
                                   }),
                               const SizedBox(
-                                width: 95,
+                                width: 65,
                               ),
                               IconButton(
                                 onPressed: () {
@@ -246,14 +231,17 @@ class _FirstPinNumberState extends State<FirstPinNumber> {
                                   color: Colors.white60,
                                   size: 45,
                                 ),
+                              ),
+                              const SizedBox(
+                                width: 30,
                               )
                             ],
-                          ),
-                        )
-                      ]),
+                          )
+                        ]),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
