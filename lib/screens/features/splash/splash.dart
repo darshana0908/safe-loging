@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:safe_encrypt/screens/features/permission/permission_screen.dart';
+import 'package:safe_encrypt/services/icon.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants/colors.dart';
-import '../auth/components/pin_number/user_pin.dart';
 
 class splash extends StatefulWidget {
   const splash({Key? key}) : super(key: key);
@@ -39,7 +38,7 @@ class _splashState extends State<splash> {
       if (ownerlogin == true) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => UserPIn()),
+          MaterialPageRoute(builder: (context) => const AppIcon()),
         );
       } else {
         Navigator.push(
@@ -57,18 +56,18 @@ class _splashState extends State<splash> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kdarkblue,
-      body: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(
-              'assets/splash_girl.svg',
-              width: 200,
-            )
-          ],
+      body: Column(children: [
+        const SizedBox(
+          height: 140,
         ),
-      ),
+        Center(
+            child: SizedBox(
+                height: 125,
+                child: Image.asset(
+                  'assets/ic2.JPG',
+                  fit: BoxFit.fill,
+                ))),
+      ]),
     );
   }
 
