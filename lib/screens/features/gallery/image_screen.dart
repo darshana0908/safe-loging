@@ -57,11 +57,10 @@ class _ImageScreenState extends State<ImageScreen> {
             floatingActionButton: Padding(
               padding: const EdgeInsets.only(bottom: 50),
               child: SpeedDial(
-                buttonSize: Size(70.0, 70.0),
-                childrenButtonSize: Size(55.0, 55.0),
-                // animatedIcon:AnimatedIcons.add_event ,
-
-                overlayColor: Color(0xff00aeed),
+                buttonSize: const Size(70.0, 70.0),
+                childrenButtonSize: const Size(55.0, 55.0),
+                animatedIcon: AnimatedIcons.add_event,
+                overlayColor: const Color(0xff00aeed),
                 overlayOpacity: 1.0,
                 activeIcon: Icons.close,
                 foregroundColor: kwhite,
@@ -70,7 +69,6 @@ class _ImageScreenState extends State<ImageScreen> {
                 activeBackgroundColor: kwhite,
                 spacing: 20,
                 spaceBetweenChildren: 15,
-
                 icon: Icons.add,
                 children: [
                   SpeedDialChild(
@@ -84,11 +82,11 @@ class _ImageScreenState extends State<ImageScreen> {
                             fontWeight: FontWeight.w500),
                       ),
                     ),
-                    onTap: () async => takePhoto(),  
+                    onTap: () async => takePhoto(),
                     elevation: 150,
                     backgroundColor: Colors.black38,
                     child: Icon(Icons.camera_alt, color: kwhite, size: 30),
-                    labelBackgroundColor: Color(0xff00aeed),
+                    labelBackgroundColor: const Color(0xff00aeed),
                   ),
                   SpeedDialChild(
                       child: Icon(Icons.photo, color: kwhite, size: 30),
@@ -100,15 +98,15 @@ class _ImageScreenState extends State<ImageScreen> {
                                 fontSize: 22,
                                 fontWeight: FontWeight.w500)),
                       ),
-                       onTap:  () async => importPhotos(),
+                      onTap: () async => importPhotos(),
                       backgroundColor: Colors.black38),
-                 
                 ],
               ),
             ),
             backgroundColor: kwhite,
             body: CustomScrollView(
               physics: const PageScrollPhysics(),
+              scrollBehavior: const ScrollBehavior(),
               slivers: [
                 SliverAppBar(
                   backgroundColor: kdarkblue,
@@ -238,31 +236,76 @@ class _ImageScreenState extends State<ImageScreen> {
         padding: const EdgeInsets.only(bottom: 60.0),
         child: GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              mainAxisSpacing: 10,
+              childAspectRatio: x == 1
+                  ? 1
+                  : x == 2
+                      ? 1
+                      : 4,
               crossAxisCount: x == 1
                   ? 2
                   : x == 2
                       ? 4
-                      : 6),
-          padding: const EdgeInsets.all(8.0),
+                      : 1),
+          padding: const EdgeInsets.all(0.8),
           itemCount: decryptedImages.length,
           itemBuilder: (context, index) {
             String imgPath = decryptedImages[index];
 
+            String imgname = imgPath.split('/').last.replaceAll("'", '');
+
+            print(imgPath);
             return GestureDetector(
-              onDoubleTap: () => delete(imgPath),
-              onTap: () =>
-                  Navigator.push(context, MaterialPageRoute(builder: (_) {
-                return ImageDetails(path: imgPath);
-              })),
-              child: Card(
-                  elevation: 8.0,
-                  child: Hero(
-                      tag: imgPath,
-                      child: Image.file(
-                        File(imgPath),
-                        fit: BoxFit.cover,
-                      ))),
-            );
+                onDoubleTap: () => delete(imgPath),
+                onTap: () =>
+                    Navigator.push(context, MaterialPageRoute(builder: (_) {
+                      return ImageDetails(path: imgPath);
+                    })),
+                child: x == 1
+                    ? Card(
+                        elevation: 8.0,
+                        child: Hero(
+                            tag: imgPath,
+                            child: Image.file(
+                              File(imgPath),
+                              fit: BoxFit.cover,
+                            )))
+                    : x == 2
+                        ? Card(
+                            elevation: 8.0,
+                            child: Hero(
+                                tag: imgPath,
+                                child: Image.file(
+                                  File(imgPath),
+                                  fit: BoxFit.cover,
+                                )))
+                        : SizedBox(
+                            height: 100,
+                            child: Card(
+                              child: Hero(
+                                  tag: imgPath,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          width: 150,
+                                          height: 200,
+                                          child: Image.file(
+                                            File(imgPath),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                        Text(imgname)
+                                      ],
+                                    ),
+                                  )),
+                            ),
+                          ));
           },
         ),
       );
@@ -295,7 +338,7 @@ class _ImageScreenState extends State<ImageScreen> {
       for (XFile image in imageList) {
         fileType = path.extension(image.path);
         imageName =
-            '${DateTime.now().microsecondsSinceEpoch.toString()}$fileType';
+            '''IMG-${DateTime.now().microsecondsSinceEpoch.toString()}$fileType\nCreated-${DateTime.now().toString()}''';
 
         File fileToSave = File(image.path);
         fileToSave.copy('${widget.path}/$imageName');
@@ -317,7 +360,7 @@ class _ImageScreenState extends State<ImageScreen> {
     if (image != null) {
       fileType = path.extension(image.path);
       imageName =
-          '${DateTime.now().microsecondsSinceEpoch.toString()}$fileType';
+          '''IMG-${DateTime.now().microsecondsSinceEpoch.toString()}$fileType\nCreated-${DateTime.now()}''';
 
       File fileToSave = File(image.path);
       fileToSave.copy('${widget.path}/$imageName');

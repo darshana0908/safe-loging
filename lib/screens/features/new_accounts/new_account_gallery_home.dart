@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hawk_fab_menu/hawk_fab_menu.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -12,6 +13,7 @@ import 'package:safe_encrypt/constants/colors.dart';
 import 'package:safe_encrypt/screens/features/auth/components/pin_number/re_enter_pin_number.dart';
 import 'package:safe_encrypt/screens/features/gallery/gallery_home.dart';
 
+import '../../../services/image_service.dart';
 import '../../../services/new_account_image_services.dart';
 
 import '../gallery/album_covers.dart';
@@ -66,6 +68,79 @@ class _NewAccountGalleryHomeState extends State<NewAccountGalleryHome> {
             context, MaterialPageRoute(builder: (_) => GalleryHome()));
       },
       child: Scaffold(
+           floatingActionButton: Padding(
+          padding: const EdgeInsets.only(bottom: 50),
+          child: SpeedDial(
+            buttonSize: Size(70.0, 70.0),
+            childrenButtonSize: Size(55.0, 55.0),
+            // animatedIcon:AnimatedIcons.add_event ,
+
+            overlayColor: Color(0xff00aeed),
+            overlayOpacity: 1.0,
+            activeIcon: Icons.close,
+            foregroundColor: kwhite,
+            activeForegroundColor: kblack,
+            backgroundColor: kblue,
+            activeBackgroundColor: kwhite,
+            spacing: 20,
+            spaceBetweenChildren: 15,
+
+            icon: Icons.add,
+            children: [
+              SpeedDialChild(
+                labelWidget: Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: Text(
+                    'Take photo',
+                    style: TextStyle(
+                        color: kwhite,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w500),
+                  ),
+                ),
+               onTap:  () async =>{
+                    NewAccountImageService(controler_pin: widget.controler_pin)
+                        .takePhoto(),
+                },
+                elevation: 150,
+                backgroundColor: Colors.black38,
+                child: Icon(Icons.camera_alt, color: kwhite, size: 30),
+                labelBackgroundColor: Color(0xff00aeed),
+              ),
+              SpeedDialChild(
+                  child: Icon(Icons.photo, color: kwhite, size: 30),
+                  labelWidget: Padding(
+                    padding: const EdgeInsets.only(right: 20),
+                    child: Text('Import photos',
+                        style: TextStyle(
+                            color: kwhite,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w500)),
+                  ),
+                  onTap:  () async => NewAccountImageService(
+                          controler_pin: widget.controler_pin)
+                      .importPhotos(),
+                  backgroundColor: Colors.black38),
+              SpeedDialChild(
+                child:
+                    Icon(Icons.add_to_photos_rounded, color: kwhite, size: 30),
+                labelWidget: Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: Text('Add album',
+                      style: TextStyle(
+                          color: kwhite,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w500)),
+                ),
+                elevation: 20,
+                backgroundColor: Colors.black38,
+                onTap: () async {
+                  return showCreateFolderDialog(context);
+                },
+              )
+            ],
+          ),
+        ),
         appBar: AppBar(
           // title: const Text('keepsafe'),
           backgroundColor: kdarkblue,
@@ -183,77 +258,72 @@ class _NewAccountGalleryHomeState extends State<NewAccountGalleryHome> {
             ],
           ),
         ),
-        body: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: HawkFabMenu(
-            blur: 155.8,
-            backgroundColor: kliteblue,
-            openIcon: Icons.add,
-            closeIcon: Icons.close,
-            items: [
-              HawkFabMenuItem(
-                  label: 'Add album',
-                  ontap: () async => showCreateFolderDialog(context),
-                  icon: const Icon(Icons.add_to_photos_rounded),
-                  color: Colors.black38,
-                  labelColor: Colors.white,
-                  labelBackgroundColor: kliteblue),
-              HawkFabMenuItem(
-                  label: 'Import photos',
-                  ontap: () async => NewAccountImageService(
-                          controler_pin: widget.controler_pin)
-                      .importPhotos(),
-                  icon: const Icon(Icons.photo),
-                  color: const Color.fromRGBO(0, 0, 0, 0.38),
-                  labelColor: Colors.white,
-                  labelBackgroundColor: kliteblue),
-              HawkFabMenuItem(
-                label: 'Take photo',
-                ontap: () async =>
-                    NewAccountImageService(controler_pin: widget.controler_pin)
-                        .takePhoto(),
-                icon: const Icon(Icons.camera_alt),
-                color: Colors.black38,
-                labelColor: Colors.white,
-                labelBackgroundColor: kliteblue,
-              ),
-            ],
-            body: GridView.builder(
-                itemCount: folderList.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 4.0,
-                    mainAxisSpacing: 4.0),
-                itemBuilder: (BuildContext context, index) {
-                  String oneEntity = folderList[index].toString();
-                  String folderName =
-                      oneEntity.split('/').last.replaceAll("'", '');
+        // body: SizedBox(
+        //   height: MediaQuery.of(context).size.height,
+        //   child: HawkFabMenu(
+        //     blur: 155.8,
+        //     backgroundColor: kliteblue,
+        //     openIcon: Icons.add,
+        //     closeIcon: Icons.close,
+        //     items: [
+        //       HawkFabMenuItem(
+        //           label: 'Add album',
+        //           ontap: () async => showCreateFolderDialog(context),
+        //           icon: const Icon(Icons.add_to_photos_rounded),
+        //           color: Colors.black38,
+        //           labelColor: Colors.white,
+        //           labelBackgroundColor: kliteblue),
+        //       HawkFabMenuItem(
+        //           label: 'Import photos',
+        //           ontap: () async => NewAccountImageService(
+        //                   controler_pin: widget.controler_pin)
+        //               .importPhotos(),
+        //           icon: const Icon(Icons.photo),
+        //           color: const Color.fromRGBO(0, 0, 0, 0.38),
+        //           labelColor: Colors.white,
+        //           labelBackgroundColor: kliteblue),
+        //       HawkFabMenuItem(
+        //         label: 'Take photo',
+        //         ontap: () async =>
+        //             NewAccountImageService(controler_pin: widget.controler_pin)
+        //                 .takePhoto(),
+        //         icon: const Icon(Icons.camera_alt),
+        //         color: Colors.black38,
+        //         labelColor: Colors.white,
+        //         labelBackgroundColor: kliteblue,
+        //       ),
+        //     ],
+        body: GridView.builder(
+            itemCount: folderList.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, crossAxisSpacing: 4.0, mainAxisSpacing: 4.0),
+            itemBuilder: (BuildContext context, index) {
+              String oneEntity = folderList[index].toString();
+              String folderName = oneEntity.split('/').last.replaceAll("'", '');
 
-                  return InkWell(
-                    child: PlatformAlbum(
+              return InkWell(
+                child: PlatformAlbum(
 
-                        // selected image of folder cover
-                        // use provider (FolderCoverImageProvider)
-                        image: Image.asset(
-                            Provider.of<FolderCoverImageProvider>(context,
-                                    listen: false)
-                                .imgList[index],
-                            fit: BoxFit.fill),
-                        title: folderName,
-                        album: 'Album Settings',
-                        isDelete: index == 0 ? false : true,
-                        path: folderList[index].path),
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => 
-                                ImageScreen(  title: folderName, path: folderList[index].path))),
-                  );
-                }),
-          ),
-        ),
+                    // selected image of folder cover
+                    // use provider (FolderCoverImageProvider)
+                    image: Image.asset(
+                        Provider.of<FolderCoverImageProvider>(context,
+                                listen: false)
+                            .imgList[index],
+                        fit: BoxFit.fill),
+                    title: folderName,
+                    album: 'Album Settings',
+                    isDelete: index == 0 ? false : true,
+                    path: folderList[index].path),
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => ImageScreen(
+                            title: folderName, path: folderList[index].path))),
+              );
+            }),
       ),
-    );
+    ); 
   }
 
   // create folder dialog
