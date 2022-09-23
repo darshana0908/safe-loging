@@ -57,6 +57,9 @@ dependencies:
   http: ^0.13.5
   flutter_speed_dial: ^6.0.0
   progress_indicators: ^1.0.0
+  filesize: ^2.0.1
+  image_size_getter: ^2.1.2
+  fluttertoast: ^8.0.9
 
   # webview_flutter: ^3.0.4
 
