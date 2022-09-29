@@ -302,7 +302,7 @@ class _NewAccountGalleryHomeState extends State<NewAccountGalleryHome> {
 
               return InkWell(
                 child: PlatformAlbum(
-
+pinnuber: widget.controler_pin,
                     // selected image of folder cover
                     // use provider (FolderCoverImageProvider)
                     image: Image.asset(
