@@ -12,6 +12,7 @@ class PlatformAlbum extends StatefulWidget {
   final String path;
   final String album;
   final Image image;
+  final String pinnuber;
 
   const PlatformAlbum({
     Key? key,
@@ -20,6 +21,7 @@ class PlatformAlbum extends StatefulWidget {
     required this.isDelete,
     required this.path,
     required this.album,
+    required this.pinnuber,
   }) : super(key: key);
 
   @override
@@ -106,12 +108,15 @@ class _PlatformAlbumState extends State<PlatformAlbum> {
                                                 String key = '';
                                                 setState(() {
                                                   delete(widget.path);
-
+                                                  print(widget.pinnuber);
                                                   Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (_) =>
-                                                               GalleryHome(pinnumber: key,)));
+                                                              GalleryHome(
+                                                                pinnumber: widget
+                                                                    .pinnuber,
+                                                              )));
                                                 });
                                               }).show();
                                           // showAlertDialog(context, widget.path);
