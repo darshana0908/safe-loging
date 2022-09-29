@@ -139,6 +139,19 @@ class _GalleryHomeState extends State<GalleryHome> {
                     ),
                     onTap: () async => ImageService(pinnuber: widget.pinnumber).importPhotos(),
                     backgroundColor: Colors.black38),
+                      SpeedDialChild(
+                    child: Icon(Icons.photo, color: kwhite, size: 30),
+                    labelWidget: Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: Text('Import all',
+                          style: TextStyle(
+                              color: kwhite,
+                              fontSize: 22,
+                              fontWeight: FontWeight.w500)),
+                    ),
+                    onTap: () async =>
+                        ImageService(pinnuber: widget.pinnumber).importPhotos(),
+                    backgroundColor: Colors.black38),
                 SpeedDialChild(
                   child: Icon(Icons.add_to_photos_rounded,
                       color: kwhite, size: 30),
@@ -345,7 +358,7 @@ class _GalleryHomeState extends State<GalleryHome> {
                     oneEntity.split('/').last.replaceAll("'", '');
 
                 return InkWell(
-                  child: PlatformAlbum(
+                  child: PlatformAlbum( 
 
                       // selected image of folder cover
                       // use provider (FolderCoverImageProvider)
@@ -354,15 +367,14 @@ class _GalleryHomeState extends State<GalleryHome> {
                         fit: BoxFit.fill,
                       ),
 
-                      // Image.asset(
-                      //     Provider.of<FolderCoverImageProvider>(context,
-                      //             listen: false)
-                      //         .imgList[index],
-                      //     fit: BoxFit.fill),
+                    
+                      
                       title: folderName,
                       album: 'Album Settings',
                       isDelete: index == 0 ? false : true,
-                      path: folderList[index].path),
+                      path: folderList[index].path, 
+                      pinnuber: widget.pinnumber,),
+
                   onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
