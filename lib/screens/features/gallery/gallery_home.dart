@@ -20,6 +20,7 @@ import '../../../utils/helper_methods.dart';
 import '../auth/components/pin_number/user_pin.dart';
 import '../new_accounts/confirm_pin_number.dart';
 import '../new_accounts/new_account_loging.dart';
+import '../new_accounts/new_account_pin_nuber.dart';
 import '../settings/settings.dart';
 import 'album_covers.dart';
 import 'components/glalery_folder.dart';
@@ -29,7 +30,9 @@ import 'dart:convert' as convert;
 class GalleryHome extends StatefulWidget {
   final String title = "Flutter Data Table";
   final bool isFake;
-  const GalleryHome({Key? key, this.isFake = false}) : super(key: key);
+  final String pinnumber;
+  const GalleryHome({Key? key, this.isFake = false, required this.pinnumber})
+      : super(key: key);
 
   @override
   State<GalleryHome> createState() => _GalleryHomeState();
@@ -41,26 +44,6 @@ class _GalleryHomeState extends State<GalleryHome> {
   Timer? timer;
   var jsonResponse = convert.jsonDecode('{"data": []}') as Map<String, dynamic>;
 
-  void getData() async {
-    var url = Uri.https(
-        'dl.dropboxusercontent.com', '/s/6nt7fkdt7ck0lue/hotels.json');
-
-    // Await the http get response, then decode the json-formatted response.
-    var response = await http.get(url);
-    if (response.statusCode == 200) {
-      setState(() {
-        jsonResponse =
-            convert.jsonDecode(response.body) as Map<String, dynamic>;
-
-        var itemCount = jsonResponse['data'];
-        // print('Number of books about http: $itemCount.');
-
-        print(jsonResponse['data'].length);
-      });
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-    }
-  }
   // User? user = FirebaseAuth.instance.currentUser;
 
   @override
@@ -69,19 +52,8 @@ class _GalleryHomeState extends State<GalleryHome> {
     requestPermission(Permission.storage);
     getFolderList();
     loadig();
-    print(imgload);
-    // timer = Timer(
-    //   const Duration(seconds: 20),
-    //   () {
-    //     /// Navigate to seconds screen when timer callback in executed
-    //     Navigator.push(
-    //       context,
-    //       MaterialPageRoute(
-    //         builder: (context) => UserPIn(),
-    //       ),
-    //     );
-    //   },
-    // );
+    print(widget.pinnumber);
+
     super.initState();
   }
 
@@ -148,7 +120,7 @@ class _GalleryHomeState extends State<GalleryHome> {
                     ),
                   ),
                   onTap: () async {
-                    return ImageService(isFake: widget.isFake).takePhoto();
+                    return ImageService(pinnuber: widget.pinnumber).takePhoto();
                   },
                   elevation: 150,
                   backgroundColor: Colors.black38,
@@ -165,7 +137,7 @@ class _GalleryHomeState extends State<GalleryHome> {
                               fontSize: 22,
                               fontWeight: FontWeight.w500)),
                     ),
-                    onTap: () async => ImageService().importPhotos(),
+                    onTap: () async => ImageService(pinnuber: widget.pinnumber).importPhotos(),
                     backgroundColor: Colors.black38),
                 SpeedDialChild(
                   child: Icon(Icons.add_to_photos_rounded,
@@ -197,9 +169,7 @@ class _GalleryHomeState extends State<GalleryHome> {
               IconButton(
                   icon: const Icon(Icons.delete, color: Colors.white54),
                   onPressed: () {}),
-              IconButton(
-                  icon: const Icon(Icons.cloud, color: Colors.white),
-                  onPressed: () {}),
+          
               PopupMenuButton(
                 itemBuilder: (context) => [
                   PopupMenuItem(
@@ -271,20 +241,20 @@ class _GalleryHomeState extends State<GalleryHome> {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.book),
-                  title: const Text(' Create New Account'),
+                  leading: const Icon(Icons.create),
+                  title: const Text(' Create New profile'),
                   onTap: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const ConfirmPin(),
+                          builder: (context) => const NewAccountPin(),
                         ));
                   },
                 ),
 
                 ListTile(
-                  leading: const Icon(Icons.book),
-                  title: const Text(' New Account Loging'),
+                  leading: const Icon(Icons.login),
+                  title: const Text(' New profile Login'),
                   onTap: () {
                     Navigator.push(
                         context,
@@ -316,7 +286,7 @@ class _GalleryHomeState extends State<GalleryHome> {
                 ),
                 ListTile(
                   leading: const Icon(Icons.logout),
-                  title: const Text('LogOut'),
+                  title: const Text('Quite'),
                   onTap: () {
                     exit(0);
                   },
@@ -452,7 +422,7 @@ class _GalleryHomeState extends State<GalleryHome> {
   // load app folders
   getFolderList() async {
     final Directory directory = Directory(
-        '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/folder');
+        '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/${widget.pinnumber}');
 
     // log(directory.toString());
 
@@ -464,7 +434,7 @@ class _GalleryHomeState extends State<GalleryHome> {
   Future<bool> createFolder(String newfolderName) async {
     String foldername = _folderName.text;
     final Directory _directory = Directory(
-        '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/$foldername');
+        '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/${widget.pinnumber}');
     Directory? directory;
     // print(_directory);
 
@@ -483,7 +453,7 @@ class _GalleryHomeState extends State<GalleryHome> {
           }
 
           newPath =
-              "/storage/emulated/0/Android/data/com.example.safe_encrypt/files/folder/$newfolderName";
+              "/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/${widget.pinnumber}/$newfolderName";
 
           directory = Directory(newPath);
           log(directory.path);

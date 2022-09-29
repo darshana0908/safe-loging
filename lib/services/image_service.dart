@@ -6,18 +6,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 
 class ImageService {
-  final bool isFake;
+  final String pinnuber;
   final ImagePicker _picker = ImagePicker();
 
-  ImageService({this.isFake = false});
+  ImageService({required this.pinnuber});
 
   // getting the default folder for each folder types (real and fake)
-  String getFolderPath() {
-    if (isFake) {
-      return '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/fakeFolder/Main Album/';
-    } else {
-      return '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/folder/Main Album/';
-    }
+  String getFolderPath() { String folder =pinnuber;
+    return '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/$folder/Main Album/';
   }
 
   // importing photos to default folder

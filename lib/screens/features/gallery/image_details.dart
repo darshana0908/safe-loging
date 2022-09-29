@@ -99,11 +99,12 @@ class _ImageDetailsState extends State<ImageDetails>
             ),
             InkWell(
               onTap: () async {
+                String key = '';
                 setState(() {
                   delete(widget.path);
                 });
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => const GalleryHome()));
+                    MaterialPageRoute(builder: (_) => GalleryHome(pinnumber: key,)));
               },
               child: Icon(
                 Icons.delete_forever,

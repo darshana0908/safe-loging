@@ -26,76 +26,7 @@ class _SettingsState extends State<Settings> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Card(
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'General',
-                        style: TextStyle(color: kliteblue, fontSize: 17),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.account_circle_rounded),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 50),
-                            child: Text(
-                              'Account',
-                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w400),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    const Divider(),
-                    const SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: const [
-                          Icon(
-                            Icons.phonelink_lock_sharp,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 50),
-                            child: Text(
-                              'Lock Screen',
-                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w400),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Divider(),
-                    const SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: const [
-                          Icon(
-                            Icons.cloud,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 50),
-                            child: Text(
-                              'Private Cloud',
-                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w400),
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ]),
-                ),
+                
                 Card(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     const SizedBox(

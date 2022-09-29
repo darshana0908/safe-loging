@@ -13,8 +13,8 @@ class PinKeyPad extends StatefulWidget {
 class _PinKeyPadState extends State<PinKeyPad> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
+    return InkWell(borderRadius: BorderRadius.circular(100),
+ 
       onTap: widget.click,
       child: Container(
         alignment: Alignment.center,

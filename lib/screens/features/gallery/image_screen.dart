@@ -342,8 +342,8 @@ class _ImageScreenState extends State<ImageScreen> {
 
         File fileToSave = File(image.path);
         fileToSave.copy('${widget.path}/$imageName');
-
-        ImageService().encryptFiles(imageName, '$imageName.aes', widget.path);
+String key='';
+        ImageService(pinnuber:key ).encryptFiles(imageName, '$imageName.aes', widget.path);
         setState(
           () {
             decryptedImages.add('${widget.path}/$imageName');
@@ -364,8 +364,8 @@ class _ImageScreenState extends State<ImageScreen> {
 
       File fileToSave = File(image.path);
       fileToSave.copy('${widget.path}/$imageName');
-
-      ImageService().encryptFiles(imageName, '$imageName.aes', widget.path);
+String key='';
+      ImageService(pinnuber:key ).encryptFiles(imageName, '$imageName.aes', widget.path);
       setState(() => decryptedImages.add('${widget.path}/$imageName'));
     }
   }

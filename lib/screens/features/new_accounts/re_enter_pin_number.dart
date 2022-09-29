@@ -8,9 +8,10 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:safe_encrypt/constants/colors.dart';
-import 'package:safe_encrypt/screens/features/new_accounts/pin_key_pad.dart';
 
 import '../../../utils/helper_methods.dart';
+import '../auth/components/pin_key_pad.dart';
+import '../gallery/gallery_home.dart';
 import 'componets/text.dart';
 import 'new_account_gallery_home.dart';
 
@@ -30,6 +31,7 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
   final Directory _directory = Directory(
       '/storage/emulated/0/Android/data/com.example.safe_encrypt/files');
   String newFolder = '';
+  bool confirmpin = true;
   @override
   void dispose() {
     controler_pin.dispose();
@@ -67,7 +69,10 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const TextWidget(text: "Re Enter Pin Numbedr."),
+                      TextWidget(
+                          text: confirmpin
+                              ? "Re Enter Pin Numberhhh."
+                              : " Wrong pin number"),
                       const SizedBox(
                         height: 50,
                       ),
@@ -95,131 +100,113 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
                       const SizedBox(
                         height: 50,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(30.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            PinKeyPad(
-                                keypad: '1',
-                                click: () {
-                                  setState(() {
-                                    backspacecolorchange = false;
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          PinKeyPad(
+                              keypad: '1',
+                              click: () {
+                                setState(() {
+                                  backspacecolorchange = false;
 
-                                    controler_pin.text =
-                                        '${controler_pin.text}1';
-                                  });
-                                }),
-                            PinKeyPad(
-                                keypad: '2',
-                                click: () {
-                                  setState(() {
-                                    backspacecolorchange = false;
+                                  controler_pin.text = '${controler_pin.text}1';
+                                });
+                              }),
+                          PinKeyPad(
+                              keypad: '2',
+                              click: () {
+                                setState(() {
+                                  backspacecolorchange = false;
 
-                                    controler_pin.text =
-                                        '${controler_pin.text}2';
-                                  });
-                                }),
-                            PinKeyPad(
-                                keypad: '3',
-                                click: () {
-                                  setState(() {
-                                    backspacecolorchange = false;
+                                  controler_pin.text = '${controler_pin.text}2';
+                                });
+                              }),
+                          PinKeyPad(
+                              keypad: '3',
+                              click: () {
+                                setState(() {
+                                  backspacecolorchange = false;
 
-                                    controler_pin.text =
-                                        '${controler_pin.text}3';
-                                  });
-                                }),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(30.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            PinKeyPad(
-                                keypad: '4',
-                                click: () {
-                                  setState(() {
-                                    backspacecolorchange = false;
-
-                                    controler_pin.text =
-                                        '${controler_pin.text}4';
-                                  });
-                                }),
-                            PinKeyPad(
-                                keypad: '5',
-                                click: () {
-                                  setState(() {
-                                    backspacecolorchange = false;
-
-                                    controler_pin.text =
-                                        '${controler_pin.text}5';
-                                  });
-                                }),
-                            PinKeyPad(
-                                keypad: '6',
-                                click: () {
-                                  setState(() {
-                                    backspacecolorchange = false;
-
-                                    controler_pin.text =
-                                        '${controler_pin.text}6';
-                                  });
-                                }),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(30.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            PinKeyPad(
-                                keypad: '7',
-                                click: () {
-                                  setState(() {
-                                    backspacecolorchange = false;
-
-                                    controler_pin.text =
-                                        '${controler_pin.text}7';
-                                  });
-                                }),
-                            PinKeyPad(
-                                keypad: '8',
-                                click: () {
-                                  setState(() {
-                                    backspacecolorchange = false;
-
-                                    controler_pin.text =
-                                        '${controler_pin.text}8';
-                                  });
-                                }),
-                            PinKeyPad(
-                                keypad: '9',
-                                click: () {
-                                  setState(() {
-                                    backspacecolorchange = false;
-
-                                    controler_pin.text =
-                                        '${controler_pin.text}9';
-                                  });
-                                }),
-                          ],
-                        ),
+                                  controler_pin.text = '${controler_pin.text}3';
+                                });
+                              }),
+                        ],
                       ),
                       const SizedBox(
                         height: 20,
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          PinKeyPad(
+                              keypad: '4',
+                              click: () {
+                                setState(() {
+                                  backspacecolorchange = false;
+
+                                  controler_pin.text = '${controler_pin.text}4';
+                                });
+                              }),
+                          PinKeyPad(
+                              keypad: '5',
+                              click: () {
+                                setState(() {
+                                  backspacecolorchange = false;
+
+                                  controler_pin.text = '${controler_pin.text}5';
+                                });
+                              }),
+                          PinKeyPad(
+                              keypad: '6',
+                              click: () {
+                                setState(() {
+                                  backspacecolorchange = false;
+
+                                  controler_pin.text = '${controler_pin.text}6';
+                                });
+                              }),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          PinKeyPad(
+                              keypad: '7',
+                              click: () {
+                                setState(() {
+                                  backspacecolorchange = false;
+
+                                  controler_pin.text = '${controler_pin.text}7';
+                                });
+                              }),
+                          PinKeyPad(
+                              keypad: '8',
+                              click: () {
+                                setState(() {
+                                  backspacecolorchange = false;
+
+                                  controler_pin.text = '${controler_pin.text}8';
+                                });
+                              }),
+                          PinKeyPad(
+                              keypad: '9',
+                              click: () {
+                                setState(() {
+                                  backspacecolorchange = false;
+
+                                  controler_pin.text = '${controler_pin.text}9';
+                                });
+                              }),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           const Text(
                             '',
@@ -227,9 +214,6 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
                                 color: Colors.white,
                                 fontSize: 35,
                                 fontWeight: FontWeight.w600),
-                          ),
-                          const SizedBox(
-                            width: 173,
                           ),
                           PinKeyPad(
                               keypad: '0',
@@ -241,125 +225,101 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
                                 });
                               }),
                           const SizedBox(
-                            width: 85,
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(45),
-                                color: Colors.brown),
                             width: 65,
-                            height: 65,
-                            child: IconButton(
-                              onPressed: () async {
-                                if (controler_pin.text ==
-                                    widget.controler_pin_new.text) {
-                                  FacebookAuth.instance
-                                      .getUserData()
-                                      .then((value) async {
-                                    final pinNumber = controler_pin.text;
-                                    final username = value['name'];
-                                    final useremail = value['email'];
-                                    final userpasward = value['id'];
-                                    await createFolder(
-                                        widget.controler_pin_new.text);
-                                    createuser(
-                                      foldername: controler_pin.text,
-                                      pin: pinNumber,
-                                      name: value['name'].toString(),
-                                      email: value['email'].toString(),
-                                      uid: value['id'].toString(),
-                                    );
-                                    // readUsers();
-
-                                    await Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              NewAccountGalleryHome(
-                                            controler_pin: controler_pin.text,
-                                          ),
-                                        ));
-                                  });
-                                  {
-                                    setState(() {});
-                                  }
-                                }
-
-                                if (controler_pin.text ==
-                                    widget.controler_pin_new.text) {
-                                  final user =
-                                      FirebaseAuth.instance.currentUser!;
-                                  final pinNumber = controler_pin.text;
-
-                                  final username = user.displayName;
-                                  final useremail = user.email;
-                                  final userpasward = user.uid;
-                                  await createFolder(
-                                      widget.controler_pin_new.text);
-                                  createuser(
-                                    pin: pinNumber,
-                                    name: username.toString(),
-                                    email: user.email.toString(),
-                                    uid: user.uid.toString(),
-                                    foldername: controler_pin.text,
-                                  );
-                                  // readUsers();
-
+                          ),
+                          IconButton(
+                            onPressed: () async {
+                              // print(controler_pin.text);
+                              if (widget.controler_pin_new.text ==
+                                  controler_pin.text) {
+                                createFolder(controler_pin.text);
                                   await Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              NewAccountGalleryHome(
-                                                controler_pin:
-                                                    controler_pin.text,
-                                              )));
-                                } else {
-                                  setState(() {});
-                                }
-                              },
+                                        builder: (context) =>
+                                            NewAccountGalleryHome(
+                                          controler_pin: controler_pin.text,
+                                        ),
+                                      ));
+                              } else {
+                                confirmpin = false;
+                              }
 
-                              //   print(controler_pin.text);
-                              //   if (controler_pin.text ==
-                              //       widget.controler_pin_new.text) {
+                              // if (controler_pin.text ==
+                              //     widget.controler_pin_new.text) {
+                              //   FacebookAuth.instance
+                              //       .getUserData()
+                              //       .then((value) async {
                               //     final pinNumber = controler_pin.text;
-                              //     final username = user.displayName;
-                              //     final useremail = user.email;
-                              //     final userpasward = user.uid;
-                              //     createuser(
-                              //         pin: pinNumber,
-                              //         name: username.toString(),
-                              //         email: user.email.toString(),
-                              //         uid: user.uid.toString(),
-                              //         foldername: controler_pin.text);
-                              //     print(controler_pin.text);
-
+                              //     final username = value['name'];
+                              //     final useremail = value['email'];
+                              //     final userpasward = value['id'];
                               //     await createFolder(
                               //         widget.controler_pin_new.text);
+                              //     createuser(
+                              //       foldername: controler_pin.text,
+                              //       pin: pinNumber,
+                              //       name: value['name'].toString(),
+                              //       email: value['email'].toString(),
+                              //       uid: value['id'].toString(),
+                              //     );
+                              //     // readUsers();
 
-                              //     Navigator.push(
+                              //     await Navigator.push(
                               //         context,
                               //         MaterialPageRoute(
-                              //             builder: (context) =>
-                              //                 NewAccountGalleryHome(
-                              //                   controler_pin:
-                              //                       controler_pin.text,
-                              //                 )));
+                              //           builder: (context) =>
+                              //               NewAccountGalleryHome(
+                              //             controler_pin: controler_pin.text,
+                              //           ),
+                              //         ));
+                              //   });
+                              //   {
+                              //     setState(() {});
                               //   }
+                              // }
 
-                              //   //   if (controler_pin.text == key) {
-                              //   //     main();
-                              //   //     print('okkkkkk');
-                              //   //   } else {
-                              //   //     print('qqqqqqqqqqqqqqqqqqqq');
-                              //   //   }
-                              // },
-                              icon: Icon(
-                                Icons.check_circle,
-                                color: kwhite,
-                                size: 50,
-                              ),
+                              // if (controler_pin.text ==
+                              //     widget.controler_pin_new.text) {
+                              //   final user =
+                              //       FirebaseAuth.instance.currentUser!;
+                              //   final pinNumber = controler_pin.text;
+
+                              //   final username = user.displayName;
+                              //   final useremail = user.email;
+                              //   final userpasward = user.uid;
+                              //   await createFolder(
+                              //       widget.controler_pin_new.text);
+                              //   createuser(
+                              //     pin: pinNumber,
+                              //     name: username.toString(),
+                              //     email: user.email.toString(),
+                              //     uid: user.uid.toString(),
+                              //     foldername: controler_pin.text,
+                              //   );
+                              //   // readUsers();
+
+                              //   await Navigator.push(
+                              //       context,
+                              //       MaterialPageRoute(
+                              //           builder: (context) =>
+                              //               NewAccountGalleryHome(
+                              //                 controler_pin:
+                              //                     controler_pin.text,
+                              //               )));
+                              // } else {
+                              //   setState(() {});
+                              // }
+                            },
+                            icon: Icon(
+                              Icons.check_circle,
+                              color: kwhite,
+                              size: 50,
                             ),
-                          )
+                          ),
+                          const SizedBox(
+                            width: 34,
+                          ),
                         ],
                       )
                     ]),
@@ -392,13 +352,10 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
             newPath += "/$folder";
           }
 
-          newPath = "$newPath/file/$folderName/Main Album";
-          // newPath = "$newPath/Main Album";
-
-          // new directory
+          newPath =
+              "$newPath/safe/app/new/$folderName/Main Album"; // new directory
 
           directory = Directory(newPath);
-          print(directory);
           log(directory.path);
         } else {
           return false;
@@ -426,24 +383,24 @@ class _ReEnterPinNumberState extends State<ReEnterPinNumber> {
     }
     return false;
   }
+}
 
-  Future createuser({
-    required String pin,
-    required String name,
-    required String email,
-    required String uid,
-    required String foldername,
-  }) async {
-    final docUser = FirebaseFirestore.instance.collection('newusers').doc();
-    final json = {
-      'id': docUser.id,
-      'pin': pin,
-      'name': name,
-      'email': email,
-      'uid': uid,
-      'foldername': foldername,
-    };
+Future createuser({
+  required String pin,
+  required String name,
+  required String email,
+  required String uid,
+  required String foldername,
+}) async {
+  final docUser = FirebaseFirestore.instance.collection('newusers').doc();
+  final json = {
+    'id': docUser.id,
+    'pin': pin,
+    'name': name,
+    'email': email,
+    'uid': uid,
+    'foldername': foldername,
+  };
 
-    await docUser.set(json);
-  }
+  await docUser.set(json);
 }

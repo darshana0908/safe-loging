@@ -103,6 +103,7 @@ class _PlatformAlbumState extends State<PlatformAlbum> {
                                                     'Dialog Dissmiss from callback $type');
                                               },
                                               btnOkOnPress: () async {
+                                                String key = '';
                                                 setState(() {
                                                   delete(widget.path);
 
@@ -110,7 +111,7 @@ class _PlatformAlbumState extends State<PlatformAlbum> {
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (_) =>
-                                                              const GalleryHome()));
+                                                               GalleryHome(pinnumber: key,)));
                                                 });
                                               }).show();
                                           // showAlertDialog(context, widget.path);

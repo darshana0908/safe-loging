@@ -233,7 +233,7 @@ class _FirstPinNumberState extends State<FirstPinNumber> {
                                 ),
                               ),
                               const SizedBox(
-                                width: 30,
+                                width: 34,
                               )
                             ],
                           )

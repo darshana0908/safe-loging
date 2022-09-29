@@ -209,13 +209,13 @@ class _AuthScreen extends State<AuthScreen> {
                               //           const NewSignupPage()),
                               // );
 
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const GalleryHome(
-                                          isFake: true,
-                                        )),
-                              );
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) => const GalleryHome(
+                              //             isFake: true,
+                              //           )),
+                              // );
                             },
                           ),
                         ),

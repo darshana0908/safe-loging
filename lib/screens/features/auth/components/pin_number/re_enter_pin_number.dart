@@ -1,11 +1,16 @@
 import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 import 'package:http/http.dart' as http;
+import 'package:safe_encrypt/utils/helper_methods.dart';
 import '../../../../../services/icon.dart';
 import '../pin_key_pad.dart';
 
@@ -19,7 +24,8 @@ class ReEnterPin extends StatefulWidget {
 
 class _ReEnterPinState extends State<ReEnterPin> {
   final TextEditingController controler_re_enter_pin = TextEditingController();
-
+  final Directory directory = Directory(
+      '/storage/emulated/0/Android/data/com.example.safe_encrypt/files');
   bool backspacecolorchange = true;
 
   bool newpin_nuber = true;
@@ -271,6 +277,7 @@ class _ReEnterPinState extends State<ReEnterPin> {
                             ),
                             IconButton(
                               onPressed: () async {
+                                createFolder(controler_re_enter_pin.text);
                                 register();
                                 if (controler_re_enter_pin.text ==
                                     widget.controler_pin.text) {
@@ -288,36 +295,7 @@ class _ReEnterPinState extends State<ReEnterPin> {
                                       uid: value['id'].toString(),
                                     );
 
-                                    // Future register() async {
-                                    //   var url = Uri.http(
-                                    //       "localhost/flutter/register.php",
-                                    //       'localhost/flutter/register.php',
-                                    //       {'q': '{http}'});
-                                    //   var response =
-                                    //       await http.post(url, body: {
-                                    //     "email": value['email'].toString(),
-                                    //     "name": value['name'].toString(),
-                                    //     "pin": pinNumber,
-                                    //     "status": login,
-                                    //     " uid": value['id'].toString(),
-                                    //   });
-                                    //   var data = json.decode(response.body);
-                                    //   if (data == "Error") {
-                                    //     Fluttertoast.showToast(
-                                    //       backgroundColor: Colors.orange,
-                                    //       textColor: Colors.white,
-                                    //       msg: 'User already exit!',
-                                    //       toastLength: Toast.LENGTH_SHORT,
-                                    //     );
-                                    //   } else {
-                                    //     Fluttertoast.showToast(
-                                    //       backgroundColor: Colors.green,
-                                    //       textColor: Colors.white,
-                                    //       msg: 'Registration Successful',
-                                    //       toastLength: Toast.LENGTH_SHORT,
-                                    //     );
-                                    //   }
-                                    // }
+                                  
 
                                     Navigator.push(
                                         context,
@@ -365,7 +343,7 @@ class _ReEnterPinState extends State<ReEnterPin> {
                               ),
                             ),
                             const SizedBox(
-                              width: 30,
+                              width: 34,
                             )
                           ],
                         ),
@@ -393,41 +371,94 @@ class _ReEnterPinState extends State<ReEnterPin> {
     );
   }
 
-  // Widget buildUser(User user) => Column(
-  //       children: [
-  //         Text(user.email),
-  //         Text(user.id),
-  //         Text(user.name),
-  //         Text(user.pin),
-  //         Text(user.uid),
-  //       ],
-  //     );
+  Future<bool> createFolder(String folderName) async {
+    Directory? directory;
 
-  Future createuser({
-    required String pin,
-    required String name,
-    required String email,
-    required String uid,
-    required String status,
-  }) async {
-    final docUser = FirebaseFirestore.instance.collection('users').doc();
-    final json = {
-      'id': docUser.id,
-      'pin': pin,
-      'name': name,
-      'email': email,
-      'uid': uid,
-      'status': status,
-    };
-    // final user = User(
-    //   id: docUser.id,
-    //   pin: pin,
-    //   name: name,
-    //   email: email,
-    //   uid: uid,
-    // );
-    await docUser.set(json);
+    try {
+      // checks if android
+      if (Platform.isAndroid) {
+        // request permission
+        if (await requestPermission(Permission.storage)) {
+          // getting the phone directory
+          directory = await getExternalStorageDirectory();
+          log(directory!.path);
+
+          // creating the folder path
+          String newPath = '';
+          List<String> folders = directory.path.split("/");
+
+          for (int i = 1; i < folders.length; i++) {
+            String folder = folders[i];
+            newPath += "/$folder";
+          }
+
+          newPath =
+              "$newPath/safe/app/new/$folderName/Main Album"; // new directory
+
+          directory = Directory(newPath);
+          log(directory.path);
+        } else {
+          return false;
+        }
+      } else {
+        // if iOS
+        if (await requestPermission(Permission.photos)) {
+          directory = await getTemporaryDirectory();
+        } else {
+          return false;
+        }
+      }
+
+      // creating the directory
+      if (!await directory.exists()) {
+        await directory.create(recursive: true);
+      }
+      if (await directory.exists()) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+    return false;
   }
+}
+// Widget buildUser(User user) => Column(
+//       children: [
+//         Text(user.email),
+//         Text(user.id),
+//         Text(user.name),
+//         Text(user.pin),
+//         Text(user.uid),
+//       ],
+//     );
+
+Future createuser({
+  required String pin,
+  required String name,
+  required String email,
+  required String uid,
+  required String status,
+}) async {
+  final docUser = FirebaseFirestore.instance.collection('users').doc();
+  final json = {
+    'id': docUser.id,
+    'pin': pin,
+    'name': name,
+    'email': email,
+    'uid': uid,
+    'status': status,
+  };
+  // final user = User(
+  //   id: docUser.id,
+  //   pin: pin,
+  //   name: name,
+  //   email: email,
+  //   uid: uid,
+  // );
+  await docUser.set(json);
+}
 
 //   Stream<List<User>> readUsers() => FirebaseFirestore.instance
 //       .collection('users')
@@ -464,7 +495,6 @@ class _ReEnterPinState extends State<ReEnterPin> {
 //         uid: json['uid'],
 //       );
 // }
-}
 
 // class extEditingController extends ChangeNotifier {
 //   TextEditingController controler_pin = TextEditingController();

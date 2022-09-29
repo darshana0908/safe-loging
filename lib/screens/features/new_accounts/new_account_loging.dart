@@ -237,7 +237,7 @@ class _NewAccountLogingState extends State<NewAccountLoging> {
                             child: IconButton(
                               onPressed: () async {
                                 String path =
-                                    "/storage/emulated/0/Android/data/com.example.safe_encrypt/files/file/${controler_pin.text}";
+                                    "/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/${controler_pin.text}";
                                 bool directoryExists =
                                     await Directory(path).exists();
                                 bool fileExists = await File(path).exists();

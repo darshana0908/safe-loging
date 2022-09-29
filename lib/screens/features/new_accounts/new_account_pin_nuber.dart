@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:safe_encrypt/constants/colors.dart';
-import 'package:safe_encrypt/screens/features/new_accounts/pin_key_pad.dart';
+
 
 import '../../../utils/helper_methods.dart';
 
+import '../auth/components/pin_key_pad.dart';
 import 're_enter_pin_number.dart';
 import 'componets/text.dart';
 
@@ -79,131 +80,122 @@ class _NewAccountPinState extends State<NewAccountPin> {
                       const SizedBox(
                         height: 50,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(30.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            PinKeyPad(
-                                keypad: '1',
-                                click: () {
-                                  setState(() {
-                                    backspacecolorchange = false;
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          PinKeyPad(
+                              keypad: '1',
+                              click: () {
+                                setState(() {
+                                  backspacecolorchange = false;
 
-                                    controler_pin.text =
-                                        '${controler_pin.text}1';
-                                  });
-                                }),
-                            PinKeyPad(
-                                keypad: '2',
-                                click: () {
-                                  setState(() {
-                                    backspacecolorchange = false;
+                                  controler_pin.text =
+                                      '${controler_pin.text}1';
+                                });
+                              }),
+                          PinKeyPad(
+                              keypad: '2',
+                              click: () {
+                                setState(() {
+                                  backspacecolorchange = false;
 
-                                    controler_pin.text =
-                                        '${controler_pin.text}2';
-                                  });
-                                }),
-                            PinKeyPad(
-                                keypad: '3',
-                                click: () {
-                                  setState(() {
-                                    backspacecolorchange = false;
+                                  controler_pin.text =
+                                      '${controler_pin.text}2';
+                                });
+                              }),
+                          PinKeyPad(
+                              keypad: '3',
+                              click: () {
+                                setState(() {
+                                  backspacecolorchange = false;
 
-                                    controler_pin.text =
-                                        '${controler_pin.text}3';
-                                  });
-                                }),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(30.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            PinKeyPad(
-                                keypad: '4',
-                                click: () {
-                                  setState(() {
-                                    backspacecolorchange = false;
-
-                                    controler_pin.text =
-                                        '${controler_pin.text}4';
-                                  });
-                                }),
-                            PinKeyPad(
-                                keypad: '5',
-                                click: () {
-                                  setState(() {
-                                    backspacecolorchange = false;
-
-                                    controler_pin.text =
-                                        '${controler_pin.text}5';
-                                  });
-                                }),
-                            PinKeyPad(
-                                keypad: '6',
-                                click: () {
-                                  setState(() {
-                                    backspacecolorchange = false;
-
-                                    controler_pin.text =
-                                        '${controler_pin.text}6';
-                                  });
-                                }),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(30.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            PinKeyPad(
-                                keypad: '7',
-                                click: () {
-                                  setState(() {
-                                    backspacecolorchange = false;
-
-                                    controler_pin.text =
-                                        '${controler_pin.text}7';
-                                  });
-                                }),
-                            PinKeyPad(
-                                keypad: '8',
-                                click: () {
-                                  setState(() {
-                                    backspacecolorchange = false;
-
-                                    controler_pin.text =
-                                        '${controler_pin.text}8';
-                                  });
-                                }),
-                            PinKeyPad(
-                                keypad: '9',
-                                click: () {
-                                  setState(() {
-                                    backspacecolorchange = false;
-
-                                    controler_pin.text =
-                                        '${controler_pin.text}9';
-                                  });
-                                }),
-                          ],
-                        ),
+                                  controler_pin.text =
+                                      '${controler_pin.text}3';
+                                });
+                              }),
+                        ],
                       ),
                       const SizedBox(
                         height: 20,
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          PinKeyPad(
+                              keypad: '4',
+                              click: () {
+                                setState(() {
+                                  backspacecolorchange = false;
+
+                                  controler_pin.text =
+                                      '${controler_pin.text}4';
+                                });
+                              }),
+                          PinKeyPad(
+                              keypad: '5',
+                              click: () {
+                                setState(() {
+                                  backspacecolorchange = false;
+
+                                  controler_pin.text =
+                                      '${controler_pin.text}5';
+                                });
+                              }),
+                          PinKeyPad(
+                              keypad: '6',
+                              click: () {
+                                setState(() {
+                                  backspacecolorchange = false;
+
+                                  controler_pin.text =
+                                      '${controler_pin.text}6';
+                                });
+                              }),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          PinKeyPad(
+                              keypad: '7',
+                              click: () {
+                                setState(() {
+                                  backspacecolorchange = false;
+
+                                  controler_pin.text =
+                                      '${controler_pin.text}7';
+                                });
+                              }),
+                          PinKeyPad(
+                              keypad: '8',
+                              click: () {
+                                setState(() {
+                                  backspacecolorchange = false;
+
+                                  controler_pin.text =
+                                      '${controler_pin.text}8';
+                                });
+                              }),
+                          PinKeyPad(
+                              keypad: '9',
+                              click: () {
+                                setState(() {
+                                  backspacecolorchange = false;
+
+                                  controler_pin.text =
+                                      '${controler_pin.text}9';
+                                });
+                              }),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           const Text(
                             '',
@@ -212,9 +204,7 @@ class _NewAccountPinState extends State<NewAccountPin> {
                                 fontSize: 35,
                                 fontWeight: FontWeight.w600),
                           ),
-                          const SizedBox(
-                            width: 173,
-                          ),
+                        
                           PinKeyPad(
                               keypad: '0',
                               click: () {
@@ -225,38 +215,34 @@ class _NewAccountPinState extends State<NewAccountPin> {
                                 });
                               }),
                           const SizedBox(
-                            width: 85,
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(45),
-                                color: Colors.brown),
                             width: 65,
-                            height: 65,
-                            child: IconButton(
-                              onPressed: () {
-                                setState(() {});
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              setState(() {});
 
-                                //   if (controler_pin.text == key) {
-                                //     main();
-                                //     print('okkkkkk');
-                                //   } else {
-                                //     print('qqqqqqqqqqqqqqqqqqqq');
-                                //   }
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ReEnterPinNumber(
-                                          controler_pin_new: controler_pin),
-                                    ));
-                              },
-                              icon: Icon(
-                                Icons.check_circle,
-                                color: kwhite,
-                                size: 50,
-                              ),
+                              //   if (controler_pin.text == key) {
+                              //     main();
+                              //     print('okkkkkk');
+                              //   } else {
+                              //     print('qqqqqqqqqqqqqqqqqqqq');
+                              //   }
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ReEnterPinNumber(
+                                        controler_pin_new: controler_pin),
+                                  ));
+                            },
+                            icon: Icon(
+                              Icons.check_circle,
+                              color: kwhite,
+                              size: 50,
                             ),
-                          )
+                          ),
+                          const SizedBox(
+                            width: 34,
+                          ),
                         ],
                       )
                     ]),

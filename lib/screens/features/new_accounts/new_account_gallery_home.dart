@@ -11,6 +11,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 import 'package:safe_encrypt/screens/features/auth/components/pin_number/re_enter_pin_number.dart';
+import 'package:safe_encrypt/screens/features/auth/components/pin_number/user_pin.dart';
 import 'package:safe_encrypt/screens/features/gallery/gallery_home.dart';
 
 import '../../../services/image_service.dart';
@@ -65,7 +66,7 @@ class _NewAccountGalleryHomeState extends State<NewAccountGalleryHome> {
     return WillPopScope(
       onWillPop: () {
         throw Navigator.push(
-            context, MaterialPageRoute(builder: (_) => GalleryHome()));
+            context, MaterialPageRoute(builder: (_) => UserPIn()));
       },
       child: Scaffold(
            floatingActionButton: Padding(
@@ -150,9 +151,7 @@ class _NewAccountGalleryHomeState extends State<NewAccountGalleryHome> {
             IconButton(
                 icon: const Icon(Icons.delete, color: Colors.white54),
                 onPressed: () {}),
-            IconButton(
-                icon: const Icon(Icons.cloud, color: Colors.white),
-                onPressed: () {}),
+         
             PopupMenuButton(
               itemBuilder: (context) => [
                 PopupMenuItem(
@@ -223,7 +222,7 @@ class _NewAccountGalleryHomeState extends State<NewAccountGalleryHome> {
                 title: const Text(' My Profile '),
                 onTap: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => GalleryHome()));
+                      MaterialPageRoute(builder: (_) => UserPIn()));
                 },
               ),
 
@@ -250,7 +249,7 @@ class _NewAccountGalleryHomeState extends State<NewAccountGalleryHome> {
               ),
               ListTile(
                 leading: const Icon(Icons.logout),
-                title: const Text('LogOut'),
+                title: const Text('Quite'),
                 onTap: () {
                   exit(0);
                 },
@@ -368,7 +367,7 @@ class _NewAccountGalleryHomeState extends State<NewAccountGalleryHome> {
   getFolderList() async {
     String foldername = widget.controler_pin;
     final Directory directory = Directory(
-        "/storage/emulated/0/Android/data/com.example.safe_encrypt/files/file/$foldername");
+        "/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/$foldername");
     print(directory);
     print('kkkkk');
     print(directory);
@@ -383,7 +382,7 @@ class _NewAccountGalleryHomeState extends State<NewAccountGalleryHome> {
   Future<bool> createFolder(String newfolderName) async {
     String foldername = widget.controler_pin;
     final Directory _directory = Directory(
-        '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/file/$foldername');
+        '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/$foldername');
     Directory? directory;
     // print(_directory);
 
@@ -402,7 +401,7 @@ class _NewAccountGalleryHomeState extends State<NewAccountGalleryHome> {
           }
 
           newPath =
-              "/storage/emulated/0/Android/data/com.example.safe_encrypt/files/file/$foldername/$newfolderName";
+              "/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/$foldername/$newfolderName";
 
           directory = Directory(newPath);
           log(directory.path);

@@ -15,7 +15,7 @@ class NewAccountImageService {
 
   final ImagePicker _picker = ImagePicker();
   getfolder() {
-    return "/storage/emulated/0/Android/data/com.example.safe_encrypt/files/file/$controler_pin/Main Album/";
+    return "/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/$controler_pin/Main Album/";
   }
 
   Future<File> encryptFiles(
@@ -104,7 +104,7 @@ class NewAccountImageService {
 }
 
 const defaultFolder =
-    '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/file/Main Album/';
+    '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/Main Album/';
 
 final ImagePicker _picker = ImagePicker();
 

@@ -62,7 +62,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
             InkWell(
               onTap: () async {
                 if (await requestPermission(Permission.storage)) {
-                  await createFolder(realFolder);
+                  // await createFolder(realFolder);
 
                   Navigator.push(
                       context,
@@ -97,55 +97,55 @@ class _PermissionScreenState extends State<PermissionScreen> {
     );
   }
 
-  Future<bool> createFolder(String folderName) async {
-    Directory? directory;
+//   Future<bool> createFolder(String folderName) async {
+//     Directory? directory;
 
-    try {
-      // checks if android
-      if (Platform.isAndroid) {
-        // request permission
-        if (await requestPermission(Permission.storage)) {
-          // getting the phone directory
-          directory = await getExternalStorageDirectory();
-          log(directory!.path);
+//     try {
+//       // checks if android
+//       if (Platform.isAndroid) {
+//         // request permission
+//         if (await requestPermission(Permission.storage)) {
+//           // getting the phone directory
+//           directory = await getExternalStorageDirectory();
+//           log(directory!.path);
 
-          // creating the folder path
-          String newPath = '';
-          List<String> folders = directory.path.split("/");
+//           // creating the folder path
+//           String newPath = '';
+//           List<String> folders = directory.path.split("/");
 
-          for (int i = 1; i < folders.length; i++) {
-            String folder = folders[i];
-            newPath += "/$folder";
-          }
+//           for (int i = 1; i < folders.length; i++) {
+//             String folder = folders[i];
+//             newPath += "/$folder";
+//           }
 
-          newPath = "$newPath/$folderName/Main Album"; // new directory
+//           newPath = "$newPath/$folderName/Main Album"; // new directory
 
-          directory = Directory(newPath);
-          log(directory.path);
-        } else {
-          return false;
-        }
-      } else {
-        // if iOS
-        if (await requestPermission(Permission.photos)) {
-          directory = await getTemporaryDirectory();
-        } else {
-          return false;
-        }
-      }
+//           directory = Directory(newPath);
+//           log(directory.path);
+//         } else {
+//           return false;
+//         }
+//       } else {
+//         // if iOS
+//         if (await requestPermission(Permission.photos)) {
+//           directory = await getTemporaryDirectory();
+//         } else {
+//           return false;
+//         }
+//       }
 
-      // creating the directory
-      if (!await directory.exists()) {
-        await directory.create(recursive: true);
-      }
-      if (await directory.exists()) {
-        return true;
-      } else {
-        return false;
-      }
-    } catch (e) {
-      log(e.toString());
-    }
-    return false;
-  }
+//       // creating the directory
+//       if (!await directory.exists()) {
+//         await directory.create(recursive: true);
+//       }
+//       if (await directory.exists()) {
+//         return true;
+//       } else {
+//         return false;
+//       }
+//     } catch (e) {
+//       log(e.toString());
+//     }
+//     return false;
+//   }
 }

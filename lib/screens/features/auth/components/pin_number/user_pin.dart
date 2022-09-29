@@ -1,5 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -276,79 +278,99 @@ class _UserPInState extends State<UserPIn> {
                             ),
                             IconButton(
                               onPressed: () async {
-                                confirm_pin
-                                    ? showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return const Center(
-                                            child: CupertinoActivityIndicator(
-                                              radius: 55,
-                                              color: Colors.red,
-                                            ),
-                                          );
-                                        },
-                                      )
-                                    : null;
+                                String path =
+                                    "/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/${controler_re_enter_pin.text}";
+                                bool directoryExists =
+                                    await Directory(path).exists();
+                                bool fileExists = await File(path).exists();
+                                if (directoryExists || fileExists) {
+                                  // ignore: use_build_context_synchronously
+                                   savebool();
+                                  await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                          GalleryHome(pinnumber: controler_re_enter_pin.text),
+                                      ));
+                                } else {
+                                  setState(() {
+                                    confirm_pin = false;
+                                  });
+                                }
 
-                                await FirebaseFirestore.instance
-                                    .collection('users')
-                                    .get()
-                                    .then((QuerySnapshot querySnapshot) {
-                                  for (var doc in querySnapshot.docs) {
-                                    String pinNum = doc['pin'].toString();
-                                    if (pinNum == controler_re_enter_pin.text) {
-                                      print(confirm_pin);
-                                      print('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
-                                      FacebookAuth.instance
-                                          .getUserData()
-                                          .then((value) async {
-                                        if (value['id'] == doc['uid']) {
-                                          print(value['id']);
-                                          print(doc['uid'].toString());
+                                // confirm_pin
+                                //     ? showDialog(
+                                //         context: context,
+                                //         builder: (context) {
+                                //           return const Center(
+                                //             child: CupertinoActivityIndicator(
+                                //               radius: 55,
+                                //               color: Colors.red,
+                                //             ),
+                                //           );
+                                //         },
+                                //       )
+                                //     : null;
 
-                                          savebool();
+                                // await FirebaseFirestore.instance
+                                //     .collection('users')
+                                //     .get()
+                                //     .then((QuerySnapshot querySnapshot) {
+                                //   for (var doc in querySnapshot.docs) {
+                                //     String pinNum = doc['pin'].toString();
+                                //     if (pinNum == controler_re_enter_pin.text) {
+                                //       print(confirm_pin);
+                                //       print('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
+                                //       FacebookAuth.instance
+                                //           .getUserData()
+                                //           .then((value) async {
+                                //         if (value['id'] == doc['uid']) {
+                                //           print(value['id']);
+                                //           print(doc['uid'].toString());
 
-                                          //loading widget goes here
+                                //           // savebool();
 
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const GalleryHome(),
-                                              ));
-                                        }
-                                      });
+                                //           //loading widget goes here
 
-                                      if (pinNum ==
-                                          controler_re_enter_pin.text) {
-                                        final user =
-                                            FirebaseAuth.instance.currentUser!;
-                                        if (user.uid == doc['uid'].toString()) {
-                                          savebool();
+                                //           Navigator.push(
+                                //               context,
+                                //               MaterialPageRoute(
+                                //                 builder: (context) =>
+                                //                     const GalleryHome(),
+                                //               ));
+                                //         }
+                                //       });
 
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const GalleryHome(),
-                                              ));
-                                        }
+                                //       if (pinNum ==
+                                //           controler_re_enter_pin.text) {
+                                //         final user =
+                                //             FirebaseAuth.instance.currentUser!;
+                                //         if (user.uid == doc['uid'].toString()) {
+                                //           // savebool();
 
-                                        print(controler_re_enter_pin.text);
-                                      }
-                                    } else {
-                                      setState(() {
-                                        confirm_pin = false;
-                                      });
+                                //           Navigator.push(
+                                //               context,
+                                //               MaterialPageRoute(
+                                //                 builder: (context) =>
+                                //                     const GalleryHome(),
+                                //               ));
+                                //         }
 
-                                      // } else {
-                                      //   setState(() {
-                                      //     confirm_pin = false;
-                                      //   });
-                                      // }
-                                    }
-                                  }
-                                });
+                                //         print(controler_re_enter_pin.text);
+                                //       }
+                                //     } else {
+                                //       setState(() {
+                                //         confirm_pin = false;
+                                //       });
+
+                                //       // } else {
+                                //       //   setState(() {
+                                //       //     confirm_pin = false;
+                                //       //   });
+                                //       // }
+                                //     }
+                                //   }
+                                // });
                               },
 
                               //   await FirebaseFirestore.instance
@@ -400,7 +422,7 @@ class _UserPInState extends State<UserPIn> {
                               ),
                             ),
                             const SizedBox(
-                              width: 30,
+                              width: 34,
                             ),
                           ],
                         )
@@ -425,11 +447,11 @@ class _UserPInState extends State<UserPIn> {
           if (pinNum == controler_re_enter_pin.text) {
             FacebookAuth.instance.getUserData().then((value) async {
               if (value['id'].toString() == doc['uid'].toString()) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const GalleryHome(),
-                    ));
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (context) => const GalleryHome(),
+                //     ));
               }
             });
           }
@@ -438,11 +460,11 @@ class _UserPInState extends State<UserPIn> {
             if (user.uid == doc['uid'].toString()) {
               // savebool();
               nave() async {
-                await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const GalleryHome(),
-                    ));
+                // await Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (context) => const GalleryHome(),
+                //     ));
               }
             }
 

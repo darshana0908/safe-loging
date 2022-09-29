@@ -53,11 +53,11 @@ class _VerificationState extends State<Verification> {
                       ),
                       InkWell(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const GalleryHome(isFake: true),
-                              ));
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //       builder: (context) => const GalleryHome(isFake: true),
+                          //     ));
                         },
                         child: Container(
                           alignment: Alignment.center,
