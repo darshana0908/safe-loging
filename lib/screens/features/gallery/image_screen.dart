@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:file_cryptor/file_cryptor.dart';
+import 'package:file_preview/file_preview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -260,15 +261,21 @@ class _ImageScreenState extends State<ImageScreen> {
                     Navigator.push(context, MaterialPageRoute(builder: (_) {
                       return ImageDetails(path: imgPath);
                     })),
-                child: x == 1
-                    ? Card(
-                        elevation: 8.0,
-                        child: Hero(
-                            tag: imgPath,
-                            child: Image.file(
-                              File(imgPath),
-                              fit: BoxFit.cover,
-                            )))
+                child: x == 1?  FilePreviewWidget(
+                  width: 150,
+                  path: imgPath,height: 150,
+                )
+
+
+
+                    // ? Card(
+                    //     elevation: 8.0,
+                    //     child: Hero(
+                    //         tag: imgPath,
+                    //         child: Image.file(
+                    //           File(imgPath),
+                    //           fit: BoxFit.cover,
+                    //         )))
                     : x == 2
                         ? Card(
                             elevation: 8.0,
@@ -385,7 +392,7 @@ class _ImageScreenState extends State<ImageScreen> {
     List<String> encryptedImages = openedFolder
         .listSync()
         .map((item) => item.path)
-        .where((item) => item.endsWith(".aes"))
+        .where((item) => item.endsWith(".aes")|| item.endsWith(".pdf"))
         .toList(growable: true);
 
     if (encryptedImages.isNotEmpty) {

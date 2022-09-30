@@ -19,6 +19,7 @@ import 'package:safe_encrypt/constants/colors.dart';
 import 'package:safe_encrypt/services/image_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../services/file_page.dart';
 import '../../../services/file_service.dart';
 import '../../../utils/helper_methods.dart';
 import '../auth/components/pin_number/user_pin.dart';
@@ -154,7 +155,9 @@ class _GalleryHomeState extends State<GalleryHome> {
                               fontSize: 22,
                               fontWeight: FontWeight.w500)),
                     ),
-                    onTap: () async => FileService(pinNumber: widget.pinnumber).importFiles(),
+                    onTap: () async =>
+                        FileService(pinNumber: widget.pinnumber).importFiles(),
+                       
                     backgroundColor: Colors.black38),
                 SpeedDialChild(
                   child: Icon(Icons.add_to_photos_rounded,
@@ -351,6 +354,9 @@ class _GalleryHomeState extends State<GalleryHome> {
 
     // );  ),
   }
+
+  openFiles(List<PlatformFile> files) =>
+      Navigator.push(context, MaterialPageRoute(builder: (_) => FilePage()));
 
   // create folder dialog
   showCreateFolderDialog(context) {
