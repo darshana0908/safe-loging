@@ -61,6 +61,7 @@ dependencies:
   image_size_getter: ^2.1.2
   fluttertoast: ^8.0.9
   open_file: ^3.2.1
+  file_preview: ^1.1.1
 
   # webview_flutter: ^3.0.4
 
