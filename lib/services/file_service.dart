@@ -26,9 +26,10 @@ class FileService {
       List<File> files = result.paths.map((path) => File(path!)).toList();
 
       for (File file in files) {
+
         fileType = path.extension(file.path);
-        fileName =
-            '${DateTime.now().microsecondsSinceEpoch.toString()}$fileType';
+        fileName =path.basenameWithoutExtension(file.path);
+        // '${DateTime.now().microsecondsSinceEpoch.toString()}$fileType';
 
         File fileToSave = File(file.path);
         fileToSave.copy('${getFolderPath()}$fileName');
