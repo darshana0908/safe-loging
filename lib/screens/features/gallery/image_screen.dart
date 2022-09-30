@@ -38,9 +38,8 @@ class _ImageScreenState extends State<ImageScreen> {
   @override
   void initState() {
     decryptImages();
-    setState(() {
       loadPhotos();
-    });
+    
 
     super.initState();
   }
@@ -342,8 +341,9 @@ class _ImageScreenState extends State<ImageScreen> {
 
         File fileToSave = File(image.path);
         fileToSave.copy('${widget.path}/$imageName');
-String key='';
-        ImageService(pinnuber:key ).encryptFiles(imageName, '$imageName.aes', widget.path);
+        String key = '';
+        ImageService(pinNumber: key)
+            .encryptFiles(imageName, '$imageName.aes', widget.path);
         setState(
           () {
             decryptedImages.add('${widget.path}/$imageName');
@@ -364,8 +364,9 @@ String key='';
 
       File fileToSave = File(image.path);
       fileToSave.copy('${widget.path}/$imageName');
-String key='';
-      ImageService(pinnuber:key ).encryptFiles(imageName, '$imageName.aes', widget.path);
+      String key = '';
+      ImageService(pinNumber: key)
+          .encryptFiles(imageName, '$imageName.aes', widget.path);
       setState(() => decryptedImages.add('${widget.path}/$imageName'));
     }
   }

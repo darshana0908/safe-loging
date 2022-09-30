@@ -3,12 +3,15 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:http/http.dart' as http;
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hawk_fab_menu/hawk_fab_menu.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +19,7 @@ import 'package:safe_encrypt/constants/colors.dart';
 import 'package:safe_encrypt/services/image_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../services/file_service.dart';
 import '../../../utils/helper_methods.dart';
 import '../auth/components/pin_number/user_pin.dart';
 import '../new_accounts/confirm_pin_number.dart';
@@ -26,6 +30,7 @@ import 'album_covers.dart';
 import 'components/glalery_folder.dart';
 import 'image_screen.dart';
 import 'dart:convert' as convert;
+import 'package:path/path.dart' as path;
 
 class GalleryHome extends StatefulWidget {
   final String title = "Flutter Data Table";
@@ -48,7 +53,6 @@ class _GalleryHomeState extends State<GalleryHome> {
 
   @override
   void initState() {
-    _keepAlive(true);
     requestPermission(Permission.storage);
     getFolderList();
     loadig();
@@ -67,6 +71,7 @@ class _GalleryHomeState extends State<GalleryHome> {
 
   String? imgload = '';
   String? faldername = '';
+  String _fileText = '';
 
   loadig() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -81,9 +86,7 @@ class _GalleryHomeState extends State<GalleryHome> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        startKeepAlive();
-      },
+      onTap: () {},
       child: WillPopScope(
         onWillPop: () {
           exit(0);
@@ -120,7 +123,8 @@ class _GalleryHomeState extends State<GalleryHome> {
                     ),
                   ),
                   onTap: () async {
-                    return ImageService(pinnuber: widget.pinnumber).takePhoto();
+                    return ImageService(pinNumber: widget.pinnumber)
+                        .takePhoto();
                   },
                   elevation: 150,
                   backgroundColor: Colors.black38,
@@ -137,9 +141,10 @@ class _GalleryHomeState extends State<GalleryHome> {
                               fontSize: 22,
                               fontWeight: FontWeight.w500)),
                     ),
-                    onTap: () async => ImageService(pinnuber: widget.pinnumber).importPhotos(),
+                    onTap: () async => ImageService(pinNumber: widget.pinnumber)
+                        .importPhotos(),
                     backgroundColor: Colors.black38),
-                      SpeedDialChild(
+                SpeedDialChild(
                     child: Icon(Icons.photo, color: kwhite, size: 30),
                     labelWidget: Padding(
                       padding: const EdgeInsets.only(right: 20),
@@ -149,8 +154,7 @@ class _GalleryHomeState extends State<GalleryHome> {
                               fontSize: 22,
                               fontWeight: FontWeight.w500)),
                     ),
-                    onTap: () async =>
-                        ImageService(pinnuber: widget.pinnumber).importPhotos(),
+                    onTap: () async => FileService(pinNumber: widget.pinnumber).importFiles(),
                     backgroundColor: Colors.black38),
                 SpeedDialChild(
                   child: Icon(Icons.add_to_photos_rounded,
@@ -182,7 +186,6 @@ class _GalleryHomeState extends State<GalleryHome> {
               IconButton(
                   icon: const Icon(Icons.delete, color: Colors.white54),
                   onPressed: () {}),
-          
               PopupMenuButton(
                 itemBuilder: (context) => [
                   PopupMenuItem(
@@ -307,45 +310,6 @@ class _GalleryHomeState extends State<GalleryHome> {
               ],
             ),
           ),
-          // body: SizedBox(
-          //   height: MediaQuery.of(context).size.height,
-          //   child: HawkFabMenu(
-          //     blur: 155.8,
-          //     backgroundColor: kliteblue,
-          //     openIcon: Icons.add,
-          //     closeIcon: Icons.close,
-
-          //     items: [
-          //       HawkFabMenuItem(
-          //         heroTag: 'ggggg',
-          //           label: 'Add album',
-          //           ontap: () async => showCreateFolderDialog(context),
-          //           icon: const Icon(Icons.add_to_photos_rounded,size: 50),
-          //           color: Colors.black38,
-          //           labelColor: Colors.white,
-          //           labelBackgroundColor: kliteblue),
-
-          //       HawkFabMenuItem(
-          //         buttonBorder:BorderSide(
-          //               width: 65.0, color: Colors.black12),
-          //           label: 'Import photos',
-          //           ontap: () async => ImageService().importPhotos(),
-          //           icon: const Icon(Icons.photo),
-          //           color: const Color.fromRGBO(0, 0, 0, 0.38),
-          //           labelColor: Colors.white,
-          //           labelBackgroundColor: kliteblue),
-
-          //       HawkFabMenuItem(
-          //         label: 'Take photo',
-          //         ontap: () async {
-          //           return ImageService(isFake: widget.isFake).takePhoto();
-          //         },
-          //         icon: const Icon(Icons.camera_alt),
-          //         color: Colors.black38,
-          //         labelColor: Colors.white,
-          //         labelBackgroundColor: kliteblue,
-          //       ),
-          //     ],
           body: GridView.builder(
               itemCount: folderList.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -358,23 +322,20 @@ class _GalleryHomeState extends State<GalleryHome> {
                     oneEntity.split('/').last.replaceAll("'", '');
 
                 return InkWell(
-                  child: PlatformAlbum( 
+                  child: PlatformAlbum(
+                    // selected image of folder cover
+                    // use provider (FolderCoverImageProvider)
+                    image: Image.asset(
+                      'assets/Capture9.JPG',
+                      fit: BoxFit.fill,
+                    ),
 
-                      // selected image of folder cover
-                      // use provider (FolderCoverImageProvider)
-                      image: Image.asset(
-                        'assets/Capture9.JPG',
-                        fit: BoxFit.fill,
-                      ),
-
-                    
-                      
-                      title: folderName,
-                      album: 'Album Settings',
-                      isDelete: index == 0 ? false : true,
-                      path: folderList[index].path, 
-                      pinnuber: widget.pinnumber,),
-
+                    title: folderName,
+                    album: 'Album Settings',
+                    isDelete: index == 0 ? false : true,
+                    path: folderList[index].path,
+                    pinnuber: widget.pinnumber,
+                  ),
                   onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -418,7 +379,7 @@ class _GalleryHomeState extends State<GalleryHome> {
                             createFolder(_folderName.text);
                             await getFolderList();
                             _folderName.clear();
-                            senddata();
+
                             Navigator.pop(context);
                           });
                         },
@@ -448,7 +409,6 @@ class _GalleryHomeState extends State<GalleryHome> {
     final Directory _directory = Directory(
         '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/${widget.pinnumber}');
     Directory? directory;
-    // print(_directory);
 
     try {
       if (Platform.isAndroid) {
@@ -497,7 +457,7 @@ class _GalleryHomeState extends State<GalleryHome> {
             headerAnimationLoop: false,
             dialogType: DialogType.SUCCES,
             showCloseIcon: true,
-            title: 'Succes',
+            title: 'Success',
             desc: '',
             btnOkOnPress: () {
               debugPrint('Continue');
@@ -511,7 +471,7 @@ class _GalleryHomeState extends State<GalleryHome> {
             },
             btnOkIcon: Icons.check_circle,
             onDissmissCallback: (type) {
-              debugPrint('Dialog Dissmiss from callback $type');
+              debugPrint('Dialog Dismiss from callback $type');
             },
           ).show();
         },
@@ -525,57 +485,4 @@ class _GalleryHomeState extends State<GalleryHome> {
     }
     return false;
   }
-
-  senddata() async {
-    final response = await http
-        .post(Uri.parse("http://localhost/flutter/insertdata.php"), body: {
-      'folder_name': _folderName.text,
-      "grant_type": "authorization_code",
-    });
-    print(_folderName.text);
-  }
-
-  void timeOutCallBack() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) {
-        return UserPIn();
-      }),
-    );
-  }
-}
-
-Timer? _keepAliveTimer;
-
-const _inactivityTimeout = Duration(seconds: 10);
-void _keepAlive(bool visible) {
-  _keepAliveTimer?.cancel();
-  if (visible) {
-    _keepAliveTimer = null;
-  } else {
-    _keepAliveTimer = Timer(_inactivityTimeout, () => exit(0));
-  }
-}
-
-class _KeepAliveObserver extends WidgetsBindingObserver {
-  @override
-  didChangeAppLifecycleState(AppLifecycleState state) {
-    switch (state) {
-      case AppLifecycleState.resumed:
-        _keepAlive(true);
-        break;
-      case AppLifecycleState.inactive:
-      case AppLifecycleState.paused:
-      case AppLifecycleState.detached:
-        _keepAlive(false); // Conservatively set a timer on all three
-        break;
-    }
-  }
-}
-
-/// Must be called only when app is visible, and exactly once
-void startKeepAlive() {
-  assert(_keepAliveTimer == null);
-  _keepAlive(true);
-  WidgetsBinding.instance.addObserver(_KeepAliveObserver());
 }
