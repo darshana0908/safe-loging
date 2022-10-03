@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 import 'package:safe_encrypt/screens/features/new_accounts/pin_key_pad.dart';
 
-import 'new_account_gallery_home.dart';
+import '../gallery/gallery_home.dart';
 
 class NewAccountLoging extends StatefulWidget {
   const NewAccountLoging({Key? key}) : super(key: key);
@@ -246,9 +246,8 @@ class _NewAccountLogingState extends State<NewAccountLoging> {
                                   await Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                            NewAccountGalleryHome(
-                                          controler_pin: controler_pin.text,
+                                        builder: (context) => GalleryHome(
+                                          pinnumber: controler_pin.text,
                                         ),
                                       ));
                                 } else {
