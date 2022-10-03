@@ -19,16 +19,16 @@ class FileService {
     String fileName = '';
     String fileType = '';
 
-    FilePickerResult? result = await FilePicker.platform
-        .pickFiles(allowMultiple: true, withData: true);
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(allowMultiple: true);
 
     if (result != null) {
       List<File> files = result.paths.map((path) => File(path!)).toList();
 
       for (File file in files) {
-
         fileType = path.extension(file.path);
-        fileName =path.basenameWithoutExtension(file.path);
+        print(path.extension(file.path));
+        fileName = path.basename(file.path);
         // '${DateTime.now().microsecondsSinceEpoch.toString()}$fileType';
 
         File fileToSave = File(file.path);
