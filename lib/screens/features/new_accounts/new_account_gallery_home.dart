@@ -41,16 +41,7 @@ class _NewAccountGalleryHomeState extends State<NewAccountGalleryHome> {
   void initState() {
     requestPermission(Permission.storage);
     getFolderList();
-    // Future.delayed(
-    //   const Duration(seconds: 120),
-    //   () {
-    //     Navigator.push(
-    //         context,
-    //         MaterialPageRoute(
-    //           builder: (context) => NewAccountLoging(),
-    //         ));
-    //   },
-    // );
+
     super.initState();
   }
 
@@ -367,7 +358,7 @@ pinnuber: widget.controler_pin,
   getFolderList() async {
     String foldername = widget.controler_pin;
     final Directory directory = Directory(
-        "/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/$foldername");
+        "/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/$foldername/Main Album");
     print(directory);
     print('kkkkk');
     print(directory);
