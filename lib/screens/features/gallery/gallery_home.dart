@@ -1,37 +1,25 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
 
 import 'dart:io';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:http/http.dart' as http;
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hawk_fab_menu/hawk_fab_menu.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:provider/provider.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 import 'package:safe_encrypt/services/image_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../services/file_page.dart';
 import '../../../services/file_service.dart';
 import '../../../utils/helper_methods.dart';
-import '../auth/components/pin_number/user_pin.dart';
-import '../new_accounts/confirm_pin_number.dart';
+import '../auth/components/pin_number/first_pin_number.dart';
 import '../new_accounts/new_account_loging.dart';
 import '../new_accounts/new_account_pin_nuber.dart';
 import '../settings/settings.dart';
-import 'album_covers.dart';
 import 'components/glalery_folder.dart';
 import 'image_screen.dart';
 import 'dart:convert' as convert;
-import 'package:path/path.dart' as path;
 
 class GalleryHome extends StatefulWidget {
   final String title = "Flutter Data Table";
@@ -72,7 +60,7 @@ class _GalleryHomeState extends State<GalleryHome> {
 
   String? imgload = '';
   String? faldername = '';
-  String _fileText = '';
+  final String _fileText = '';
 
   loadig() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -96,11 +84,11 @@ class _GalleryHomeState extends State<GalleryHome> {
           floatingActionButton: Padding(
             padding: const EdgeInsets.only(bottom: 50),
             child: SpeedDial(
-              buttonSize: Size(70.0, 70.0),
-              childrenButtonSize: Size(55.0, 55.0),
+              buttonSize: const Size(70.0, 70.0),
+              childrenButtonSize: const Size(55.0, 55.0),
               // animatedIcon:AnimatedIcons.add_event ,
 
-              overlayColor: Color(0xff00aeed),
+              overlayColor: const Color(0xff00aeed),
               overlayOpacity: 1.0,
               activeIcon: Icons.close,
               foregroundColor: kwhite,
@@ -130,21 +118,21 @@ class _GalleryHomeState extends State<GalleryHome> {
                   elevation: 150,
                   backgroundColor: Colors.black38,
                   child: Icon(Icons.camera_alt, color: kwhite, size: 30),
-                  labelBackgroundColor: Color(0xff00aeed),
+                  labelBackgroundColor: const Color(0xff00aeed),
                 ),
-                SpeedDialChild(
-                    child: Icon(Icons.photo, color: kwhite, size: 30),
-                    labelWidget: Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: Text('Import photos',
-                          style: TextStyle(
-                              color: kwhite,
-                              fontSize: 22,
-                              fontWeight: FontWeight.w500)),
-                    ),
-                    onTap: () async => ImageService(pinNumber: widget.pinnumber)
-                        .importPhotos(),
-                    backgroundColor: Colors.black38),
+                // SpeedDialChild(
+                //     child: Icon(Icons.photo, color: kwhite, size: 30),
+                //     labelWidget: Padding(
+                //       padding: const EdgeInsets.only(right: 20),
+                //       child: Text('Import photos',
+                //           style: TextStyle(
+                //               color: kwhite,
+                //               fontSize: 22,
+                //               fontWeight: FontWeight.w500)),
+                //     ),
+                //     onTap: () async => ImageService(pinNumber: widget.pinnumber)
+                //         .importPhotos(),
+                //     backgroundColor: Colors.black38),
                 SpeedDialChild(
                     child: Icon(Icons.photo, color: kwhite, size: 30),
                     labelWidget: Padding(
@@ -155,9 +143,10 @@ class _GalleryHomeState extends State<GalleryHome> {
                               fontSize: 22,
                               fontWeight: FontWeight.w500)),
                     ),
-                    onTap: () async =>
-                        FileService(pinNumber: widget.pinnumber).importFiles(),
-                       
+                    onTap: () async {
+                      String extention = '';
+                      FileService(pinNumber: widget.pinnumber).importFiles();
+                    },
                     backgroundColor: Colors.black38),
                 SpeedDialChild(
                   child: Icon(Icons.add_to_photos_rounded,
@@ -180,7 +169,7 @@ class _GalleryHomeState extends State<GalleryHome> {
             ),
           ),
           appBar: AppBar(
-            title: Text('Keepsafe'),
+            title: const Text('Keepsafe'),
             // title: const Text('keepsafe'),
             backgroundColor: kdarkblue,
             // automaticallyImplyLeading: false,
@@ -237,13 +226,13 @@ class _GalleryHomeState extends State<GalleryHome> {
                   ), //BoxDecoration
                   child: UserAccountsDrawerHeader(
                     decoration: BoxDecoration(color: kdarkblue),
-                    accountName: Text(
+                    accountName: const Text(
                       '',
-                      style: const TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: 18),
                     ),
-                    accountEmail: Text(''),
+                    accountEmail: const Text(''),
                     currentAccountPictureSize: const Size.square(50),
-                    currentAccountPicture: CircleAvatar(
+                    currentAccountPicture: const CircleAvatar(
                       backgroundColor: Color.fromARGB(255, 165, 255, 137),
                       child: Text(
                         '',
@@ -266,7 +255,7 @@ class _GalleryHomeState extends State<GalleryHome> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const NewAccountPin(),
+                          builder: (context) => const FirstPinNumber(),
                         ));
                   },
                 ),
@@ -285,8 +274,18 @@ class _GalleryHomeState extends State<GalleryHome> {
                 ListTile(
                   leading: const Icon(Icons.workspace_premium),
                   title: const Text(' Go Premium '),
-                  onTap: () {
-                    Navigator.pop(context);
+                  onTap: () async {
+                    // String file = '';
+
+                    // print(file.name);
+                    // print(file.bytes);
+                    // print(file.size);
+                    // print(file.extension);
+                    // print(file.path);
+                    // final newFile = saveFilePermanetly(file);
+
+                    // print(file.path!);
+                    // print(newFile);
                   },
                 ),
                 ListTile(
@@ -355,8 +354,8 @@ class _GalleryHomeState extends State<GalleryHome> {
     // );  ),
   }
 
-  openFiles(List<PlatformFile> files) =>
-      Navigator.push(context, MaterialPageRoute(builder: (_) => FilePage()));
+  // openFiles(List<PlatformFile> files) =>
+  //     Navigator.push(context, MaterialPageRoute(builder: (_) => FilePage()));
 
   // create folder dialog
   showCreateFolderDialog(context) {
@@ -400,17 +399,17 @@ class _GalleryHomeState extends State<GalleryHome> {
 
   // load app folders
   getFolderList() async {
-    final Directory directory = Directory(
+    final Directory directoryi = Directory(
         '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/${widget.pinnumber}');
 
     // log(directory.toString());
 
-    folderList = directory.listSync(followLinks: true);
+    folderList = directoryi.listSync(followLinks: true);
     folderList.removeWhere((item) => item.runtimeType.toString() == '_File');
   }
 
   // creating folders
-  Future<bool> createFolder(String newfolderName) async {
+     Future<bool> createFolder(String newfolderName) async {
     String foldername = _folderName.text;
     final Directory _directory = Directory(
         '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/${widget.pinnumber}');
@@ -490,5 +489,9 @@ class _GalleryHomeState extends State<GalleryHome> {
       log(e.toString());
     }
     return false;
+  }
+
+  String getFolderPath() {
+    return '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/25/Main Album/';
   }
 }

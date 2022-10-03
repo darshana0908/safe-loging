@@ -2,11 +2,12 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:file_cryptor/file_cryptor.dart';
-import 'package:file_preview/file_preview.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:open_file/open_file.dart';
 import 'package:path/path.dart' as path;
 
 import '../../../services/image_service.dart';
@@ -16,6 +17,7 @@ import 'image_details.dart';
 class ImageScreen extends StatefulWidget {
   final String path;
   final String title;
+
   const ImageScreen({Key? key, required this.path, required this.title})
       : super(key: key);
 
@@ -27,8 +29,10 @@ class _ImageScreenState extends State<ImageScreen> {
   String imageName = '';
   String fileType = '';
   bool _isLoading = false;
+  String imgPath = '';
 
   int x = 1;
+  int y = 1;
 
   int size = 5;
   final ImagePicker _picker = ImagePicker();
@@ -39,8 +43,7 @@ class _ImageScreenState extends State<ImageScreen> {
   @override
   void initState() {
     decryptImages();
-      loadPhotos();
-    
+    loadPhotos();
 
     super.initState();
   }
@@ -59,7 +62,8 @@ class _ImageScreenState extends State<ImageScreen> {
               child: SpeedDial(
                 buttonSize: const Size(70.0, 70.0),
                 childrenButtonSize: const Size(55.0, 55.0),
-                animatedIcon: AnimatedIcons.add_event,
+                // animatedIcon:AnimatedIcons.add_event ,
+
                 overlayColor: const Color(0xff00aeed),
                 overlayOpacity: 1.0,
                 activeIcon: Icons.close,
@@ -69,6 +73,7 @@ class _ImageScreenState extends State<ImageScreen> {
                 activeBackgroundColor: kwhite,
                 spacing: 20,
                 spaceBetweenChildren: 15,
+
                 icon: Icons.add,
                 children: [
                   SpeedDialChild(
@@ -92,13 +97,13 @@ class _ImageScreenState extends State<ImageScreen> {
                       child: Icon(Icons.photo, color: kwhite, size: 30),
                       labelWidget: Padding(
                         padding: const EdgeInsets.only(right: 20),
-                        child: Text('Import photos',
+                        child: Text('Import all',
                             style: TextStyle(
                                 color: kwhite,
                                 fontSize: 22,
                                 fontWeight: FontWeight.w500)),
                       ),
-                      onTap: () async => importPhotos(),
+                      onTap: () async => importFiles(),
                       backgroundColor: Colors.black38),
                 ],
               ),
@@ -139,25 +144,35 @@ class _ImageScreenState extends State<ImageScreen> {
                   ],
                   flexibleSpace: FlexibleSpaceBar(
                       title: SizedBox(
-                        width: 250,
-                        height: 50,
+                        width: 300,
+                        height: 100,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(widget.title),
-                            Text(
-                              '${decryptedImages.length.toString()} Photos',
-                              style: TextStyle(color: kgray, fontSize: 11),
+                            Row(
+                              children: [
+                                TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      y = 2;
+                                    });
+                                  },
+                                  child: Text(
+                                    '(${decryptedImages.length})   All Files',
+                                    style:
+                                        TextStyle(color: kgray, fontSize: 11),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
                       ),
                       background: imgload
                           ? Image.file(
-                              File(
-                                decryptedImages.last,
-                              ),
+                              File(decryptedImages.last),
                               fit: BoxFit.cover,
                             )
                           : Image.asset(
@@ -233,10 +248,11 @@ class _ImageScreenState extends State<ImageScreen> {
   loadPhotos() {
     if (decryptedImages.isNotEmpty) {
       return Container(
-        padding: const EdgeInsets.only(bottom: 60.0),
+        // padding: const EdgeInsets.only(bottom: 60.0),
         child: GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              mainAxisSpacing: 10,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
               childAspectRatio: x == 1
                   ? 1
                   : x == 2
@@ -251,66 +267,274 @@ class _ImageScreenState extends State<ImageScreen> {
           itemCount: decryptedImages.length,
           itemBuilder: (context, index) {
             String imgPath = decryptedImages[index];
+            String extention = '';
 
             String imgname = imgPath.split('/').last.replaceAll("'", '');
+            extention = imgPath.split('.').last.replaceAll("'", '');
 
             print(imgPath);
+            print('fffffffffffffffffffffff');
+            print(extention);
             return GestureDetector(
                 onDoubleTap: () => delete(imgPath),
-                onTap: () =>
+                onTap: () {
+                  if (imgPath.endsWith('jpg')) {
                     Navigator.push(context, MaterialPageRoute(builder: (_) {
                       return ImageDetails(path: imgPath);
-                    })),
-                child: x == 1?  FilePreviewWidget(
-                  width: 150,
-                  path: imgPath,height: 150,
-                )
-
-
-
-                    // ? Card(
-                    //     elevation: 8.0,
-                    //     child: Hero(
-                    //         tag: imgPath,
-                    //         child: Image.file(
-                    //           File(imgPath),
-                    //           fit: BoxFit.cover,
-                    //         )))
-                    : x == 2
-                        ? Card(
-                            elevation: 8.0,
-                            child: Hero(
-                                tag: imgPath,
+                    }));
+                  } else {
+                    final result = OpenFile.open(imgPath);
+                  }
+                },
+                child: x == 1
+                    ? Column(
+                        children: [
+                          if (imgPath.endsWith('jpg') ||
+                              imgPath.endsWith('JPG') ||
+                              imgPath.endsWith('jpeg') ||
+                              imgPath.endsWith('png'))
+                            Card(
+                              elevation: 8,
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width - 16,
+                                height: 200,
                                 child: Image.file(
                                   File(imgPath),
                                   fit: BoxFit.cover,
-                                )))
-                        : SizedBox(
-                            height: 100,
-                            child: Card(
-                              child: Hero(
-                                  tag: imgPath,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          width: 150,
-                                          height: 200,
-                                          child: Image.file(
-                                            File(imgPath),
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                        Text(imgname)
-                                      ],
-                                    ),
+                                ),
+                              ),
+                            ),
+                          if (imgPath.endsWith('mp4') ||
+                              imgPath.endsWith('mp3') ||
+                              imgPath.endsWith('avi') ||
+                              imgPath.endsWith('mpeg'))
+                            Card(
+                              elevation: 8,
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width - 16,
+                                height: 200,
+                                child: Image.asset(
+                                  'assets/mp4-1-1-256.png',
+                                  fit: BoxFit.scaleDown,
+                                  scale: 2,
+                                ),
+                              ),
+                            ),
+                          if (imgPath.endsWith('pdf'))
+                            Card(
+                              elevation: 8,
+                              child: SizedBox(
+                                  width: MediaQuery.of(context).size.width - 16,
+                                  height: 200,
+                                  child: Image.asset(
+                                    'assets/pdf-94-256.png',
+                                    fit: BoxFit.scaleDown,
+                                    scale: 2,
                                   )),
                             ),
+                          if (imgPath.endsWith('docx') ||
+                              imgPath.endsWith('ppt') ||
+                              imgPath.endsWith('txt') ||
+                              imgPath.endsWith('xml') ||
+                              imgPath.endsWith('zip'))
+                            Card(
+                              elevation: 8,
+                              child: SizedBox(
+                                  width: MediaQuery.of(context).size.width - 16,
+                                  height: 200,
+                                  child: Image.asset(
+                                    'assets/docx-8-256.png',
+                                    fit: BoxFit.scaleDown,
+                                    scale: 2,
+                                  )),
+                            )
+                        ],
+                      )
+                    : x == 2
+                        ? Column(
+                            children: [
+                              if (imgPath.endsWith('jpg') ||
+                                  imgPath.endsWith('JPG') ||
+                                  imgPath.endsWith('jpeg') ||
+                                  imgPath.endsWith('png'))
+                                Card(
+                                  elevation: 8,
+                                  child: SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width - 48,
+                                    height: 100,
+                                    child: Image.file(
+                                      File(imgPath),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              if (imgPath.endsWith('mp4') ||
+                                  imgPath.endsWith('mp3') ||
+                                  imgPath.endsWith('avi') ||
+                                  imgPath.endsWith('mpeg'))
+                                Card(
+                                  elevation: 8,
+                                  child: SizedBox(
+                                      width: MediaQuery.of(context).size.width -
+                                          48,
+                                      height: 100,
+                                      child: Image.asset(
+                                          'assets/mp4-1-1-256.png',
+                                          fit: BoxFit.scaleDown)),
+                                ),
+                              if (imgPath.endsWith('pdf'))
+                                Card(
+                                  elevation: 8,
+                                  child: SizedBox(
+                                      width: MediaQuery.of(context).size.width -
+                                          48,
+                                      height: 100,
+                                      child: Image.asset(
+                                        'assets/pdf-94-256.png',
+                                        fit: BoxFit.scaleDown,
+                                      )),
+                                ),
+                              if (imgPath.endsWith('docx') ||
+                                  imgPath.endsWith('ppt') ||
+                                  imgPath.endsWith('txt') ||
+                                  imgPath.endsWith('xml') ||
+                                  imgPath.endsWith('zip'))
+                                Card(
+                                  elevation: 8,
+                                  child: SizedBox(
+                                      width: MediaQuery.of(context).size.width -
+                                          48,
+                                      height: 100,
+                                      child: Image.asset(
+                                        'assets/docx-8-256.png',
+                                        fit: BoxFit.scaleDown,
+                                      )),
+                                )
+                            ],
+                          )
+                        : Column(
+                            children: [
+                              if (imgPath.endsWith('jpg') ||
+                                  imgPath.endsWith('JPG') ||
+                                  imgPath.endsWith('jpeg') ||
+                                  imgPath.endsWith('png'))
+                                SizedBox(
+                                  height: 100,
+                                  child: Card(
+                                    child: Hero(
+                                        tag: imgPath,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                width: 150,
+                                                height: 200,
+                                                child: Image.file(
+                                                  File(imgPath),
+                                                  fit: BoxFit.scaleDown,
+                                                ),
+                                              ),
+                                              Text(imgname)
+                                            ],
+                                          ),
+                                        )),
+                                  ),
+                                ),
+                              if (imgPath.endsWith('pdf'))
+                                SizedBox(
+                                  height: 100,
+                                  child: Card(
+                                    child: Hero(
+                                        tag: imgPath,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                  width: 150,
+                                                  height: 200,
+                                                  child: Image.asset(
+                                                    'assets/pdf-94-256.png',
+                                                    fit: BoxFit.scaleDown,
+                                                  )),
+                                              Text(imgname)
+                                            ],
+                                          ),
+                                        )),
+                                  ),
+                                ),
+                              if (imgPath.endsWith('mp4') ||
+                                  imgPath.endsWith('mp3') ||
+                                  imgPath.endsWith('avi') ||
+                                  imgPath.endsWith('mpeg'))
+                                SizedBox(
+                                  height: 100,
+                                  child: Card(
+                                    child: Hero(
+                                        tag: imgPath,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                  width: 150,
+                                                  height: 200,
+                                                  child: Image.asset(
+                                                    'assets/mp4-1-1-256.png',
+                                                    fit: BoxFit.scaleDown,
+                                                  )),
+                                              Text(imgname)
+                                            ],
+                                          ),
+                                        )),
+                                  ),
+                                ),
+                              if (imgPath.endsWith('docx') ||
+                                  imgPath.endsWith('ppt') ||
+                                  imgPath.endsWith('txt') ||
+                                  imgPath.endsWith('xml') ||
+                                  imgPath.endsWith('zip'))
+                                SizedBox(
+                                  height: 100,
+                                  child: Card(
+                                    child: Hero(
+                                        tag: imgPath,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                  width: 150,
+                                                  height: 200,
+                                                  child: Image.asset(
+                                                    'assets/docx-8-256.png',
+                                                    fit: BoxFit.scaleDown,
+                                                  )),
+                                              Text(imgname)
+                                            ],
+                                          ),
+                                        )),
+                                  ),
+                                ),
+                            ],
                           ));
           },
         ),
@@ -331,6 +555,41 @@ class _ImageScreenState extends State<ImageScreen> {
           ),
         ),
       );
+    }
+  }
+
+  void openFile(PlatformFile file) {
+    OpenFile.open(file.path);
+    print(file.path.toString());
+  }
+
+  void importFiles() async {
+    String fileName = '';
+    String fileType = '';
+
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(allowMultiple: true);
+
+    if (result != null) {
+      List<File> files = result.paths.map((path) => File(path!)).toList();
+
+      for (File image in files) {
+        fileType = path.extension(image.path);
+        imageName = path.basename(image.path);
+
+        File fileToSave = File(image.path);
+        fileToSave.copy('${widget.path}/$imageName');
+        String key = '';
+        ImageService(pinNumber: key)
+            .encryptFiles(imageName, '$imageName.aes', widget.path);
+        setState(
+          () {
+            decryptedImages.add('${widget.path}/$imageName');
+          },
+        );
+      }
+    } else {
+      // User canceled the picker
     }
   }
 
@@ -366,8 +625,7 @@ class _ImageScreenState extends State<ImageScreen> {
     print(imageName);
     if (image != null) {
       fileType = path.extension(image.path);
-      imageName =
-          '''IMG-${DateTime.now().microsecondsSinceEpoch.toString()}$fileType\nCreated-${DateTime.now()}''';
+      imageName = path.basename(image.path);
 
       File fileToSave = File(image.path);
       fileToSave.copy('${widget.path}/$imageName');
@@ -392,7 +650,7 @@ class _ImageScreenState extends State<ImageScreen> {
     List<String> encryptedImages = openedFolder
         .listSync()
         .map((item) => item.path)
-        .where((item) => item.endsWith(".aes")|| item.endsWith(".pdf"))
+        .where((item) => item.endsWith(".aes"))
         .toList(growable: true);
 
     if (encryptedImages.isNotEmpty) {
