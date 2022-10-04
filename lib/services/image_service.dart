@@ -48,8 +48,9 @@ class ImageService {
 
     if (image != null) {
       fileType = path.extension(image.path);
+
       imageName =
-          '${DateTime.now().microsecondsSinceEpoch.toString()}$fileType';
+          "Cam-IMG ${DateTime.now().microsecondsSinceEpoch.toString()}$fileType";
 
       File fileToSave = File(image.path);
       fileToSave.copy('${getFolderPath()}$imageName');
