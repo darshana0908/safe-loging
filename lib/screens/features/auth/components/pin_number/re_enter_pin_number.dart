@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -277,64 +278,70 @@ class _ReEnterPinState extends State<ReEnterPin> {
                             ),
                             IconButton(
                               onPressed: () async {
-                                createFolder(controler_re_enter_pin.text);
-                                register();
                                 if (controler_re_enter_pin.text ==
                                     widget.controler_pin.text) {
-                                  FacebookAuth.instance
-                                      .getUserData()
-                                      .then((value) async {
-                                    final pinNumber =
-                                        controler_re_enter_pin.text;
-
-                                    createuser(
-                                      status: login,
-                                      pin: pinNumber,
-                                      name: value['name'].toString(),
-                                      email: value['email'].toString(),
-                                      uid: value['id'].toString(),
-                                    );
-
-                                  
-
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => const AppIcon(),
-                                        ));
-
-                                    // readUsers();
-                                  });
-                                }
-                                if (controler_re_enter_pin.text ==
-                                    widget.controler_pin.text) {
-                                  final user =
-                                      FirebaseAuth.instance.currentUser!;
-
-                                  print(user.displayName);
-                                  print(user.email);
-                                  final pinNumber = controler_re_enter_pin.text;
-                                  final username = user.displayName;
-                                  String fb;
-                                  createuser(
-                                    pin: pinNumber,
-                                    name: username.toString(),
-                                    email: user.email.toString(),
-                                    uid: user.uid.toString(),
-                                    status: gloging,
-                                  );
-                                  // readUsers();
-
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => const AppIcon(),
-                                      ));
+                                  createFolder(controler_re_enter_pin.text);
+                                  register();
                                 } else {
                                   setState(() {
                                     newpin_nuber = false;
                                   });
                                 }
+
+                                // if (controler_re_enter_pin.text ==
+                                //     widget.controler_pin.text) {
+                                //   FacebookAuth.instance
+                                //       .getUserData()
+                                //       .then((value) async {
+                                //     final pinNumber =
+                                //         controler_re_enter_pin.text;
+
+                                //     createuser(
+                                //       status: login,
+                                //       pin: pinNumber,
+                                //       name: value['name'].toString(),
+                                //       email: value['email'].toString(),
+                                //       uid: value['id'].toString(),
+                                //     );
+
+                                //     Navigator.push(
+                                //         context,
+                                //         MaterialPageRoute(
+                                //           builder: (context) => const AppIcon(),
+                                //         ));
+
+                                //     // readUsers();
+                                //   });
+                                // }
+                                // if (controler_re_enter_pin.text ==
+                                //     widget.controler_pin.text) {
+                                //   final user =
+                                //       FirebaseAuth.instance.currentUser!;
+
+                                //   print(user.displayName);
+                                //   print(user.email);
+                                //   final pinNumber = controler_re_enter_pin.text;
+                                //   final username = user.displayName;
+                                //   String fb;
+                                //   createuser(
+                                //     pin: pinNumber,
+                                //     name: username.toString(),
+                                //     email: user.email.toString(),
+                                //     uid: user.uid.toString(),
+                                //     status: gloging,
+                                //   );
+                                //   // readUsers();
+
+                                //   Navigator.push(
+                                //       context,
+                                //       MaterialPageRoute(
+                                //         builder: (context) => const AppIcon(),
+                                //       ));
+                                // } else {
+                                //   setState(() {
+                                //     newpin_nuber = false;
+                                //   });
+                                // }
                               },
                               icon: const Icon(
                                 Icons.check_circle,
@@ -412,12 +419,33 @@ class _ReEnterPinState extends State<ReEnterPin> {
       // creating the directory
       if (!await directory.exists()) {
         await directory.create(recursive: true);
+        await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AppIcon(),
+            ));
       }
-      if (await directory.exists()) {
-        return true;
-      } else {
-        return false;
-      }
+      if (await directory.exists().whenComplete(
+        () {
+          AwesomeDialog(
+              btnOkText: 'Continue',
+              context: context,
+              dialogType: DialogType.INFO,
+              headerAnimationLoop: false,
+              animType: AnimType.TOPSLIDE,
+              showCloseIcon: true,
+              closeIcon: const Icon(Icons.close_fullscreen_outlined),
+              title: 'Oops! ',
+              desc: 'you already have a Vault',
+              btnOkOnPress: () async {
+                await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AppIcon(),
+                    ));
+              }).show();
+        },
+      )) {}
     } catch (e) {
       log(e.toString());
     }
