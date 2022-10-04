@@ -12,6 +12,7 @@ import 'package:safe_encrypt/services/image_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../services/file_service.dart';
+import '../../../services/icon.dart';
 import '../../../utils/helper_methods.dart';
 import '../auth/components/pin_number/first_pin_number.dart';
 import '../new_accounts/new_account_loging.dart';
@@ -32,7 +33,7 @@ class GalleryHome extends StatefulWidget {
   State<GalleryHome> createState() => _GalleryHomeState();
 }
 
-class _GalleryHomeState extends State<GalleryHome> {
+class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
   final TextEditingController _folderName = TextEditingController();
   List<FileSystemEntity> folderList = [];
   Timer? timer;
@@ -42,6 +43,7 @@ class _GalleryHomeState extends State<GalleryHome> {
 
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
     requestPermission(Permission.storage);
     getFolderList();
     loadig();
@@ -56,6 +58,33 @@ class _GalleryHomeState extends State<GalleryHome> {
     _folderName.dispose();
 
     super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // TODO: implement didChangeAppLifecycleState
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+    Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const AppIcon(),
+          ));
+    }
+    if (state == AppLifecycleState.inactive) {
+       Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const AppIcon(),
+          ));
+    }if(state == AppLifecycleState.paused){
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const AppIcon(),
+          ));
+    }
   }
 
   String? imgload = '';
@@ -78,7 +107,8 @@ class _GalleryHomeState extends State<GalleryHome> {
       onTap: () {},
       child: WillPopScope(
         onWillPop: () {
-          exit(0);
+          throw Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const AppIcon()));
         },
         child: Scaffold(
           floatingActionButton: Padding(
@@ -137,7 +167,7 @@ class _GalleryHomeState extends State<GalleryHome> {
                     child: Icon(Icons.photo, color: kwhite, size: 30),
                     labelWidget: Padding(
                       padding: const EdgeInsets.only(right: 20),
-                      child: Text('Import all',
+                      child: Text('Import files',
                           style: TextStyle(
                               color: kwhite,
                               fontSize: 22,
@@ -175,9 +205,6 @@ class _GalleryHomeState extends State<GalleryHome> {
             // automaticallyImplyLeading: false,
             // leading: const Icon(Icons.account_circle),
             actions: <Widget>[
-              IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.white54),
-                  onPressed: () {}),
               PopupMenuButton(
                 itemBuilder: (context) => [
                   PopupMenuItem(
@@ -243,14 +270,18 @@ class _GalleryHomeState extends State<GalleryHome> {
                 ), //DrawerHeader
                 ListTile(
                   leading: const Icon(Icons.person),
-                  title: const Text(' My Profile '),
+                  title: const Text(' My Vault '),
                   onTap: () {
-                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AppIcon(),
+                        ));
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.create),
-                  title: const Text(' Create New profile'),
+                  title: const Text(' Create New Vault'),
                   onTap: () {
                     Navigator.push(
                         context,
@@ -262,49 +293,19 @@ class _GalleryHomeState extends State<GalleryHome> {
 
                 ListTile(
                   leading: const Icon(Icons.login),
-                  title: const Text(' New profile Login'),
+                  title: const Text(' New Vault Login'),
                   onTap: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const NewAccountLoging(),
+                          builder: (context) => const AppIcon(),
                         ));
                   },
                 ),
-                ListTile(
-                  leading: const Icon(Icons.workspace_premium),
-                  title: const Text(' Go Premium '),
-                  onTap: () async {
-                    // String file = '';
 
-                    // print(file.name);
-                    // print(file.bytes);
-                    // print(file.size);
-                    // print(file.extension);
-                    // print(file.path);
-                    // final newFile = saveFilePermanetly(file);
-
-                    // print(file.path!);
-                    // print(newFile);
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.video_label),
-                  title: const Text(' Saved Videos '),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.edit),
-                  title: const Text(' Edit Profile '),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
                 ListTile(
                   leading: const Icon(Icons.logout),
-                  title: const Text('Quite'),
+                  title: const Text('Quit'),
                   onTap: () {
                     exit(0);
                   },
@@ -384,8 +385,6 @@ class _GalleryHomeState extends State<GalleryHome> {
                             createFolder(_folderName.text);
                             await getFolderList();
                             _folderName.clear();
-
-                            Navigator.pop(context);
                           });
                         },
                         child: const Text('CREATE')),
@@ -409,7 +408,7 @@ class _GalleryHomeState extends State<GalleryHome> {
   }
 
   // creating folders
-     Future<bool> createFolder(String newfolderName) async {
+  Future<bool> createFolder(String newfolderName) async {
     String foldername = _folderName.text;
     final Directory _directory = Directory(
         '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/${widget.pinnumber}');
