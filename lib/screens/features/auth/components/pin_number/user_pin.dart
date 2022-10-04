@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:safe_encrypt/constants/colors.dart';
@@ -34,7 +33,7 @@ class UserPIn extends StatefulWidget {
 class _UserPInState extends State<UserPIn> {
   final TextEditingController controler_re_enter_pin = TextEditingController();
   bool backspacecolorchange = true;
-
+  bool bActive = false;
   bool newpin_nuber = true;
   String usern = '';
   String pas = '';
@@ -131,6 +130,9 @@ class _UserPInState extends State<UserPIn> {
                                           0,
                                           controler_re_enter_pin.text.length -
                                               1);
+                                  setState(() {
+                                    bActive = false;
+                                  });
                                 },
                               ),
                             ),
@@ -147,7 +149,7 @@ class _UserPInState extends State<UserPIn> {
                                 click: () {
                                   setState(() {
                                     backspacecolorchange = false;
-
+                                    bActive = true;
                                     controler_re_enter_pin.text =
                                         '${controler_re_enter_pin.text}1';
                                   });
@@ -157,7 +159,7 @@ class _UserPInState extends State<UserPIn> {
                                 click: () {
                                   setState(() {
                                     backspacecolorchange = false;
-
+                                    bActive = true;
                                     controler_re_enter_pin.text =
                                         '${controler_re_enter_pin.text}2';
                                   });
@@ -167,7 +169,7 @@ class _UserPInState extends State<UserPIn> {
                                 click: () {
                                   setState(() {
                                     backspacecolorchange = false;
-
+                                    bActive = true;
                                     controler_re_enter_pin.text =
                                         '${controler_re_enter_pin.text}3';
                                   });
@@ -185,7 +187,7 @@ class _UserPInState extends State<UserPIn> {
                                 click: () {
                                   setState(() {
                                     backspacecolorchange = false;
-
+                                    bActive = true;
                                     controler_re_enter_pin.text =
                                         '${controler_re_enter_pin.text}4';
                                   });
@@ -195,7 +197,7 @@ class _UserPInState extends State<UserPIn> {
                                 click: () {
                                   setState(() {
                                     backspacecolorchange = false;
-
+                                    bActive = true;
                                     controler_re_enter_pin.text =
                                         '${controler_re_enter_pin.text}5';
                                   });
@@ -205,7 +207,7 @@ class _UserPInState extends State<UserPIn> {
                                 click: () {
                                   setState(() {
                                     backspacecolorchange = false;
-
+                                    bActive = true;
                                     controler_re_enter_pin.text =
                                         '${controler_re_enter_pin.text}6';
                                   });
@@ -223,7 +225,7 @@ class _UserPInState extends State<UserPIn> {
                                 click: () {
                                   setState(() {
                                     backspacecolorchange = false;
-
+                                    bActive = true;
                                     controler_re_enter_pin.text =
                                         '${controler_re_enter_pin.text}7';
                                   });
@@ -233,7 +235,7 @@ class _UserPInState extends State<UserPIn> {
                                 click: () {
                                   setState(() {
                                     backspacecolorchange = false;
-
+                                    bActive = true;
                                     controler_re_enter_pin.text =
                                         '${controler_re_enter_pin.text}8';
                                   });
@@ -243,7 +245,7 @@ class _UserPInState extends State<UserPIn> {
                                 click: () {
                                   setState(() {
                                     backspacecolorchange = false;
-
+                                    bActive = true;
                                     controler_re_enter_pin.text =
                                         '${controler_re_enter_pin.text}9';
                                   });
@@ -268,34 +270,38 @@ class _UserPInState extends State<UserPIn> {
                                 click: () {
                                   setState(() {
                                     backspacecolorchange = false;
-
+                                    bActive = true;
                                     controler_re_enter_pin.text =
                                         '${controler_re_enter_pin.text}0';
                                   });
                                 }),
                             const SizedBox(
-                              width: 65,
+                              width: 42,
                             ),
-                            IconButton(
-                              onPressed: () async {
-                                String path =
-                                    "/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/${controler_re_enter_pin.text}";
-                                bool directoryExists =
-                                    await Directory(path).exists();
-                                bool fileExists = await File(path).exists();
-                                if (directoryExists || fileExists) {
-                                  // ignore: use_build_context_synchronously
-                                   savebool();
-                                  await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                          GalleryHome(pinnumber: controler_re_enter_pin.text),
-                                      ));
-                                } else {
-                                  setState(() {
-                                    confirm_pin = false;
-                                  });
+                            InkWell(
+                              borderRadius: BorderRadius.circular(100),
+                              onTap: () async {
+                                if (controler_re_enter_pin.text.isNotEmpty) {
+                                  String path =
+                                      "/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/${controler_re_enter_pin.text}";
+                                  bool directoryExists =
+                                      await Directory(path).exists();
+                                  bool fileExists = await File(path).exists();
+                                  if (directoryExists || fileExists) {
+                                    // ignore: use_build_context_synchronously
+                                    savebool();
+                                    await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => GalleryHome(
+                                              pinnumber:
+                                                  controler_re_enter_pin.text),
+                                        ));
+                                  } else {
+                                    setState(() {
+                                      confirm_pin = false;
+                                    });
+                                  }
                                 }
 
                                 // confirm_pin
@@ -415,14 +421,16 @@ class _UserPInState extends State<UserPIn> {
                               // //   await loginWithEmail(context, value['email']);
                               // // }
                               //   };
-                              icon: const Icon(
-                                Icons.check_circle,
-                                color: Colors.white60,
-                                size: 45,
+                              child: Container(
+                                alignment: Alignment.center,
+                                width: 105,
+                                height: 105,
+                                child: const Icon(
+                                  Icons.check_circle,
+                                  color: Colors.white60,
+                                  size: 45,
+                                ),
                               ),
-                            ),
-                            const SizedBox(
-                              width: 34,
                             ),
                           ],
                         )
