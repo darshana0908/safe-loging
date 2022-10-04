@@ -143,48 +143,47 @@ class _ImageScreenState extends State<ImageScreen> {
                     ),
                   ],
                   flexibleSpace: FlexibleSpaceBar(
-                      title: SizedBox(
-                        width: 300,
-                        height: 100,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(widget.title),
-                            Row(
-                              children: [
-                                TextButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      y = 2;
-                                    });
-                                  },
-                                  child: Text(
-                                    '(${decryptedImages.length})   All Files',
-                                    style:
-                                        TextStyle(color: kgray, fontSize: 11),
-                                  ),
+                    title: SizedBox(
+                      width: 300,
+                      height: 100,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(widget.title),
+                          Row(
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    y = 2;
+                                  });
+                                },
+                                child: Text(
+                                  '(${decryptedImages.length})   All Files',
+                                  style: TextStyle(color: kgray, fontSize: 11),
                                 ),
-                              ],
-                            ),
-                          ],
-                        ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      background: imgload
-                          ? Image.file(
-                              File(decryptedImages.last),
-                              fit: BoxFit.cover,
-                            )
-                          : Image.asset(
-                              'assets/Capture5.JPG',
-                              fit: BoxFit.cover,
-                            )
+                    ),
+                    // background: imgload
+                    // ? Image.file(
+                    //     File(decryptedImages.last),
+                    //     fit: BoxFit.cover,
+                    //   )
+                    // : Image.asset(
+                    //     'assets/Capture5.JPG',
+                    //     fit: BoxFit.cover,
+                    //   )
 
-                      // Image.asset(
-                      //   '${widget.path}/$imageName',
-                      //   fit: BoxFit.fill,
-                      // ),
-                      ),
+                    // Image.asset(
+                    //   '${widget.path}/$imageName',
+                    //   fit: BoxFit.fill,
+                    // ),
+                  ),
                   floating: false,
                   pinned: true,
                   expandedHeight: MediaQuery.of(context).size.height * 0.305,
@@ -625,7 +624,8 @@ class _ImageScreenState extends State<ImageScreen> {
     print(imageName);
     if (image != null) {
       fileType = path.extension(image.path);
-      imageName = path.basename(image.path);
+      imageName =
+          "Cam-IMG ${DateTime.now().microsecondsSinceEpoch.toString()}$fileType";
 
       File fileToSave = File(image.path);
       fileToSave.copy('${widget.path}/$imageName');
