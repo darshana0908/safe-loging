@@ -38,8 +38,8 @@ class _ReEnterPinState extends State<ReEnterPin> {
       FacebookAuth.instance.getUserData().then((value) async {
         final pinNumber = controler_re_enter_pin.text;
 
-        var url =
-            Uri.http('192.168.1.160', '/flutter/register.php', {'q': '{http}'});
+        var url = Uri.http(
+            '192.168.36.226', '/flutter/register.php', {'q': '{http}'});
         var response = await http.post(url, body: {
           "status": login,
           "pin": pinNumber,
@@ -59,7 +59,7 @@ class _ReEnterPinState extends State<ReEnterPin> {
       final username = user.displayName;
       String fb;
       var url =
-          Uri.http('192.168.1.160', '/flutter/register.php', {'q': '{http}'});
+          Uri.http('192.168.36.226', '/flutter/register.php', {'q': '{http}'});
       var response = await http.post(url, body: {
         "pin": controler_re_enter_pin.text,
         "name": username.toString(),
