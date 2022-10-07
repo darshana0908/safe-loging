@@ -114,7 +114,7 @@ class _PlatformAlbumState extends State<PlatformAlbum> {
                                                       MaterialPageRoute(
                                                           builder: (_) =>
                                                               GalleryHome(
-                                                                pinnumber: widget
+                                                                pinNumber: widget
                                                                     .pinnuber,
                                                               )));
                                                 });
