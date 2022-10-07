@@ -9,25 +9,20 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 import 'package:safe_encrypt/services/image_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:safe_encrypt/utils/widgets/custom_drawer.dart';
 
 import '../../../services/file_service.dart';
-import '../../../services/icon.dart';
 import '../../../utils/helper_methods.dart';
-import '../auth/components/pin_number/first_pin_number.dart';
-import '../new_accounts/new_account_loging.dart';
-import '../new_accounts/new_account_pin_nuber.dart';
 import '../settings/settings.dart';
 import 'components/glalery_folder.dart';
 import 'image_screen.dart';
-import 'dart:convert' as convert;
+import 'dart:convert';
 
 class GalleryHome extends StatefulWidget {
   final String title = "Flutter Data Table";
   final bool isFake;
-  final String pinnumber;
-  const GalleryHome({Key? key, this.isFake = false, required this.pinnumber})
-      : super(key: key);
+  final String pinNumber;
+  const GalleryHome({Key? key, this.isFake = false, required this.pinNumber}) : super(key: key);
 
   @override
   State<GalleryHome> createState() => _GalleryHomeState();
@@ -37,17 +32,16 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
   final TextEditingController _folderName = TextEditingController();
   List<FileSystemEntity> folderList = [];
   Timer? timer;
-  var jsonResponse = convert.jsonDecode('{"data": []}') as Map<String, dynamic>;
-
-  // User? user = FirebaseAuth.instance.currentUser;
+  var jsonResponse = jsonDecode('{"data": []}') as Map<String, dynamic>;
+  bool exitApp = true;
+  String newpath = '';
+  List<String> myfile = [];
 
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     requestPermission(Permission.storage);
     getFolderList();
-    loadig();
-    print(widget.pinnumber);
 
     super.initState();
   }
@@ -62,53 +56,27 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    // TODO: implement didChangeAppLifecycleState
-    super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.resumed) {
-    Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const AppIcon(),
-          ));
-    }
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    print(state.toString());
     if (state == AppLifecycleState.inactive) {
-       Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const AppIcon(),
-          ));
-    }if(state == AppLifecycleState.paused){
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const AppIcon(),
-          ));
+      print('inactive');
+      Navigator.pop(context);
+    } else if (state == AppLifecycleState.resumed) {
+      log('do nothing');
     }
+    super.didChangeAppLifecycleState(state);
   }
 
   String? imgload = '';
   String? faldername = '';
-  final String _fileText = '';
-
-  loadig() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    imgload = prefs.getString(
-      'imgname',
-    );
-    faldername = prefs.getString('faldername');
-    print(imgload);
-    print(faldername);
-  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
       child: WillPopScope(
-        onWillPop: () {
-          throw Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const AppIcon()));
+        onWillPop: () async {
+          Navigator.pop(context);
+          return true;
         },
         child: Scaffold(
           floatingActionButton: Padding(
@@ -116,8 +84,6 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
             child: SpeedDial(
               buttonSize: const Size(70.0, 70.0),
               childrenButtonSize: const Size(55.0, 55.0),
-              // animatedIcon:AnimatedIcons.add_event ,
-
               overlayColor: const Color(0xff00aeed),
               overlayOpacity: 1.0,
               activeIcon: Icons.close,
@@ -127,7 +93,6 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
               activeBackgroundColor: kwhite,
               spacing: 20,
               spaceBetweenChildren: 15,
-
               icon: Icons.add,
               children: [
                 SpeedDialChild(
@@ -135,75 +100,46 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
                     padding: const EdgeInsets.only(right: 20),
                     child: Text(
                       'Take photo',
-                      style: TextStyle(
-                          color: kwhite,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w500),
+                      style: TextStyle(color: kwhite, fontSize: 22, fontWeight: FontWeight.w500),
                     ),
                   ),
                   onTap: () async {
-                    return ImageService(pinNumber: widget.pinnumber)
-                        .takePhoto();
+                    setState(() => exitApp = false);
+                    ImageService(pinNumber: widget.pinNumber).takePhoto();
                   },
                   elevation: 150,
                   backgroundColor: Colors.black38,
                   child: Icon(Icons.camera_alt, color: kwhite, size: 30),
                   labelBackgroundColor: const Color(0xff00aeed),
                 ),
-                // SpeedDialChild(
-                //     child: Icon(Icons.photo, color: kwhite, size: 30),
-                //     labelWidget: Padding(
-                //       padding: const EdgeInsets.only(right: 20),
-                //       child: Text('Import photos',
-                //           style: TextStyle(
-                //               color: kwhite,
-                //               fontSize: 22,
-                //               fontWeight: FontWeight.w500)),
-                //     ),
-                //     onTap: () async => ImageService(pinNumber: widget.pinnumber)
-                //         .importPhotos(),
-                //     backgroundColor: Colors.black38),
                 SpeedDialChild(
                     child: Icon(Icons.photo, color: kwhite, size: 30),
                     labelWidget: Padding(
                       padding: const EdgeInsets.only(right: 20),
-                      child: Text('Import files',
-                          style: TextStyle(
-                              color: kwhite,
-                              fontSize: 22,
-                              fontWeight: FontWeight.w500)),
+                      child: Text('Import files', style: TextStyle(color: kwhite, fontSize: 22, fontWeight: FontWeight.w500)),
                     ),
                     onTap: () async {
+                      setState(() => exitApp = false);
                       String extention = '';
-                      FileService(pinNumber: widget.pinnumber).importFiles();
+                      FileService(pinNumber: widget.pinNumber).importFiles();
                     },
                     backgroundColor: Colors.black38),
                 SpeedDialChild(
-                  child: Icon(Icons.add_to_photos_rounded,
-                      color: kwhite, size: 30),
+                  child: Icon(Icons.add_to_photos_rounded, color: kwhite, size: 30),
                   labelWidget: Padding(
                     padding: const EdgeInsets.only(right: 20),
-                    child: Text('Add album',
-                        style: TextStyle(
-                            color: kwhite,
-                            fontSize: 22,
-                            fontWeight: FontWeight.w500)),
+                    child: Text('Add album', style: TextStyle(color: kwhite, fontSize: 22, fontWeight: FontWeight.w500)),
                   ),
                   elevation: 20,
                   backgroundColor: Colors.black38,
-                  onTap: () async {
-                    return showCreateFolderDialog(context);
-                  },
+                  onTap: () async => showCreateFolderDialog(context),
                 )
               ],
             ),
           ),
           appBar: AppBar(
             title: const Text('Keepsafe'),
-            // title: const Text('keepsafe'),
             backgroundColor: kdarkblue,
-            // automaticallyImplyLeading: false,
-            // leading: const Icon(Icons.account_circle),
             actions: <Widget>[
               PopupMenuButton(
                 itemBuilder: (context) => [
@@ -216,22 +152,15 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
                             alignment: Alignment.topLeft,
                             child: TextButton(
                               autofocus: true,
-                              child: Text('Settings',
-                                  style:
-                                      TextStyle(color: kblack, fontSize: 17)),
-                              onPressed: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const Settings())),
+                              child: Text('Settings', style: TextStyle(color: kblack, fontSize: 17)),
+                              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Settings())),
                             ),
                           ),
                           Container(
                             alignment: Alignment.topLeft,
                             child: TextButton(
                               autofocus: true,
-                              child: Text('Help',
-                                  style:
-                                      TextStyle(color: kblack, fontSize: 17)),
+                              child: Text('Help', style: TextStyle(color: kblack, fontSize: 17)),
                               onPressed: () {},
                             ),
                           ),
@@ -243,86 +172,13 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
               )
             ],
           ),
-          drawer: Drawer(
-            child: ListView(
-              padding: const EdgeInsets.all(0),
-              children: [
-                DrawerHeader(
-                  decoration: BoxDecoration(
-                    color: kdarkblue,
-                  ), //BoxDecoration
-                  child: UserAccountsDrawerHeader(
-                    decoration: BoxDecoration(color: kdarkblue),
-                    accountName: const Text(
-                      '',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    accountEmail: const Text(''),
-                    currentAccountPictureSize: const Size.square(50),
-                    currentAccountPicture: const CircleAvatar(
-                      backgroundColor: Color.fromARGB(255, 165, 255, 137),
-                      child: Text(
-                        '',
-                        style: TextStyle(fontSize: 30.0, color: Colors.blue),
-                      ), //Text
-                    ), //circleAvatar
-                  ), //UserAccountDrawerHeader
-                ), //DrawerHeader
-                ListTile(
-                  leading: const Icon(Icons.person),
-                  title: const Text(' My Vault '),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AppIcon(),
-                        ));
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.create),
-                  title: const Text(' Create New Vault'),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const FirstPinNumber(),
-                        ));
-                  },
-                ),
-
-                ListTile(
-                  leading: const Icon(Icons.login),
-                  title: const Text(' New Vault Login'),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AppIcon(),
-                        ));
-                  },
-                ),
-
-                ListTile(
-                  leading: const Icon(Icons.logout),
-                  title: const Text('Quit'),
-                  onTap: () {
-                    exit(0);
-                  },
-                ),
-              ],
-            ),
-          ),
+          drawer: CustomDrawer(pinNumber: widget.pinNumber),
           body: GridView.builder(
               itemCount: folderList.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 4.0,
-                  mainAxisSpacing: 4.0),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 4.0, mainAxisSpacing: 4.0),
               itemBuilder: (BuildContext context, index) {
                 String oneEntity = folderList[index].toString();
-                String folderName =
-                    oneEntity.split('/').last.replaceAll("'", '');
+                String folderName = oneEntity.split('/').last.replaceAll("'", '');
 
                 return InkWell(
                   child: PlatformAlbum(
@@ -337,7 +193,7 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
                     album: 'Album Settings',
                     isDelete: index == 0 ? false : true,
                     path: folderList[index].path,
-                    pinnuber: widget.pinnumber,
+                    pinnuber: widget.pinNumber,
                   ),
                   onTap: () => Navigator.push(
                       context,
@@ -369,16 +225,12 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
               height: 250,
               padding: const EdgeInsets.all(20),
               child: Column(mainAxisSize: MainAxisSize.min, children: [
-                TextField(
-                    controller: _folderName,
-                    decoration: const InputDecoration(hintText: 'Folder name')),
+                TextField(controller: _folderName, decoration: const InputDecoration(hintText: 'Folder name')),
                 const SizedBox(height: 40),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    TextButton(
-                        onPressed: () => Navigator.pop(context, true),
-                        child: const Text('CANCEL')),
+                    TextButton(onPressed: () => Navigator.pop(context, true), child: const Text('CANCEL')),
                     TextButton(
                         onPressed: () async {
                           setState(() async {
@@ -398,8 +250,7 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
 
   // load app folders
   getFolderList() async {
-    final Directory directoryi = Directory(
-        '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/${widget.pinnumber}');
+    final Directory directoryi = Directory('/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/${widget.pinNumber}');
 
     // log(directory.toString());
 
@@ -408,11 +259,8 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
   }
 
   // creating folders
-  Future<bool> createFolder(String newfolderName) async {
-    String foldername = _folderName.text;
-    final Directory _directory = Directory(
-        '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/${widget.pinnumber}');
-    Directory? directory;
+  Future<bool> createFolder(String newFolderName) async {
+    Directory? directory = Directory('/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/${widget.pinNumber}');
 
     try {
       if (Platform.isAndroid) {
@@ -428,8 +276,7 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
             newPath += "/$folder";
           }
 
-          newPath =
-              "/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/${widget.pinnumber}/$newfolderName";
+          newPath = "/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/${widget.pinNumber}/$newFolderName";
 
           directory = Directory(newPath);
           log(directory.path);
@@ -445,13 +292,7 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
       }
 
       if (!await directory.exists()) {
-        await directory.create(recursive: true).whenComplete(
-          () {
-            setState(() {
-              getFolderList();
-            });
-          },
-        );
+        await directory.create(recursive: true);
       }
       if (await directory.exists().whenComplete(
         () {
@@ -467,9 +308,9 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
               debugPrint('Continue');
               setState(() {
                 getFolderList();
-                initState();
+             
                 requestPermission(Permission.storage);
-                getFolderList();
+               
                 Navigator.pop(context, true);
               });
             },
@@ -491,6 +332,15 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
   }
 
   String getFolderPath() {
-    return '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/25/Main Album/';
+    return '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/${widget.pinNumber}/';
+  }
+
+// Cam-IMG 1664964306767412.jpg
+  void delete(String path) {
+    exitApp = false;
+    print(exitApp);
+    log(path);
+    final dir = Directory(path);
+    dir.deleteSync(recursive: true);
   }
 }
