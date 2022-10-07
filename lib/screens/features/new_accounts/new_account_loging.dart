@@ -247,7 +247,7 @@ class _NewAccountLogingState extends State<NewAccountLoging> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => GalleryHome(
-                                          pinnumber: controler_pin.text,
+                                          pinNumber: controler_pin.text,
                                         ),
                                       ));
                                 } else {
