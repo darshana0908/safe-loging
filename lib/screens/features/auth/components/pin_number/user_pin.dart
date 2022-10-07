@@ -294,7 +294,7 @@ class _UserPInState extends State<UserPIn> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => GalleryHome(
-                                              pinnumber:
+                                              pinNumber:
                                                   controler_re_enter_pin.text),
                                         ));
                                   } else {
