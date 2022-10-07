@@ -32,9 +32,9 @@ class _splashState extends State<splash> {
   }
 
   loadbool() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
-      var ownerlogin = prefs.getBool('ownerlogin');
+      var ownerlogin = sharedPreferences.getBool('ownerlogin');
       if (ownerlogin == true) {
         Navigator.push(
           context,
@@ -49,7 +49,7 @@ class _splashState extends State<splash> {
     });
   }
 
-  final prefs = SharedPreferences.getInstance();
+  final sharedPreferences = SharedPreferences.getInstance();
   TextEditingController controler_pin = TextEditingController();
 
   @override
