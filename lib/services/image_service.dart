@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:file_cryptor/file_cryptor.dart';
@@ -23,12 +22,10 @@ class ImageService {
     String fileType = '';
 
     final List<XFile>? imageList = await _picker.pickMultiImage();
-
     if (imageList != null) {
       for (XFile image in imageList) {
         fileType = path.extension(image.path);
-        imageName =
-            '${DateTime.now().microsecondsSinceEpoch.toString()}$fileType';
+        imageName = '${DateTime.now().microsecondsSinceEpoch.toString()}$fileType';
 
         File fileToSave = File(image.path);
         fileToSave.copy('${getFolderPath()}$imageName');
@@ -49,8 +46,7 @@ class ImageService {
     if (image != null) {
       fileType = path.extension(image.path);
 
-      imageName =
-          "Cam-IMG ${DateTime.now().microsecondsSinceEpoch.toString()}$fileType";
+      imageName = "Cam-IMG ${DateTime.now().microsecondsSinceEpoch.toString()}$fileType";
 
       File fileToSave = File(image.path);
       fileToSave.copy('${getFolderPath()}$imageName');
@@ -60,21 +56,17 @@ class ImageService {
     }
   }
 
-  Future<File> encryptFiles(
-      String inputFileName, String outputFileName, String directory) async {
+  Future<File> encryptFiles(String inputFileName, String outputFileName, String directory) async {
     FileCryptor fileCryptor = FileCryptor(
       key: 'Your 32 bit key.................',
       iv: 16,
       dir: directory,
     );
-
-    return fileCryptor.encrypt(
-        inputFile: inputFileName, outputFile: outputFileName);
+    return fileCryptor.encrypt(inputFile: inputFileName, outputFile: outputFileName);
   }
 
 // deleting files
   void delete(String path) {
-    log(path);
     final dir = Directory(path);
     dir.deleteSync(recursive: true);
   }
