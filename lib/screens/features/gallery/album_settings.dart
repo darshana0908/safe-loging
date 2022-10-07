@@ -56,12 +56,16 @@ class _AlbumSettingsState extends State<AlbumSettings> {
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Text(
-                            'Main Album',
-                            style: TextStyle(
-                                fontSize: 17,
-                                color: kgray,
-                                fontWeight: FontWeight.w500),
+                          child: InkWell( onTap: () {
+                            
+                          },
+                            child: Text(
+                              widget.foldernames,
+                              style: TextStyle(
+                                  fontSize: 17,
+                                  color: kgray,
+                                  fontWeight: FontWeight.w500),
+                            ),
                           ),
                         ),
                       ],
