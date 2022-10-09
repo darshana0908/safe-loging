@@ -13,7 +13,7 @@ import '../../../utils/helper_methods.dart';
 import '../auth/components/pin_key_pad.dart';
 import '../gallery/gallery_home.dart';
 import 'componets/text.dart';
-import 'new_account_gallery_home.dart';
+import 'new_account_gallery_home.drt';
 
 class ReEnterPinNumber extends StatefulWidget {
   const ReEnterPinNumber({Key? key, required this.controler_pin_new})

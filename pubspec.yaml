@@ -62,6 +62,7 @@ dependencies:
   fluttertoast: ^8.0.9
   open_file: ^3.2.1
   file_preview: ^1.1.1
+  flutter_secure_storage:
 
   # webview_flutter: ^3.0.4
 

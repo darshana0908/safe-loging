@@ -10,6 +10,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 import 'package:safe_encrypt/services/image_service.dart';
 import 'package:safe_encrypt/utils/widgets/custom_drawer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../services/file_service.dart';
 import '../../../utils/helper_methods.dart';
@@ -36,13 +37,17 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
   bool exitApp = true;
   String newpath = '';
   List<String> myfile = [];
+  String? imageName;
+  String finalImage = 'assets/ic.JPG';
+  String assets = 'assets/ic.JPG';
 
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     requestPermission(Permission.storage);
+    
     getFolderList();
-
+    
     super.initState();
   }
 
@@ -179,15 +184,11 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
               itemBuilder: (BuildContext context, index) {
                 String oneEntity = folderList[index].toString();
                 String folderName = oneEntity.split('/').last.replaceAll("'", '');
-
+                print(folderName);
                 return InkWell(
                   child: PlatformAlbum(
                     // selected image of folder cover
                     // use provider (FolderCoverImageProvider)
-                    image: Image.asset(
-                      'assets/Capture9.JPG',
-                      fit: BoxFit.fill,
-                    ),
 
                     title: folderName,
                     album: 'Album Settings',
@@ -256,6 +257,10 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
 
     folderList = directoryi.listSync(followLinks: true);
     folderList.removeWhere((item) => item.runtimeType.toString() == '_File');
+    setState(() {
+      log(imageName.toString());
+      finalImage = imageName.toString();
+    });
   }
 
   // creating folders
@@ -295,7 +300,9 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
         await directory.create(recursive: true);
       }
       if (await directory.exists().whenComplete(
-        () {
+        () async {
+          SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+          await sharedPreferences.setString('foldername-${newFolderName}', assets);
           AwesomeDialog(
             context: context,
             animType: AnimType.LEFTSLIDE,
@@ -304,18 +311,19 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
             showCloseIcon: true,
             title: 'Success',
             desc: '',
-            btnOkOnPress: () {
+            btnOkOnPress: () async {
               debugPrint('Continue');
+
               setState(() {
                 getFolderList();
-             
+
                 requestPermission(Permission.storage);
-               
+
                 Navigator.pop(context, true);
               });
             },
             btnOkIcon: Icons.check_circle,
-            onDissmissCallback: (type) {
+            onDissmissCallback: (type) async {
               debugPrint('Dialog Dismiss from callback $type');
             },
           ).show();

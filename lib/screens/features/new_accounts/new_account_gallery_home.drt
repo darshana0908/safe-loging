@@ -26,8 +26,7 @@ import 'new_account_loging.dart';
 
 class NewAccountGalleryHome extends StatefulWidget {
   final String controler_pin;
-  const NewAccountGalleryHome({Key? key, required this.controler_pin})
-      : super(key: key);
+  const NewAccountGalleryHome({Key? key, required this.controler_pin}) : super(key: key);
 
   @override
   State<NewAccountGalleryHome> createState() => _NewAccountGalleryHomeState();
@@ -56,18 +55,17 @@ class _NewAccountGalleryHomeState extends State<NewAccountGalleryHome> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        throw Navigator.push(
-            context, MaterialPageRoute(builder: (_) => UserPIn()));
+        throw Navigator.push(context, MaterialPageRoute(builder: (_) => UserPIn()));
       },
       child: Scaffold(
-           floatingActionButton: Padding(
+        floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 50),
           child: SpeedDial(
-            buttonSize: Size(70.0, 70.0),
-            childrenButtonSize: Size(55.0, 55.0),
+            buttonSize: const Size(70.0, 70.0),
+            childrenButtonSize: const Size(55.0, 55.0),
             // animatedIcon:AnimatedIcons.add_event ,
 
-            overlayColor: Color(0xff00aeed),
+            overlayColor: const Color(0xff00aeed),
             overlayOpacity: 1.0,
             activeIcon: Icons.close,
             foregroundColor: kwhite,
@@ -84,45 +82,30 @@ class _NewAccountGalleryHomeState extends State<NewAccountGalleryHome> {
                   padding: const EdgeInsets.only(right: 20),
                   child: Text(
                     'Take photo',
-                    style: TextStyle(
-                        color: kwhite,
-                        fontSize: 22,
-                        fontWeight: FontWeight.w500),
+                    style: TextStyle(color: kwhite, fontSize: 22, fontWeight: FontWeight.w500),
                   ),
                 ),
-               onTap:  () async =>{
-                    NewAccountImageService(controler_pin: widget.controler_pin)
-                        .takePhoto(),
+                onTap: () async => {
+                  NewAccountImageService(controler_pin: widget.controler_pin).takePhoto(),
                 },
                 elevation: 150,
                 backgroundColor: Colors.black38,
                 child: Icon(Icons.camera_alt, color: kwhite, size: 30),
-                labelBackgroundColor: Color(0xff00aeed),
+                labelBackgroundColor: const Color(0xff00aeed),
               ),
               SpeedDialChild(
                   child: Icon(Icons.photo, color: kwhite, size: 30),
                   labelWidget: Padding(
                     padding: const EdgeInsets.only(right: 20),
-                    child: Text('Import photos',
-                        style: TextStyle(
-                            color: kwhite,
-                            fontSize: 22,
-                            fontWeight: FontWeight.w500)),
+                    child: Text('Import photos', style: TextStyle(color: kwhite, fontSize: 22, fontWeight: FontWeight.w500)),
                   ),
-                  onTap:  () async => NewAccountImageService(
-                          controler_pin: widget.controler_pin)
-                      .importPhotos(),
+                  onTap: () async => NewAccountImageService(controler_pin: widget.controler_pin).importPhotos(),
                   backgroundColor: Colors.black38),
               SpeedDialChild(
-                child:
-                    Icon(Icons.add_to_photos_rounded, color: kwhite, size: 30),
+                child: Icon(Icons.add_to_photos_rounded, color: kwhite, size: 30),
                 labelWidget: Padding(
                   padding: const EdgeInsets.only(right: 20),
-                  child: Text('Add album',
-                      style: TextStyle(
-                          color: kwhite,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w500)),
+                  child: Text('Add album', style: TextStyle(color: kwhite, fontSize: 22, fontWeight: FontWeight.w500)),
                 ),
                 elevation: 20,
                 backgroundColor: Colors.black38,
@@ -139,10 +122,7 @@ class _NewAccountGalleryHomeState extends State<NewAccountGalleryHome> {
           // automaticallyImplyLeading: false,
           // leading: const Icon(Icons.account_circle),
           actions: <Widget>[
-            IconButton(
-                icon: const Icon(Icons.delete, color: Colors.white54),
-                onPressed: () {}),
-         
+            IconButton(icon: const Icon(Icons.delete, color: Colors.white54), onPressed: () {}),
             PopupMenuButton(
               itemBuilder: (context) => [
                 PopupMenuItem(
@@ -154,20 +134,15 @@ class _NewAccountGalleryHomeState extends State<NewAccountGalleryHome> {
                           alignment: Alignment.topLeft,
                           child: TextButton(
                             autofocus: true,
-                            child: Text('Settings',
-                                style: TextStyle(color: kblack, fontSize: 17)),
-                            onPressed: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const Settings())),
+                            child: Text('Settings', style: TextStyle(color: kblack, fontSize: 17)),
+                            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Settings())),
                           ),
                         ),
                         Container(
                           alignment: Alignment.topLeft,
                           child: TextButton(
                             autofocus: true,
-                            child: Text('Help',
-                                style: TextStyle(color: kblack, fontSize: 17)),
+                            child: Text('Help', style: TextStyle(color: kblack, fontSize: 17)),
                             onPressed: () {},
                           ),
                         ),
@@ -189,12 +164,12 @@ class _NewAccountGalleryHomeState extends State<NewAccountGalleryHome> {
                 ), //BoxDecoration
                 child: UserAccountsDrawerHeader(
                   decoration: BoxDecoration(color: kdarkblue),
-                  accountName: Text(
+                  accountName: const Text(
                     '',
                     // user.displayName!.toString(),
-                    style: const TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 18),
                   ),
-                  accountEmail: Text(''
+                  accountEmail: const Text(''
                       // user.email!
 
                       ),
@@ -212,8 +187,7 @@ class _NewAccountGalleryHomeState extends State<NewAccountGalleryHome> {
                 leading: const Icon(Icons.person),
                 title: const Text(' My Profile '),
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => UserPIn()));
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => UserPIn()));
                 },
               ),
 
@@ -285,35 +259,32 @@ class _NewAccountGalleryHomeState extends State<NewAccountGalleryHome> {
         //     ],
         body: GridView.builder(
             itemCount: folderList.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, crossAxisSpacing: 4.0, mainAxisSpacing: 4.0),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 4.0, mainAxisSpacing: 4.0),
             itemBuilder: (BuildContext context, index) {
               String oneEntity = folderList[index].toString();
               String folderName = oneEntity.split('/').last.replaceAll("'", '');
 
-              return InkWell(
-                child: PlatformAlbum(
-pinnuber: widget.controler_pin,
-                    // selected image of folder cover
-                    // use provider (FolderCoverImageProvider)
-                    image: Image.asset(
-                        Provider.of<FolderCoverImageProvider>(context,
-                                listen: false)
-                            .imgList[index],
-                        fit: BoxFit.fill),
-                    title: folderName,
-                    album: 'Album Settings',
-                    isDelete: index == 0 ? false : true,
-                    path: folderList[index].path),
-                onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => ImageScreen(
-                            title: folderName, path: folderList[index].path))),
-              );
+//               return InkWell(
+//                 child: PlatformAlbum(
+// pinnuber: widget.controler_pin,
+//                     // selected image of folder cover
+//                     // use provider (FolderCoverImageProvider)
+//                     image: Image.asset(
+//                        ' assets/ic.JPG',
+//                         fit: BoxFit.fill).toString(),
+//                     title: folderName,
+//                     album: 'Album Settings',
+//                     isDelete: index == 0 ? false : true,
+//                     path: folderList[index].path),
+//                 onTap: () => Navigator.push(
+//                     context,
+//                     MaterialPageRoute(
+//                         builder: (_) => ImageScreen(
+//                             title: folderName, path: folderList[index].path))),
+//               );
             }),
       ),
-    ); 
+    );
   }
 
   // create folder dialog
@@ -327,16 +298,12 @@ pinnuber: widget.controler_pin,
               height: 250,
               padding: const EdgeInsets.all(20),
               child: Column(mainAxisSize: MainAxisSize.min, children: [
-                TextField(
-                    controller: _folderName,
-                    decoration: const InputDecoration(hintText: 'Folder name')),
+                TextField(controller: _folderName, decoration: const InputDecoration(hintText: 'Folder name')),
                 const SizedBox(height: 40),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    TextButton(
-                        onPressed: () => Navigator.pop(context, true),
-                        child: const Text('CANCEL')),
+                    TextButton(onPressed: () => Navigator.pop(context, true), child: const Text('CANCEL')),
                     TextButton(
                         onPressed: () async {
                           await createFolder(_folderName.text);
@@ -357,8 +324,7 @@ pinnuber: widget.controler_pin,
   // load app folders
   getFolderList() async {
     String foldername = widget.controler_pin;
-    final Directory directory = Directory(
-        "/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/$foldername/Main Album");
+    final Directory directory = Directory("/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/$foldername/Main Album");
     print(directory);
     print('kkkkk');
     print(directory);
@@ -372,8 +338,7 @@ pinnuber: widget.controler_pin,
   // creating folders
   Future<bool> createFolder(String newfolderName) async {
     String foldername = widget.controler_pin;
-    final Directory _directory = Directory(
-        '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/$foldername');
+    final Directory directory = Directory('/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/$foldername');
     Directory? directory;
     // print(_directory);
 
@@ -391,8 +356,7 @@ pinnuber: widget.controler_pin,
             newPath += "/$folder";
           }
 
-          newPath =
-              "/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/$foldername/$newfolderName";
+          newPath = "/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/$foldername/$newfolderName";
 
           directory = Directory(newPath);
           log(directory.path);

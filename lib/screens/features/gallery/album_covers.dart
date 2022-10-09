@@ -1,19 +1,23 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'gallery_home.dart';
+
 class AlbumCovers extends StatefulWidget {
-  const AlbumCovers({Key? key, required this.foldersname}) : super(key: key);
+  const AlbumCovers({Key? key, required this.foldersname, required this.path, required this.pin}) : super(key: key);
   final String foldersname;
+  final String path;
+  final String pin;
   @override
   State<AlbumCovers> createState() => _AlbumCoversState();
 }
 
 class _AlbumCoversState extends State<AlbumCovers> {
-  late SharedPreferences preferences;
   bool customcover = false;
   bool selectedfolder = false;
-
+  String assetPath = 'assets/ic.JPG';
   int selected = 0;
   String imgname = '';
   List<String> imgList = [
@@ -29,57 +33,25 @@ class _AlbumCoversState extends State<AlbumCovers> {
   ];
 
   String selectedfolderString = '';
-  saveimg(String selectedfolderString) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    await prefs.setString('imgname', selectedfolderString);
-    await prefs.setString('faldername', widget.foldersname);
-
-    print(selectedfolderString);
-    print('fffffffffffffffff');
-    print(widget.foldersname);
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Main Album'),
-        backgroundColor: kdarkblue,
-      ),
+      appBar: AppBar(title: const Text('Main Album'), backgroundColor: kdarkblue),
       body: SingleChildScrollView(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Row(
-              children: const [
-                // Icon(Icons.abc),
-                // Text(
-                //   'ffffffffffffffff\nfffffffffffffffff',
-                //   style: TextStyle(fontSize: 17),
-                // ),
-              ],
-            ),
-          ),
           const Padding(
             padding: EdgeInsets.all(8.0),
-            child: Text(
-              'Select item from this album for the cover photo',
-              style: TextStyle(fontSize: 17),
-            ),
+            child: Text('Select item from this album for the cover photo', style: TextStyle(fontSize: 17)),
           ),
-          const SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20),
           SizedBox(
               height: 55,
               width: MediaQuery.of(context).size.width,
               child: SwitchListTile(
                   activeTrackColor: klightBlueAccent,
                   activeColor: kblue,
-                  title: const Text('Set custom cover',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+                  title: const Text('Set custom cover', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
                   value: customcover,
                   onChanged: (bool value) {
                     setState(() {
@@ -106,22 +78,37 @@ class _AlbumCoversState extends State<AlbumCovers> {
                 itemBuilder: (BuildContext context, index) {
                   return InkWell(
                     onTap: customcover
-                        ? () {
-                            setState(() {
-                              // use provider (FolderCoverImageProvider) load folder cover image list
-                              // Provider.of<FolderCoverImageProvider>(context,
-                              //         listen: false)
-                              //     .changecovername(index);
+                        ? () async {
+                            AwesomeDialog(
+                              context: context,
+                              animType: AnimType.LEFTSLIDE,
+                              headerAnimationLoop: false,
+                              dialogType: DialogType.SUCCES,
+                              showCloseIcon: true,
+                              title: 'Success',
+                              desc: '',
+                              btnOkOnPress: () async {
+                                debugPrint('Continue');
+                                SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                                await sharedPreferences.setString('foldername-${widget.foldersname}', selectedfolderString);
+                                await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => GalleryHome(
+                                              pinNumber: widget.pin,
+                                            )));
+                              },
+                              btnOkIcon: Icons.check_circle,
+                              onDissmissCallback: (type) {
+                                debugPrint('Dialog Dismiss from callback $type');
+                              },
+                            ).show();
 
-                              // imgname = Provider.of<FolderCoverImageProvider>(
-                              //         context,
-                              //         listen: false)
-                              //     .imgList[index];
-                              // print(imgname);
+                            setState(() {
                               selectedfolderString = imgList[index];
                               selectedfolder = true;
-
-                              saveimg(selectedfolderString);
+                              print(selectedfolderString);
+                              // saveimg(selectedfolderString);
                             });
                           }
                         : () {
@@ -153,9 +140,7 @@ class _AlbumCoversState extends State<AlbumCovers> {
                               //                 context,
                               //                 listen: true)
                               //             .imgList[index]
-                              height: selectedfolderString == imgList[index]
-                                  ? MediaQuery.of(context).size.height
-                                  : 0,
+                              height: selectedfolderString == imgList[index] ? MediaQuery.of(context).size.height : 0,
                             ),
                             Positioned(
                               // left: Provider.of<FolderCoverImageProvider>(
@@ -167,9 +152,7 @@ class _AlbumCoversState extends State<AlbumCovers> {
                               //                 listen: true)
                               //             .imgList[index]
 
-                              left: selectedfolderString == imgList[index]
-                                  ? 24
-                                  : 0,
+                              left: selectedfolderString == imgList[index] ? 24 : 0,
                               top: selectedfolderString == imgList[index]
 
                                   // Provider.of<FolderCoverImageProvider>(
@@ -242,25 +225,32 @@ class _AlbumCoversState extends State<AlbumCovers> {
   }
 }
 
-class FolderCoverImageProvider with ChangeNotifier {
-  List<String> imgList = [
-    'assets/Capture1.JPG', //ahen na idahan
-    'assets/Capture2.JPG',
-    'assets/Capture3.JPG',
-    'assets/Capture4.JPG',
-    'assets/Capture5.JPG',
-    'assets/Capture6.JPG',
-    'assets/Capture7.JPG',
-    'assets/Capture8.JPG',
-    'assets/Capture9.JPG',
-  ];
-  Color color = Colors.black;
-  Color get getcolor => color;
-  String selectedfolderString = '';
-  List get getcovername => imgList;
+// class FolderCoverImageProvider with ChangeNotifier {
+//   Map<String, String>? _albumCover;
 
-  changecovername(index) {
-    selectedfolderString = imgList[index];
-    notifyListeners();
-  }
-}
+
+//   Map<String, String>? get getAlbumCover => _albumCover;
+
+//   void setAlbumCover(Map<String, String> image ) {
+//     _albumCover = image;
+//     notifyListeners();
+//   }
+
+//   Future<String> getProfileImage(String imagename) async {
+//     // Obtain shared preferences.
+//     final prefs = await SharedPreferences.getInstance();
+//     String? newPath = prefs.getString(imagename);
+
+//     setProfileFront(newPath!);
+
+//     return newPath;
+//   }
+
+//   Future<void> setProfileImage(String imagename, String imagePath) async {
+//     final prefs = await SharedPreferences.getInstance();
+
+//     await prefs.setString(imagename, imagePath);
+
+//     setProfileFront(imagePath);
+//   }
+// }

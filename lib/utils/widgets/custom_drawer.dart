@@ -25,13 +25,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
   String finalImage = '';
 
   String assetPath = 'assets/ic.JPG';
-  int? i = null;
+  int? i;
   // File? finalImage = null;
 
   @override
   void initState() {
     loadImage();
-    print(imageName);
 
     super.initState();
   }
@@ -41,18 +40,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
     var imageName = sharedPreferences.getString('profileImage-${widget.pinNumber}');
 
     setState(() {
-      // log(imageName.toString());
       finalImage = imageName.toString();
     });
-    // return Image.file(File(imageName.toString()));
   }
-
-  // loadbool() async {
-  //   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     var imageName = sharedPreferences.getString('profileImage-${widget.pinNumber}');
-  //   });
-  // }
 
   bool app = true;
   @override
@@ -62,42 +52,20 @@ class _CustomDrawerState extends State<CustomDrawer> {
         padding: const EdgeInsets.all(0),
         children: [
           DrawerHeader(
-              decoration: BoxDecoration(
-                color: kwhite,
-              ),
+              decoration: BoxDecoration(backgroundBlendMode: BlendMode.darken, color: kindigo),
               //BoxDecoration
               child: InkWell(
                 onTap: () {
-                  print('vvvvvv');
-                  print(imageName);
-                  print('vvvvvv');
                   uploadPhoto();
                 },
                 child: Center(
                   child: Stack(
                     children: [
                       if (finalImage.isNotEmpty)
-                        CircleAvatar(
-                          backgroundImage: AssetImage('assets/ic.JPG'),
-                          foregroundImage: FileImage(
-                            File( 
-                              finalImage.toString(),
-                              
-                            ),
-                          ),
-                        
-                          radius: 80,
-                        )
+                        CircleAvatar(foregroundImage: FileImage(File(finalImage.toString())), radius: 80)
                       else
-                        CircleAvatar( foregroundImage: AssetImage('assets/ic.JPG'),
-                          backgroundColor: kblack,
-                          radius: 80,
-                        ),
-                      const Positioned(
-                        bottom: 20,
-                        right: 20,
-                        child: Icon(Icons.camera_alt, size: 28, color: Colors.deepPurple),
-                      ),
+                        CircleAvatar(backgroundColor: kblack, radius: 80),
+                      const Positioned(bottom: 20, right: 20, child: Icon(Icons.camera_alt, size: 28, color: Colors.deepPurple)),
                     ],
                   ),
                 ),
