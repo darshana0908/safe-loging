@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:safe_encrypt/constants/colors.dart';
+import 'package:safe_encrypt/services/icon.dart';
 import 'package:safe_encrypt/services/image_service.dart';
 import 'package:safe_encrypt/utils/widgets/custom_drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -34,7 +35,7 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
   List<FileSystemEntity> folderList = [];
   Timer? timer;
   var jsonResponse = jsonDecode('{"data": []}') as Map<String, dynamic>;
-  bool exitApp = true;
+  bool takingPhoto = false;
   String newpath = '';
   List<String> myfile = [];
   String? imageName;
@@ -43,11 +44,13 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
 
   @override
   void initState() {
+    // takingPhoto == true ?
     WidgetsBinding.instance.addObserver(this);
+    // : WidgetsBinding.instance.removeObserver(this);
     requestPermission(Permission.storage);
-    
+    takingPhoto = false;
     getFolderList();
-    
+
     super.initState();
   }
 
@@ -61,15 +64,23 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) async {
-    print(state.toString());
-    if (state == AppLifecycleState.inactive) {
-      print('inactive');
-      Navigator.pop(context);
-    } else if (state == AppLifecycleState.resumed) {
-      log('do nothing');
-    }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
+    print('$state  $takingPhoto');
+    if (state == AppLifecycleState.resumed) {
+      if (takingPhoto) {
+        setState(() {
+          takingPhoto = false;
+        });
+      } else {
+        setState(() {
+          takingPhoto = false;
+        });
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => const AppIcon()), (Route<dynamic> route) => false);
+        // Navigator.push(context, MaterialPageRoute(builder: (_) => const AppIcon()));
+      }
+    }
   }
 
   String? imgload = '';
@@ -109,8 +120,11 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
                     ),
                   ),
                   onTap: () async {
-                    setState(() => exitApp = false);
+                    setState(() => takingPhoto = true);
                     ImageService(pinNumber: widget.pinNumber).takePhoto();
+                    // .then((val) {
+                    //   setState(() => takingPhoto = false);
+                    // });
                   },
                   elevation: 150,
                   backgroundColor: Colors.black38,
@@ -124,9 +138,16 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
                       child: Text('Import files', style: TextStyle(color: kwhite, fontSize: 22, fontWeight: FontWeight.w500)),
                     ),
                     onTap: () async {
-                      setState(() => exitApp = false);
+                      setState(() {
+                        takingPhoto = true;
+                      });
                       String extention = '';
                       FileService(pinNumber: widget.pinNumber).importFiles();
+                      // .then((val) {
+                      //   setState(() {
+                      //     takingPhoto = false;
+                      //   });
+                      // });
                     },
                     backgroundColor: Colors.black38),
                 SpeedDialChild(
@@ -143,8 +164,9 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
             ),
           ),
           appBar: AppBar(
-            title: const Text('Keepsafe'),
             backgroundColor: kdarkblue,
+            title: const Text('Keepsafe'),
+            // backgroundColor: kdarkblue,
             actions: <Widget>[
               PopupMenuButton(
                 itemBuilder: (context) => [
@@ -189,7 +211,6 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
                   child: PlatformAlbum(
                     // selected image of folder cover
                     // use provider (FolderCoverImageProvider)
-
                     title: folderName,
                     album: 'Album Settings',
                     isDelete: index == 0 ? false : true,
@@ -302,7 +323,7 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
       if (await directory.exists().whenComplete(
         () async {
           SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-          await sharedPreferences.setString('foldername-${newFolderName}', assets);
+          await sharedPreferences.setString('foldername-$newFolderName-${widget.pinNumber}', assets);
           AwesomeDialog(
             context: context,
             animType: AnimType.LEFTSLIDE,
@@ -323,7 +344,7 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
               });
             },
             btnOkIcon: Icons.check_circle,
-            onDissmissCallback: (type) async {
+            onDismissCallback: (type) async {
               debugPrint('Dialog Dismiss from callback $type');
             },
           ).show();
@@ -345,8 +366,8 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
 
 // Cam-IMG 1664964306767412.jpg
   void delete(String path) {
-    exitApp = false;
-    print(exitApp);
+    takingPhoto = false;
+    print(takingPhoto);
     log(path);
     final dir = Directory(path);
     dir.deleteSync(recursive: true);
