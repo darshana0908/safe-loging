@@ -41,6 +41,11 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
   String? imageName;
   String finalImage = 'assets/ic.JPG';
   String assets = 'assets/ic.JPG';
+  getbool() {
+    setState(() {
+      takingPhoto = true;
+    });
+  }
 
   @override
   void initState() {
@@ -199,7 +204,11 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
               )
             ],
           ),
-          drawer: CustomDrawer(pinNumber: widget.pinNumber),
+          drawer: CustomDrawer(
+            pinNumber: widget.pinNumber,
+            takinphoto: takingPhoto,
+            getbool: getbool,
+          ),
           body: GridView.builder(
               itemCount: folderList.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 4.0, mainAxisSpacing: 4.0),
@@ -221,6 +230,7 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
                       context,
                       MaterialPageRoute(
                           builder: (_) => ImageScreen(
+                                getbool: getbool,
                                 title: folderName,
                                 path: folderList[index].path,
                               ))),

@@ -37,7 +37,8 @@ class _AlbumCoversState extends State<AlbumCovers> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Main Album'), backgroundColor: kdarkblue),
+      appBar: AppBar(title: const Text('Main Album'),backgroundColor: kdarkblue,),
+      //  backgroundColor: kdarkblue),
       body: SingleChildScrollView(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           const Padding(
@@ -90,7 +91,7 @@ class _AlbumCoversState extends State<AlbumCovers> {
                               btnOkOnPress: () async {
                                 debugPrint('Continue');
                                 SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-                                await sharedPreferences.setString('foldername-${widget.foldersname}', selectedfolderString);
+                                await sharedPreferences.setString('foldername-${widget.foldersname}-${widget.pin}', selectedfolderString);
                                 await Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -99,7 +100,7 @@ class _AlbumCoversState extends State<AlbumCovers> {
                                             )));
                               },
                               btnOkIcon: Icons.check_circle,
-                              onDissmissCallback: (type) {
+                              onDismissCallback: (type) {
                                 debugPrint('Dialog Dismiss from callback $type');
                               },
                             ).show();

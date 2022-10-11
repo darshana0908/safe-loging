@@ -10,10 +10,11 @@ import 'album_covers.dart';
 import 'gallery_home.dart';
 
 class AlbumSettings extends StatefulWidget {
-  const AlbumSettings({Key? key, required this.foldernames, required this.path, required this.pin}) : super(key: key);
+  const AlbumSettings({Key? key, required this.foldernames, required this.path, required this.pin, required this.isDelete}) : super(key: key);
   final String foldernames;
   final String path;
   final String pin;
+  final bool isDelete;
 
   @override
   State<AlbumSettings> createState() => _AlbumSettingsState();
@@ -28,13 +29,16 @@ class _AlbumSettingsState extends State<AlbumSettings> {
   void initState() {
     final String foldernames;
     loadImage();
+
+    log(imageName.toString());
+    finalImage = imageName.toString();
     // TODO: implement initState
     super.initState();
   }
 
   loadImage() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    var imageName = sharedPreferences.getString('foldername-${widget.foldernames}');
+    var imageName = sharedPreferences.getString('foldername-${widget.foldernames}-${widget.pin}');
     print(widget.foldernames);
     setState(() {
       log(imageName.toString());
@@ -52,8 +56,9 @@ class _AlbumSettingsState extends State<AlbumSettings> {
       },
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: kdarkblue,
+          // backgroundColor: kdarkblue,
           title: const Text('Album settings'),
+          backgroundColor: kdarkblue,
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -66,37 +71,73 @@ class _AlbumSettingsState extends State<AlbumSettings> {
                   style: TextStyle(color: kblue, fontSize: 20),
                 ),
               ),
-              InkWell(
-                onTap: () {
-                  showrenameFolderDialog(context);
-                },
-                child: Card(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: 150,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Name',
-                            style: TextStyle(color: kblack, fontSize: 19, fontWeight: FontWeight.w500),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Text(
-                              widget.foldernames,
-                              style: TextStyle(fontSize: 17, color: kgray, fontWeight: FontWeight.w500),
+              widget.isDelete
+                  ? InkWell(
+                      onTap: () {
+                        showrenameFolderDialog(context);
+                      },
+                      child: Card(
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: 150,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Name',
+                                  style: TextStyle(color: kblack, fontSize: 19, fontWeight: FontWeight.w500),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                  child: Text(
+                                    widget.foldernames,
+                                    style: TextStyle(fontSize: 17, color: kgray, fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
+                        ),
+                      ),
+                    )
+                  : Card(
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: 150,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Name',
+                                style: TextStyle(color: kblack, fontSize: 19, fontWeight: FontWeight.w500),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      widget.foldernames,
+                                      style: TextStyle(fontSize: 17, color: kgray, fontWeight: FontWeight.w500),
+                                    ),
+                                    Icon(
+                                      Icons.lock,
+                                      color: kgray,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              ),
               const SizedBox(
                 height: 50,
               ),
@@ -131,7 +172,7 @@ class _AlbumSettingsState extends State<AlbumSettings> {
                         ),
                         SizedBox(
                           width: 200,
-                          height: 200,
+                          height: 150,
                           child: Image.asset(
                             finalImage,
                             fit: BoxFit.fill,
@@ -204,7 +245,7 @@ class _AlbumSettingsState extends State<AlbumSettings> {
                               print('kkkkkkkkkkkkkk');
                               print(widget.foldernames);
                               print('kkkkkkkkkkkkkk');
-                             await Navigator.push(
+                              await Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => GalleryHome(
@@ -212,7 +253,7 @@ class _AlbumSettingsState extends State<AlbumSettings> {
                                           )));
                             },
                             btnOkIcon: Icons.check_circle,
-                            onDissmissCallback: (type) async {
+                            onDismissCallback: (type) async {
                               debugPrint('Dialog Dismiss from callback $type');
                             },
                           ).show();
@@ -259,11 +300,20 @@ class _AlbumSettingsState extends State<AlbumSettings> {
     var path = myfile.path;
 
     var lastSeparator = path.lastIndexOf(Platform.pathSeparator);
-    var newPath = path.substring(0, lastSeparator + 1)+ newFileName;
+    var newPath = path.substring(0, lastSeparator + 1) + newFileName;
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    await sharedPreferences.setString('foldername-$newFileName', assets);
+    // print("****************");
+    // print(widget.foldernames);
+    // print("****************");
+
+    String? oldKey = sharedPreferences.getString("foldername-${widget.foldernames}-${widget.pin}");
+
+    await sharedPreferences.setString('foldername-$newFileName-${widget.pin}', oldKey.toString());
     log(newFileName);
-      setState(() {
+    setState(() {
+      log(imageName.toString());
+      finalImage = imageName.toString();
+      loadImage();
       log(imageName.toString());
       finalImage = imageName.toString();
     });

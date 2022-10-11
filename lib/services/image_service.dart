@@ -37,7 +37,7 @@ class ImageService {
   }
 
   // taking photos from camera to default folder
-  takePhoto() async {
+  Future<void> takePhoto() async {
     String imageName = '';
     String fileType = '';
 

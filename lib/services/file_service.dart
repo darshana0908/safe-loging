@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:developer';
 import 'dart:io';
 
@@ -14,7 +16,7 @@ class FileService {
   String getFolderPath() => '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/$pinNumber/Main Album/';
 
   // importing files
-  void importFiles() async {
+  Future<void> importFiles() async {
     String fileName = '';
 
     FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: true);

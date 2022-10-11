@@ -3,5 +3,12 @@
         "activityBar.background": "#2A2F25",
         "titleBar.activeBackground": "#3B4234",
         "titleBar.activeForeground": "#F9FAF9"
-    }
+    },
+    "cSpell.words": [
+        "faldername",
+        "imgload",
+        "kblack",
+        "kblue",
+        "kwhite"
+    ]
 }

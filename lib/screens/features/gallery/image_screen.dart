@@ -12,13 +12,12 @@ import 'package:safe_encrypt/constants/images.dart';
 
 import '../../../services/image_service.dart';
 import '../../../constants/colors.dart';
-import 'image_details.dart';
 
 class ImageScreen extends StatefulWidget {
   final String path;
   final String title;
-
-  const ImageScreen({Key? key, required this.path, required this.title}) : super(key: key);
+  final Function getbool;
+  const ImageScreen({Key? key, required this.path, required this.title, required this.getbool}) : super(key: key);
 
   @override
   State<ImageScreen> createState() => _ImageScreenState();
@@ -44,7 +43,7 @@ class _ImageScreenState extends State<ImageScreen> {
   void initState() {
     decryptImages();
     loadPhotos();
-
+    print(imgPath);
     super.initState();
   }
 
@@ -84,7 +83,13 @@ class _ImageScreenState extends State<ImageScreen> {
                     labelWidget: Padding(
                         padding: const EdgeInsets.only(right: 20),
                         child: Text('Take photo', style: TextStyle(color: kwhite, fontSize: 22, fontWeight: FontWeight.w500))),
-                    onTap: () async => takePhoto(),
+                    onTap: () async {
+                      takePhoto();
+                      setState(() {
+                        widget.getbool();
+                        print(widget.getbool());
+                      });
+                    },
                     elevation: 150,
                     backgroundColor: Colors.black38,
                     child: Icon(Icons.camera_alt, color: kwhite, size: 30),
@@ -95,7 +100,13 @@ class _ImageScreenState extends State<ImageScreen> {
                       labelWidget: Padding(
                           padding: const EdgeInsets.only(right: 20),
                           child: Text('Import all', style: TextStyle(color: kwhite, fontSize: 22, fontWeight: FontWeight.w500))),
-                      onTap: () async => importFiles(),
+                      onTap: () async {
+                        importFiles();
+                        setState(() {
+                          widget.getbool();
+                          print(widget.getbool());
+                        });
+                      },
                       backgroundColor: Colors.black38),
                 ],
               ),
@@ -133,6 +144,17 @@ class _ImageScreenState extends State<ImageScreen> {
                     ),
                   ],
                   flexibleSpace: FlexibleSpaceBar(
+                    background: imgload
+                        ? (decryptedImages.last.toLowerCase().endsWith('jpg') || decryptedImages.last.toLowerCase().endsWith('png'))
+                            ? Image.file(
+                                File(decryptedImages.last),
+                                fit: BoxFit.cover,
+                              )
+                            : const Text('not a image')
+                        : Image.asset(
+                            'assets/Capture5.JPG',
+                            fit: BoxFit.cover,
+                          ),
                     title: SizedBox(
                       width: 300,
                       height: 100,
@@ -162,9 +184,19 @@ class _ImageScreenState extends State<ImageScreen> {
                 ),
                 SliverList(
                     delegate: SliverChildListDelegate([
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.8,
-                    child: _isLoading ? const Center(child: CircularProgressIndicator(color: Colors.red)) : loadPhotos(),
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.8,
+                        child: _isLoading
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                color: Colors.redAccent,
+                                backgroundColor: Colors.lightBlueAccent,
+                              ))
+                            : loadPhotos(),
+                      ),
+                    ],
                   ),
                 ]))
               ],
@@ -195,19 +227,23 @@ class _ImageScreenState extends State<ImageScreen> {
         itemBuilder: (context, index) {
           String imgPath = decryptedImages[index];
           String extention = '';
-
+          String newimg = '';
           String imgname = imgPath.split('/').last.replaceAll("'", '');
           extention = imgPath.split('.').last.replaceAll("'", '');
 
           return GestureDetector(
               onDoubleTap: () => delete(imgPath),
               onTap: () async {
-                if (checkFileType(imgPath) == 1) {
-                  bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) => ImageDetails(path: imgPath)));
-                  if (result) decryptImages();
-                } else {
-                  OpenFile.open(imgPath);
-                }
+                // if (checkFileType(imgPath) == 1) {
+                //   bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) => ImageDetails(path: imgPath)));
+                //   if (result) decryptImages();
+                // } else {
+                OpenFile.open(imgPath);
+                setState(() {
+                  widget.getbool();
+                  print(widget.getbool());
+                });
+                // }
               },
               child: x == 1
                   ? Column(
@@ -409,6 +445,9 @@ class _ImageScreenState extends State<ImageScreen> {
   }
 
   void importFiles() async {
+    setState(() {
+      _isLoading = true;
+    });
     String fileName = '';
     String fileType = '';
 
@@ -428,6 +467,9 @@ class _ImageScreenState extends State<ImageScreen> {
         setState(
           () {
             decryptedImages.add('${widget.path}/$imageName');
+            loadPhotos();
+            Future.delayed(const Duration(seconds: 1));
+            _isLoading = false;
           },
         );
       }
@@ -440,7 +482,7 @@ class _ImageScreenState extends State<ImageScreen> {
   importPhotos() async {
     log(widget.path);
     print(imageName);
-
+    setState(() => _isLoading = true);
     final List<XFile>? imageList = await _picker.pickMultiImage();
 
     if (imageList != null) {
@@ -457,12 +499,16 @@ class _ImageScreenState extends State<ImageScreen> {
             decryptedImages.add('${widget.path}/$imageName');
           },
         );
+        Visibility(visible: _isLoading, child: const CircularProgressIndicator());
       }
     }
   }
 
   // take photos inside the folder
   takePhoto() async {
+    setState(() {
+      _isLoading = true;
+    });
     final XFile? image = await _picker.pickImage(source: ImageSource.camera);
     print(imageName);
     if (image != null) {
@@ -473,7 +519,10 @@ class _ImageScreenState extends State<ImageScreen> {
       fileToSave.copy('${widget.path}/$imageName');
       String key = '';
       ImageService(pinNumber: key).encryptFiles(imageName, '$imageName.aes', widget.path);
-      setState(() => decryptedImages.add('${widget.path}/$imageName'));
+      setState(() {
+        decryptedImages.add('${widget.path}/$imageName');
+        _isLoading = false;
+      });
     }
   }
 

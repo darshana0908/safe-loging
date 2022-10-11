@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:safe_encrypt/screens/features/gallery/album_settings.dart';
 import 'package:safe_encrypt/screens/features/gallery/gallery_home.dart';
@@ -36,6 +37,8 @@ class _PlatformAlbumState extends State<PlatformAlbum> {
   String? assetsName;
   String finalAssets = '';
 
+  bool isImageLoading = true;
+
   @override
   void initState() {
     widget.title;
@@ -53,11 +56,12 @@ class _PlatformAlbumState extends State<PlatformAlbum> {
   loadImage() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-    var imageName = sharedPreferences.getString('foldername-${widget.title}');
+    var imageName = sharedPreferences.getString('foldername-${widget.title}-${widget.pinnuber}');
 
     setState(() {
       finalImage = imageName.toString();
       log(finalImage);
+      isImageLoading = false;
     });
   }
 
@@ -76,7 +80,7 @@ class _PlatformAlbumState extends State<PlatformAlbum> {
                 width: MediaQuery.of(context).size.width / 2 - 16,
                 height: 180,
                 color: kindigo,
-                child: Image.asset(finalImage, fit: BoxFit.fill),
+                child: isImageLoading ? const CupertinoActivityIndicator() : Image.asset(finalImage, fit: BoxFit.fill),
                 // child: Consumer<FolderCoverImageProvider>(
                 //   builder: (context, value, child) {
                 //     return value;
@@ -121,7 +125,7 @@ class _PlatformAlbumState extends State<PlatformAlbum> {
                                               title: 'Warning',
                                               desc: 'Are you sure want to delete folder',
                                               btnCancelOnPress: () {},
-                                              onDissmissCallback: (type) {
+                                              onDismissCallback: (type) {
                                                 debugPrint('Dialog Dissmiss from callback $type');
                                               },
                                               btnOkOnPress: () async {
@@ -139,7 +143,8 @@ class _PlatformAlbumState extends State<PlatformAlbum> {
                                                               )));
                                                 });
                                               }).show();
-                                          // showAlertDialog(context, widget.path);
+
+                                          // showcoAlertDialog(context, widget.path);
                                         }),
                                   ),
                                 ),
@@ -155,7 +160,12 @@ class _PlatformAlbumState extends State<PlatformAlbum> {
                                       bool result = await Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (_) => AlbumSettings(foldernames: widget.title, path: widget.path, pin: widget.pinnuber)));
+                                              builder: (_) => AlbumSettings(
+                                                    foldernames: widget.title,
+                                                    path: widget.path,
+                                                    pin: widget.pinnuber,
+                                                    isDelete: widget.isDelete,
+                                                  )));
                                       if (result) loadImage();
                                     },
                                   ),

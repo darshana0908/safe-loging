@@ -12,7 +12,9 @@ import 'package:path/path.dart' as path;
 
 class CustomDrawer extends StatefulWidget {
   final String pinNumber;
-  const CustomDrawer({Key? key, required this.pinNumber}) : super(key: key);
+  final bool takinphoto;
+  final Function getbool;
+  CustomDrawer({Key? key, required this.pinNumber, required this.takinphoto, required this.getbool}) : super(key: key);
 
   @override
   State<CustomDrawer> createState() => _CustomDrawerState();
@@ -57,6 +59,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
               child: InkWell(
                 onTap: () {
                   uploadPhoto();
+                  setState(() {
+                    widget.getbool();
+                    print(widget.getbool());
+                  });
                 },
                 child: Center(
                   child: Stack(

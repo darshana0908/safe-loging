@@ -2,14 +2,15 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:share_plus/share_plus.dart';
+import 'package:share_extend/share_extend.dart';
 
 import '../../../constants/colors.dart';
 import 'image_screen.dart';
 
 class ImageDetails extends StatefulWidget {
   final String path;
-  const ImageDetails({Key? key, required this.path}) : super(key: key);
+    final Function getbool;
+  const ImageDetails({Key? key, required this.path,required this.getbool}) : super(key: key);
 
   @override
   State<ImageDetails> createState() => _ImageDetailsState();
@@ -42,8 +43,8 @@ class _ImageDetailsState extends State<ImageDetails> with SingleTickerProviderSt
       },
       child: Scaffold(
           appBar: AppBar(
-            backgroundColor: kblack,
-          ),
+              // backgroundColor: kblack,
+              ),
           backgroundColor: kblack,
           body: Column(
             children: [
@@ -75,8 +76,9 @@ class _ImageDetailsState extends State<ImageDetails> with SingleTickerProviderSt
               IconButton(
                 onPressed: () async {
                   final temp = await getTemporaryDirectory();
+                  await ShareExtend.share(widget.path, "file");
 
-                  await Share.shareFiles([widget.path], text: 'check out my Apps https://Safeloging.com');
+                  // await Share.shareFiles([widget.path], text: 'check out my Apps https://Safeloging.com');
                 },
                 icon: Icon(
                   Icons.share,
@@ -101,15 +103,9 @@ class _ImageDetailsState extends State<ImageDetails> with SingleTickerProviderSt
               InkWell(
                 onTap: () async {
                   String folder = '';
-                 
+
                   setState(() => delete(widget.path));
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => ImageScreen(
-                                title: folder,
-                                path: widget.path 
-                              )));
+                  // Navigator.push(context, MaterialPageRoute(builder: (_) => ImageScreen(title: folder, path: widget.path)));
                 },
                 child: Icon(
                   Icons.delete_forever,
