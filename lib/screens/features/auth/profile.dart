@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:safe_encrypt/constants/colors.dart';
@@ -46,30 +45,20 @@ class _UserProfileState extends State<UserProfile> {
                 ),
                 Text(
                   'Welcome !',
-                  style: TextStyle(
-                      fontSize: 25, color: kwhite, fontWeight: FontWeight.w500),
+                  style: TextStyle(fontSize: 25, color: kwhite, fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(
                   height: 40,
                 ),
-                CircleAvatar(
-                    backgroundImage: NetworkImage(user!.photoURL!, scale: 300)),
+                CircleAvatar(backgroundImage: NetworkImage(user!.photoURL!, scale: 300)),
                 const SizedBox(
                   height: 20,
                 ),
-                Text(user!.email!,
-                    style: const TextStyle(
-                        fontSize: 17,
-                        color: Colors.white60,
-                        fontWeight: FontWeight.w500)),
+                Text(user!.email!, style: const TextStyle(fontSize: 17, color: Colors.white60, fontWeight: FontWeight.w500)),
                 const SizedBox(
                   height: 20,
                 ),
-                Text(user!.email!,
-                    style: const TextStyle(
-                        fontSize: 17,
-                        color: Colors.white60,
-                        fontWeight: FontWeight.w500)),
+                Text(user!.email!, style: const TextStyle(fontSize: 17, color: Colors.white60, fontWeight: FontWeight.w500)),
                 const SizedBox(
                   height: 60,
                 ),
@@ -77,8 +66,7 @@ class _UserProfileState extends State<UserProfile> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => const FirstPinNumber()),
+                      MaterialPageRoute(builder: (context) => const FirstPinNumber()),
                     );
                   },
                   child: Container(
@@ -88,10 +76,7 @@ class _UserProfileState extends State<UserProfile> {
                     width: MediaQuery.of(context).size.width,
                     child: Text(
                       'Continue',
-                      style: TextStyle(
-                          fontSize: 17,
-                          color: kwhite,
-                          fontWeight: FontWeight.w500),
+                      style: TextStyle(fontSize: 17, color: kwhite, fontWeight: FontWeight.w500),
                     ),
                   ),
                 )
@@ -101,18 +86,5 @@ class _UserProfileState extends State<UserProfile> {
         ),
       ),
     );
-  }
-
-  Future createuser({
-    required String name,
-    required String email,
-  }) async {
-    final docUser = FirebaseFirestore.instance.collection('users').doc('my-id');
-    final json = {
-      'name': name,
-      'email': email,
-    };
-
-    await docUser.set(json);
   }
 }

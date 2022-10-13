@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +10,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 import 'package:safe_encrypt/screens/features/auth/components/pin_number/first_pin_number.dart';
+import 'package:safe_encrypt/screens/features/auth/resgister.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 
 import '../../../providers/google_sign_provider.dart';
@@ -89,28 +90,18 @@ class _AuthScreen extends State<AuthScreen> {
 
                           if (result.status == LoginStatus.success) {
                             // Login Success
-                            await FirebaseFirestore.instance.collection('users').get().then(
-                              (QuerySnapshot querySnapshot) {
-                                for (var doc in querySnapshot.docs) {
-                                  FacebookAuth.instance.getUserData().then((value) async {
-                                    print(value['email']);
 
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => const FirstPinNumber()),
-                                    );
-
-                                    // Logger().w(value['email']);
-                                    // if (isfromSignup) {
-                                    //   await checkEmail(context, value['email']);
-                                    // } else {
-                                    //   await loginWithEmail(context, value['email']);
-                                    // }
-                                  });
-                                  print(doc['email']);
-                                }
-                              },
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const FirstPinNumber()),
                             );
+
+                            // Logger().w(value['email']);
+                            // if (isfromSignup) {
+                            //   await checkEmail(context, value['email']);
+                            // } else {
+                            //   await loginWithEmail(context, value['email']);
+                            // }
 
                             // isLoadingFb = false;
                           } else if (result.status == LoginStatus.operationInProgress) {
@@ -172,12 +163,7 @@ class _AuthScreen extends State<AuthScreen> {
                           ),
                         ),
                         onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) =>
-                          //           const NewSignupPage()),
-                          // );
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const Register()));
 
                           // Navigator.push(
                           //   context,
