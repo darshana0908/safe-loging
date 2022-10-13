@@ -9,11 +9,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 import 'package:safe_encrypt/services/icon.dart';
-import 'package:safe_encrypt/services/image_service.dart';
 import 'package:safe_encrypt/utils/widgets/custom_drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../services/file_service.dart';
 import '../../../utils/helper_methods.dart';
 import '../settings/settings.dart';
 import 'components/glalery_folder.dart';
@@ -83,7 +81,6 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
           takingPhoto = false;
         });
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => const AppIcon()), (Route<dynamic> route) => false);
-        // Navigator.push(context, MaterialPageRoute(builder: (_) => const AppIcon()));
       }
     }
   }
@@ -116,45 +113,45 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
               spaceBetweenChildren: 15,
               icon: Icons.add,
               children: [
-                SpeedDialChild(
-                  labelWidget: Padding(
-                    padding: const EdgeInsets.only(right: 20),
-                    child: Text(
-                      'Take photo',
-                      style: TextStyle(color: kwhite, fontSize: 22, fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  onTap: () async {
-                    setState(() => takingPhoto = true);
-                    ImageService(pinNumber: widget.pinNumber).takePhoto();
-                    // .then((val) {
-                    //   setState(() => takingPhoto = false);
-                    // });
-                  },
-                  elevation: 150,
-                  backgroundColor: Colors.black38,
-                  child: Icon(Icons.camera_alt, color: kwhite, size: 30),
-                  labelBackgroundColor: const Color(0xff00aeed),
-                ),
-                SpeedDialChild(
-                    child: Icon(Icons.photo, color: kwhite, size: 30),
-                    labelWidget: Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: Text('Import files', style: TextStyle(color: kwhite, fontSize: 22, fontWeight: FontWeight.w500)),
-                    ),
-                    onTap: () async {
-                      setState(() {
-                        takingPhoto = true;
-                      });
-                      String extention = '';
-                      FileService(pinNumber: widget.pinNumber).importFiles();
-                      // .then((val) {
-                      //   setState(() {
-                      //     takingPhoto = false;
-                      //   });
-                      // });
-                    },
-                    backgroundColor: Colors.black38),
+                // SpeedDialChild(
+                //   labelWidget: Padding(
+                //     padding: const EdgeInsets.only(right: 20),
+                //     child: Text(
+                //       'Take photo',
+                //       style: TextStyle(color: kwhite, fontSize: 22, fontWeight: FontWeight.w500),
+                //     ),
+                //   ),
+                //   onTap: () async {
+                //     setState(() => takingPhoto = true);
+                //     ImageService(pinNumber: widget.pinNumber).takePhoto();
+                //     // .then((val) {
+                //     //   setState(() => takingPhoto = false);
+                //     // });
+                //   },
+                //   elevation: 150,
+                //   backgroundColor: Colors.black38,
+                //   child: Icon(Icons.camera_alt, color: kwhite, size: 30),
+                //   labelBackgroundColor: const Color(0xff00aeed),
+                // ),
+                // SpeedDialChild(
+                //     child: Icon(Icons.photo, color: kwhite, size: 30),
+                //     labelWidget: Padding(
+                //       padding: const EdgeInsets.only(right: 20),
+                //       child: Text('Import files', style: TextStyle(color: kwhite, fontSize: 22, fontWeight: FontWeight.w500)),
+                //     ),
+                //     onTap: () async {
+                //       setState(() {
+                //         takingPhoto = true;
+                //       });
+                //       String extention = '';
+                //       FileService(pinNumber: widget.pinNumber).importFiles();
+                //       // .then((val) {
+                //       //   setState(() {
+                //       //     takingPhoto = false;
+                //       //   });
+                //       // });
+                //     },
+                //     backgroundColor: Colors.black38),
                 SpeedDialChild(
                   child: Icon(Icons.add_to_photos_rounded, color: kwhite, size: 30),
                   labelWidget: Padding(

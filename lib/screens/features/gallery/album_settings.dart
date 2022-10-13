@@ -238,7 +238,7 @@ class _AlbumSettingsState extends State<AlbumSettings> {
                             showCloseIcon: true,
                             title: 'Success',
                             desc: '',
-                            btnOkText: 'Add Album Cover',
+                            btnOkText: 'Add Album',
                             btnOkOnPress: () async {
                               debugPrint('Continue');
 
@@ -258,7 +258,7 @@ class _AlbumSettingsState extends State<AlbumSettings> {
                             },
                           ).show();
                         },
-                        child: const Text('CREATE')),
+                        child: const Text('UPDATE FOLDER NAME')),
                   ],
                 )
               ]),

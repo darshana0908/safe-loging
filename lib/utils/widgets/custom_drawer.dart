@@ -14,7 +14,7 @@ class CustomDrawer extends StatefulWidget {
   final String pinNumber;
   final bool takinphoto;
   final Function getbool;
-  CustomDrawer({Key? key, required this.pinNumber, required this.takinphoto, required this.getbool}) : super(key: key);
+  const CustomDrawer({Key? key, required this.pinNumber, required this.takinphoto, required this.getbool}) : super(key: key);
 
   @override
   State<CustomDrawer> createState() => _CustomDrawerState();
@@ -49,6 +49,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
   bool app = true;
   @override
   Widget build(BuildContext context) {
+    var listTile = ListTile(
+      leading: const Icon(Icons.person),
+      title: const Text(' My Vault '),
+      onTap: () {
+        Navigator.pop(context);
+      },
+    );
     return Drawer(
       child: ListView(
         padding: const EdgeInsets.all(0),
@@ -76,15 +83,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ),
                 ),
               )),
-          ListTile(
-            leading: const Icon(Icons.person),
-            title: const Text(' My Vault '),
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AppIcon())),
-          ),
+          listTile,
           ListTile(
             leading: const Icon(Icons.create),
             title: const Text(' Create New Vault'),
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const FirstPinNumber())),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const FirstPinNumber()));
+            },
           ),
           ListTile(
             leading: const Icon(Icons.login),

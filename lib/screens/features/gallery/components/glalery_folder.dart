@@ -98,6 +98,8 @@ class _PlatformAlbumState extends State<PlatformAlbum> {
                       style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
                     ),
                     PopupMenuButton(
+                    
+                      splashRadius: 20,
                       itemBuilder: (context) => [
                         PopupMenuItem(
                           child: SizedBox(
@@ -109,8 +111,9 @@ class _PlatformAlbumState extends State<PlatformAlbum> {
                                   child: Container(
                                     alignment: Alignment.topLeft,
                                     child: TextButton(
+                                        style: const ButtonStyle(),
                                         autofocus: true,
-                                        child: Text('Delete', style: TextStyle(color: kblack, fontSize: 17)),
+                                        child: const Text('Delete', style: TextStyle(fontSize: 17)),
                                         onPressed: () {
                                           // setState(() {
                                           //   delete(widget.path);
@@ -154,7 +157,7 @@ class _PlatformAlbumState extends State<PlatformAlbum> {
                                     autofocus: true,
                                     child: Text(
                                       widget.album,
-                                      style: TextStyle(color: kblack, fontSize: 17),
+                                      style: const TextStyle(fontSize: 17),
                                     ),
                                     onPressed: () async {
                                       bool result = await Navigator.push(

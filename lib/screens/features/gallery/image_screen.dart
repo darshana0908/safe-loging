@@ -99,7 +99,7 @@ class _ImageScreenState extends State<ImageScreen> {
                       child: Icon(Icons.photo, color: kwhite, size: 30),
                       labelWidget: Padding(
                           padding: const EdgeInsets.only(right: 20),
-                          child: Text('Import all', style: TextStyle(color: kwhite, fontSize: 22, fontWeight: FontWeight.w500))),
+                          child: Text('Import files', style: TextStyle(color: kwhite, fontSize: 22, fontWeight: FontWeight.w500))),
                       onTap: () async {
                         importFiles();
                         setState(() {
@@ -145,12 +145,49 @@ class _ImageScreenState extends State<ImageScreen> {
                   ],
                   flexibleSpace: FlexibleSpaceBar(
                     background: imgload
-                        ? (decryptedImages.last.toLowerCase().endsWith('jpg') || decryptedImages.last.toLowerCase().endsWith('png'))
-                            ? Image.file(
-                                File(decryptedImages.last),
-                                fit: BoxFit.cover,
-                              )
-                            : const Text('not a image')
+                        ? SizedBox(
+                            height: 100,
+                            child: Column(
+                              children: [
+                                (decryptedImages.last.toLowerCase().endsWith('jpg') || decryptedImages.last.toLowerCase().endsWith('jpeg'))
+                                    ? SizedBox(
+                                        height: MediaQuery.of(context).size.height * 0.3,
+                                        width: MediaQuery.of(context).size.width,
+                                        child: Image.file(
+                                          File(decryptedImages.last),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    : (decryptedImages.last.toLowerCase().endsWith('mp4') ||
+                                            decryptedImages.last.toLowerCase().endsWith('mp3') ||
+                                            decryptedImages.last.toLowerCase().endsWith('avi') ||
+                                            decryptedImages.last.toLowerCase().endsWith('mpeg'))
+                                        ? SizedBox(
+                                            height: MediaQuery.of(context).size.height * 0.3,
+                                            width: MediaQuery.of(context).size.width,
+                                            child: Image.asset(videoIcon, fit: BoxFit.scaleDown))
+                                        : (decryptedImages.last.toLowerCase().endsWith('pdf'))
+                                            ? SizedBox(
+                                                height: MediaQuery.of(context).size.height * 0.3,
+                                                width: MediaQuery.of(context).size.width,
+                                                child: Image.asset(pdfIcon, fit: BoxFit.scaleDown))
+                                            : (decryptedImages.last.toLowerCase().endsWith('docx') ||
+                                                    decryptedImages.last.toLowerCase().endsWith('ppt'))
+                                                ? SizedBox(
+                                                    height: MediaQuery.of(context).size.height * 0.3,
+                                                    width: MediaQuery.of(context).size.width,
+                                                    child: Image.asset(docsIcon, fit: BoxFit.scaleDown))
+                                                : SizedBox(
+                                                    height: MediaQuery.of(context).size.height * 0.3,
+                                                    width: MediaQuery.of(context).size.width,
+                                                    child: Image.asset(
+                                                      'assets/Capture5.JPG',
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                              ],
+                            ),
+                          )
                         : Image.asset(
                             'assets/Capture5.JPG',
                             fit: BoxFit.cover,
@@ -180,14 +217,14 @@ class _ImageScreenState extends State<ImageScreen> {
                   ),
                   floating: false,
                   pinned: true,
-                  expandedHeight: MediaQuery.of(context).size.height * 0.2,
+                  expandedHeight: MediaQuery.of(context).size.height * 0.3,
                 ),
                 SliverList(
                     delegate: SliverChildListDelegate([
                   Column(
                     children: [
                       SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.8,
+                        height: MediaQuery.of(context).size.height * 0.7,
                         child: _isLoading
                             ? const Center(
                                 child: CircularProgressIndicator(
