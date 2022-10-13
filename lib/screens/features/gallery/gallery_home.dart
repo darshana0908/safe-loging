@@ -39,6 +39,8 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
   String? imageName;
   String finalImage = 'assets/ic.JPG';
   String assets = 'assets/ic.JPG';
+  bool ownerlogin = true;
+  bool isLoading = true;
   getbool() {
     setState(() {
       takingPhoto = true;
@@ -49,6 +51,7 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
   void initState() {
     // takingPhoto == true ?
     WidgetsBinding.instance.addObserver(this);
+    savebool();
     // : WidgetsBinding.instance.removeObserver(this);
     requestPermission(Permission.storage);
     takingPhoto = false;
@@ -83,6 +86,13 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => const AppIcon()), (Route<dynamic> route) => false);
       }
     }
+  }
+
+  @override
+  savebool() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('ownerlogin', ownerlogin);
+    print(ownerlogin);
   }
 
   String? imgload = '';
