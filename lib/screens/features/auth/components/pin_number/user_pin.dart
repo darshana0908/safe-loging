@@ -2,10 +2,7 @@
 
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 import 'package:safe_encrypt/screens/features/gallery/gallery_home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,7 +16,6 @@ class UserPIn extends StatefulWidget {
           key: key,
         );
 
-  final CollectionReference _firebaseFirestore = FirebaseFirestore.instance.collection('users');
   List documents = [];
   bool owner = false;
   bool isLoading = true;
@@ -416,45 +412,45 @@ class _UserPInState extends State<UserPIn> {
     );
   }
 
-  loaddata() async {
-    await FirebaseFirestore.instance.collection('users').get().then((QuerySnapshot querySnapshot) {
-      for (var doc in querySnapshot.docs) {
-        String pinNum = doc['pin'].toString();
-        if (pinNum == controler_re_enter_pin.text) {
-          if (pinNum == controler_re_enter_pin.text) {
-            FacebookAuth.instance.getUserData().then((value) async {
-              if (value['id'].toString() == doc['uid'].toString()) {
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //       builder: (context) => const GalleryHome(),
-                //     ));
-              }
-            });
-          }
-          if (pinNum == controler_re_enter_pin.text) {
-            final user = FirebaseAuth.instance.currentUser!;
-            if (user.uid == doc['uid'].toString()) {
-              // savebool();
-              nave() async {
-                // await Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //       builder: (context) => const GalleryHome(),
-                //     ));
-              }
-            }
+  // loaddata() async {
+  //   await FirebaseFirestore.instance.collection('users').get().then((QuerySnapshot querySnapshot) {
+  //     for (var doc in querySnapshot.docs) {
+  //       String pinNum = doc['pin'].toString();
+  //       if (pinNum == controler_re_enter_pin.text) {
+  //         if (pinNum == controler_re_enter_pin.text) {
+  //           FacebookAuth.instance.getUserData().then((value) async {
+  //             if (value['id'].toString() == doc['uid'].toString()) {
+  //               // Navigator.push(
+  //               //     context,
+  //               //     MaterialPageRoute(
+  //               //       builder: (context) => const GalleryHome(),
+  //               //     ));
+  //             }
+  //           });
+  //         }
+  //         if (pinNum == controler_re_enter_pin.text) {
+  //           final user = FirebaseAuth.instance.currentUser!;
+  //           if (user.uid == doc['uid'].toString()) {
+  //             // savebool();
+  //             nave() async {
+  //               // await Navigator.push(
+  //               //     context,
+  //               //     MaterialPageRoute(
+  //               //       builder: (context) => const GalleryHome(),
+  //               //     ));
+  //             }
+  //           }
 
-            print(controler_re_enter_pin.text);
-          }
-        } else {
-          setState(() {
-            confirm_pin = false;
-          });
-        }
-      }
-    });
-  }
+  //           print(controler_re_enter_pin.text);
+  //         }
+  //       } else {
+  //         setState(() {
+  //           confirm_pin = false;
+  //         });
+  //       }
+  //     }
+  //   });
+  // }
 
 //
 
