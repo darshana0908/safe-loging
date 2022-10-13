@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:safe_encrypt/constants/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'components/pin_number/first_pin_number.dart';
 
 class WelcomeScreen extends StatefulWidget {
-  const WelcomeScreen({Key? key}) : super(key: key);
+  final String email;
+  final String name;
+  const WelcomeScreen({Key? key, required this.email, required this.name}) : super(key: key);
 
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
@@ -13,7 +16,15 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   void initState() {
+    getmail();
     super.initState();
+  }
+
+  String? getemail;
+
+  getmail() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    getemail = sharedPreferences.getString('email-${widget.email}${widget.name}');
   }
 
   @override
@@ -35,9 +46,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             Padding(
               padding: const EdgeInsets.all(40.0),
               child: Column(children: [
-                const SizedBox(
-                  height: 50,
-                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.2),
                 Text(
                   'Welcome back!',
                   style: TextStyle(fontSize: 25, color: kwhite, fontWeight: FontWeight.w500),
@@ -45,18 +54,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                const Text('Log in with your Keepsafe account email', style: TextStyle(fontSize: 17, color: Colors.white60, fontWeight: FontWeight.w500)),
+                const Text('Log in with your Keepsafe account email',
+                    style: TextStyle(fontSize: 17, color: Colors.white60, fontWeight: FontWeight.w500)),
                 const SizedBox(
                   height: 20,
                 ),
-                TextField(
-                  decoration: InputDecoration(
-                      label: const Text(
-                        'Email',
-                        style: TextStyle(fontSize: 17, color: Colors.white30, fontWeight: FontWeight.w500),
-                      ),
-                      fillColor: kwhite),
-                ),
+                Text(getemail.toString(), style: TextStyle(color: kwhite)),
                 const SizedBox(
                   height: 40,
                 ),
