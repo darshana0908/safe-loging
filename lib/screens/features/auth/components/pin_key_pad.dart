@@ -20,10 +20,7 @@ class _PinKeyPadState extends State<PinKeyPad> {
         alignment: Alignment.center,
         width: 105,
         height: 105,
-        // decoration: BoxDecoration(
-        //   borderRadius: BorderRadius.circular(45),
-        //   color: Colors.deepPurple,
-        // ),
+    
         child: Text(
           widget.keypad,
           style: const TextStyle(

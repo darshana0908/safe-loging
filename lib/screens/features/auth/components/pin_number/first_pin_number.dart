@@ -98,7 +98,7 @@ class _FirstPinNumberState extends State<FirstPinNumber> {
                             errorText: x == 1
                                 ? ""
                                 : x == 5
-                                    ? "required between  4  and 7 numbers"
+                                    ? "required a number between  4  and 7 "
                                     : 'required maximum 7 characters',
                             border: InputBorder.none,
                             suffixIcon: IconButton(
