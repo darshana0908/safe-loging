@@ -164,22 +164,9 @@ class _AuthScreen extends State<AuthScreen> {
                         ),
                         onTap: () {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => const Register()));
-
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) => const GalleryHome(
-                          //             isFake: true,
-                          //           )),
-                          // );
                         },
                       ),
                     ),
-                    // const SizedBox(height: 25),
-                    // TextButton(
-                    //   child: const Text('LOG IN'),
-                    //   onPressed: () {},
-                    // )
                   ]),
                 ),
               ],
@@ -197,8 +184,7 @@ class _AuthScreen extends State<AuthScreen> {
 
     // Create a credential from the access token
     final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
-    print(loginResult);
-    print('ggggggggggggggggggggggggggg');
+
     // Once signed in, return the UserCredential
 
     return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential).whenComplete(() {

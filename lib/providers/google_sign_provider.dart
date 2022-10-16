@@ -43,7 +43,6 @@ class GoogleSignInProvider extends ChangeNotifier {
     // print(pin);
     // print("------------------------------------");
 
-
     setProfileFront(newPath!);
 
     return newPath;
@@ -53,8 +52,9 @@ class GoogleSignInProvider extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
 
     await prefs.setString(pin, imagePath);
-   print("------------------------------------"); print(pin);
-   print(imagePath);
+    print("------------------------------------");
+    print(pin);
+    print(imagePath);
     print("------------------------------------");
     setProfileFront(imagePath);
   }

@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:safe_encrypt/screens/features/auth/components/pin_number/first_pin_number.dart';
@@ -38,23 +37,3 @@ class _GmailLoginState extends State<GmailLogin> {
     ));
   }
 }
-
-
-
-// class New extends StatefulWidget {
-//   const New({Key? key}) : super(key: key);
-
-//   @override
-//   State<New> createState() => _NewState();
-// }
-
-// class _NewState extends State<New> {
-//   @override
-//   Widget build(BuildContext context) {
-//     final user = FirebaseAuth.instance.currentUser!;
-//     return Scaffold(
-//       body:
-//           Column(children: [Text(user.uid), Text(user.displayName.toString())]),
-//     );
-//   }
-// }
