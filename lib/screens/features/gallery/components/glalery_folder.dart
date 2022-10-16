@@ -15,11 +15,12 @@ class PlatformAlbum extends StatefulWidget {
   final bool isDelete;
   final String path;
   final String album;
-
+  final Function getRenameFolderlist;
   final String pinnuber;
 
   const PlatformAlbum({
     Key? key,
+    required this.getRenameFolderlist,
     required this.title,
     required this.isDelete,
     required this.path,
@@ -43,14 +44,17 @@ class _PlatformAlbumState extends State<PlatformAlbum> {
   void initState() {
     widget.title;
     loadImage();
-    setState(() {
-      finalImage = widget.title;
-      print(finalImage);
-    });
+    setState(() {});
 
     // loadImage();
     // TODO: implement initState
     super.initState();
+  }
+
+  gettitel() {
+    setState(() {
+      widget.title;
+    });
   }
 
   loadImage() async {
@@ -81,12 +85,6 @@ class _PlatformAlbumState extends State<PlatformAlbum> {
                 height: 180,
                 color: kindigo,
                 child: isImageLoading ? const CupertinoActivityIndicator() : Image.asset(finalImage, fit: BoxFit.fill),
-                // child: Consumer<FolderCoverImageProvider>(
-                //   builder: (context, value, child) {
-                //     return value;
-                //     );
-                //   },
-                // ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -98,10 +96,11 @@ class _PlatformAlbumState extends State<PlatformAlbum> {
                       style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
                     ),
                     PopupMenuButton(
-                    
+                      position: PopupMenuPosition.under,
                       splashRadius: 20,
                       itemBuilder: (context) => [
                         PopupMenuItem(
+                        
                           child: SizedBox(
                             width: MediaQuery.of(context).size.width / 2,
                             child: Column(
@@ -164,6 +163,7 @@ class _PlatformAlbumState extends State<PlatformAlbum> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (_) => AlbumSettings(
+                                                    getRenameFolderlist: widget.getRenameFolderlist,
                                                     foldernames: widget.title,
                                                     path: widget.path,
                                                     pin: widget.pinnuber,

@@ -47,6 +47,12 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
     });
   }
 
+  gettitel() {
+    setState(() {
+      widget.title;
+    });
+  }
+
   @override
   void initState() {
     // takingPhoto == true ?
@@ -70,7 +76,6 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
   }
 
   @override
-  @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     print('$state  $takingPhoto');
@@ -93,6 +98,13 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('ownerlogin', ownerlogin);
     print(ownerlogin);
+  }
+
+  updateFolderList() {
+    print('kkkgggggggggggggggggggggddddddddddddddddddddd');
+    setState(() {
+      getFolderList();
+    });
   }
 
   String? imgload = '';
@@ -123,45 +135,6 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
               spaceBetweenChildren: 15,
               icon: Icons.add,
               children: [
-                // SpeedDialChild(
-                //   labelWidget: Padding(
-                //     padding: const EdgeInsets.only(right: 20),
-                //     child: Text(
-                //       'Take photo',
-                //       style: TextStyle(color: kwhite, fontSize: 22, fontWeight: FontWeight.w500),
-                //     ),
-                //   ),
-                //   onTap: () async {
-                //     setState(() => takingPhoto = true);
-                //     ImageService(pinNumber: widget.pinNumber).takePhoto();
-                //     // .then((val) {
-                //     //   setState(() => takingPhoto = false);
-                //     // });
-                //   },
-                //   elevation: 150,
-                //   backgroundColor: Colors.black38,
-                //   child: Icon(Icons.camera_alt, color: kwhite, size: 30),
-                //   labelBackgroundColor: const Color(0xff00aeed),
-                // ),
-                // SpeedDialChild(
-                //     child: Icon(Icons.photo, color: kwhite, size: 30),
-                //     labelWidget: Padding(
-                //       padding: const EdgeInsets.only(right: 20),
-                //       child: Text('Import files', style: TextStyle(color: kwhite, fontSize: 22, fontWeight: FontWeight.w500)),
-                //     ),
-                //     onTap: () async {
-                //       setState(() {
-                //         takingPhoto = true;
-                //       });
-                //       String extention = '';
-                //       FileService(pinNumber: widget.pinNumber).importFiles();
-                //       // .then((val) {
-                //       //   setState(() {
-                //       //     takingPhoto = false;
-                //       //   });
-                //       // });
-                //     },
-                //     backgroundColor: Colors.black38),
                 SpeedDialChild(
                   child: Icon(Icons.add_to_photos_rounded, color: kwhite, size: 30),
                   labelWidget: Padding(
@@ -222,11 +195,13 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
               itemBuilder: (BuildContext context, index) {
                 String oneEntity = folderList[index].toString();
                 String folderName = oneEntity.split('/').last.replaceAll("'", '');
-                print(folderName);
+
                 return InkWell(
                   child: PlatformAlbum(
                     // selected image of folder cover
                     // use provider (FolderCoverImageProvider)
+
+                    getRenameFolderlist: updateFolderList,
                     title: folderName,
                     album: 'Album Settings',
                     isDelete: index == 0 ? false : true,
@@ -249,9 +224,6 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
 
     // );  ),
   }
-
-  // openFiles(List<PlatformFile> files) =>
-  //     Navigator.push(context, MaterialPageRoute(builder: (_) => FilePage()));
 
   // create folder dialog
   showCreateFolderDialog(context) {
@@ -298,6 +270,7 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
     setState(() {
       log(imageName.toString());
       finalImage = imageName.toString();
+      folderList;
     });
   }
 
@@ -341,6 +314,7 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
         () async {
           SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
           await sharedPreferences.setString('foldername-$newFolderName-${widget.pinNumber}', assets);
+          getFolderList();
           AwesomeDialog(
             context: context,
             animType: AnimType.LEFTSLIDE,
@@ -353,8 +327,6 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
               debugPrint('Continue');
 
               setState(() {
-                getFolderList();
-
                 requestPermission(Permission.storage);
 
                 Navigator.pop(context, true);
@@ -384,8 +356,7 @@ class _GalleryHomeState extends State<GalleryHome> with WidgetsBindingObserver {
 // Cam-IMG 1664964306767412.jpg
   void delete(String path) {
     takingPhoto = false;
-    print(takingPhoto);
-    log(path);
+
     final dir = Directory(path);
     dir.deleteSync(recursive: true);
   }

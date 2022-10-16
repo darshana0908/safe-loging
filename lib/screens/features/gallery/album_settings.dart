@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:safe_encrypt/constants/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,20 +11,26 @@ import 'album_covers.dart';
 import 'gallery_home.dart';
 
 class AlbumSettings extends StatefulWidget {
-  const AlbumSettings({Key? key, required this.foldernames, required this.path, required this.pin, required this.isDelete}) : super(key: key);
+  const AlbumSettings(
+      {Key? key, required this.getRenameFolderlist, required this.foldernames, required this.path, required this.pin, required this.isDelete})
+      : super(key: key);
   final String foldernames;
   final String path;
   final String pin;
   final bool isDelete;
+  final Function getRenameFolderlist;
 
   @override
   State<AlbumSettings> createState() => _AlbumSettingsState();
 }
 
 class _AlbumSettingsState extends State<AlbumSettings> {
+  String? newfoldername;
+  String createfolder = '';
   String? imageName;
   String finalImage = '';
   String assets = 'assets/ic.JPG';
+  bool islosding = false;
   final TextEditingController controler = TextEditingController();
   @override
   void initState() {
@@ -39,18 +46,24 @@ class _AlbumSettingsState extends State<AlbumSettings> {
   loadImage() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var imageName = sharedPreferences.getString('foldername-${widget.foldernames}-${widget.pin}');
-    print(widget.foldernames);
+
     setState(() {
-      log(imageName.toString());
+      print('jjj');
+      log(newfoldername.toString());
       finalImage = imageName.toString();
+      createfolder = newfoldername.toString();
+      islosding = true;
     });
-    // return Image.file(File(imageName.toString()));
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        setState(() {
+          widget.getRenameFolderlist();
+        });
+
         Navigator.pop(context);
         return true;
       },
@@ -171,13 +184,14 @@ class _AlbumSettingsState extends State<AlbumSettings> {
                           ],
                         ),
                         SizedBox(
-                          width: 200,
-                          height: 150,
-                          child: Image.asset(
-                            finalImage,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
+                            width: 200,
+                            height: 150,
+                            child: islosding
+                                ? Image.asset(
+                                    finalImage,
+                                    fit: BoxFit.fill,
+                                  )
+                                : const CupertinoActivityIndicator()),
                       ],
                     ),
                   ),
@@ -187,6 +201,7 @@ class _AlbumSettingsState extends State<AlbumSettings> {
                       context,
                       MaterialPageRoute(
                           builder: (_) => AlbumCovers(
+                                updatefolderlist: widget.getRenameFolderlist,
                                 pin: widget.pin,
                                 path: widget.path,
                                 foldersname: widget.foldernames,
@@ -224,75 +239,69 @@ class _AlbumSettingsState extends State<AlbumSettings> {
                     TextButton(onPressed: () => Navigator.pop(context, true), child: const Text('CANCEL')),
                     TextButton(
                         onPressed: () async {
-                          print(widget.foldernames);
-                          setState(() {
-                            var myfile = Directory(widget.path);
-                            changeFileNameOnly(myfile, controler.text);
-                          });
-
-                          AwesomeDialog(
-                            context: context,
-                            animType: AnimType.LEFTSLIDE,
-                            headerAnimationLoop: false,
-                            dialogType: DialogType.SUCCES,
-                            showCloseIcon: true,
-                            title: 'Success',
-                            desc: '',
-                            btnOkText: 'Add Album',
-                            btnOkOnPress: () async {
-                              debugPrint('Continue');
-
-                              print('kkkkkkkkkkkkkk');
-                              print(widget.foldernames);
-                              print('kkkkkkkkkkkkkk');
-                              await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => GalleryHome(
-                                            pinNumber: widget.pin,
-                                          )));
-                            },
-                            btnOkIcon: Icons.check_circle,
-                            onDismissCallback: (type) async {
-                              debugPrint('Dialog Dismiss from callback $type');
-                            },
-                          ).show();
+                          if (controler.text.length < 20 && controler.text.isNotEmpty) {
+                            print(widget.foldernames);
+                            setState(() {
+                              var myfile = Directory(widget.path);
+                              changeFileNameOnly(myfile, controler.text);
+                            });
+                          } else {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                content: Container(
+                                  alignment: Alignment.center,
+                                  height: 140,
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        'required folder name less',
+                                        style: TextStyle(
+                                          color: kred,
+                                          fontSize: 24,
+                                        ),
+                                      ),
+                                      Text(
+                                        'of than 20 characters',
+                                        style: TextStyle(
+                                          color: kred,
+                                          fontSize: 24,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
+                                          alignment: Alignment.center,
+                                          height: 50,
+                                          width: 100,
+                                          child: const Text(
+                                            'OK',
+                                            style: TextStyle(fontSize: 25, color: Colors.blue),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
                         },
-                        child: const Text('UPDATE FOLDER NAME')),
+                        child: const Text('UPDATE FOLDER')),
                   ],
                 )
               ]),
             ),
           );
-          // showrenameFolderDialog(context) {
-          //   showDialog(
-          //       context: context,
-          //       builder: (context) {
-          //         return Dialog(
-          //           child: Center(
-          //             child: Container(
-          //               width: double.infinity,
-          //               height: 200,
-          //               padding: const EdgeInsets.all(210),
-          //               child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
-          //                 TextField(controller: controler, decoration: const InputDecoration(hintText: 'Folder name')),
-          //                 const SizedBox(height: 40),
-          //         Row(
-          //           mainAxisAlignment: MainAxisAlignment.end,
-          //           children: [
-          //             TextButton(onPressed: () => Navigator.pop(context, true), child: const Text('CANCEL')),
-          //             TextButton(
-          //                 onPressed: () async {
-          //                   var myfile = Directory(widget.path);
-          //                   changeFileNameOnly(myfile, controler.text);
-          //                 },
-          //                 child: const Text('CREATE')),
-          //           ],
-          //         )
-          //       ]),
-          //     ),
-          //   ),
-          // );
         });
   }
 
@@ -302,21 +311,55 @@ class _AlbumSettingsState extends State<AlbumSettings> {
     var lastSeparator = path.lastIndexOf(Platform.pathSeparator);
     var newPath = path.substring(0, lastSeparator + 1) + newFileName;
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    // print("****************");
-    // print(widget.foldernames);
-    // print("****************");
 
     String? oldKey = sharedPreferences.getString("foldername-${widget.foldernames}-${widget.pin}");
 
     await sharedPreferences.setString('foldername-$newFileName-${widget.pin}', oldKey.toString());
-    log(newFileName);
+
     setState(() {
+      widget.getRenameFolderlist();
       log(imageName.toString());
       finalImage = imageName.toString();
       loadImage();
       log(imageName.toString());
       finalImage = imageName.toString();
     });
-    return myfile.rename(newPath);
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+            builder: (_) => GalleryHome(
+                  pinNumber: widget.pin,
+                )),
+        (Route<dynamic> route) => false).whenComplete(
+      () {
+        AwesomeDialog(
+          context: context,
+          animType: AnimType.LEFTSLIDE,
+          headerAnimationLoop: false,
+          dialogType: DialogType.SUCCES,
+          showCloseIcon: true,
+          title: 'Success',
+          desc: '',
+          btnOkText: 'Add Album',
+          btnOkOnPress: () async {
+            debugPrint('Continue');
+          },
+          btnOkIcon: Icons.check_circle,
+          onDismissCallback: (type) async {
+            debugPrint('Dialog Dismiss from callback $type');
+          },
+        ).show();
+      },
+    );
+
+    setState(() {
+      myfile.rename(newPath);
+      loadImage();
+    });
+    // return
+    await sharedPreferences.setString('foldername-$newFileName-${widget.pin}', oldKey.toString());
+    setState(() {
+      loadImage();
+    });
   }
 }

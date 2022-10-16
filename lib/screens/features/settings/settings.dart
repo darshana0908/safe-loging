@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:safe_encrypt/constants/colors.dart';
+import 'package:safe_encrypt/screens/features/auth/components/pin_number/first_pin_number.dart';
 
-import '../../../services/icon.dart';
-import '../../../constants/colors.dart';
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
 
@@ -63,36 +62,14 @@ class _SettingsState extends State<Settings> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
-                        children: const [
-                          Icon(
-                            Icons.alt_route_rounded,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 50),
-                            child: Text(
-                              'Fake PIN',
-                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w400),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Divider(),
-                    const SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
                         children: [
                           const Icon(
                             Icons.vpn_key,
                           ),
                           InkWell(
                             onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const AppIcon(),
-                                  ));
+                              Navigator.pushAndRemoveUntil(
+                                  context, MaterialPageRoute(builder: (_) => const FirstPinNumber()), (Route<dynamic> route) => false);
                             },
                             child: const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 50),

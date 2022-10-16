@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:file_cryptor/file_cryptor.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:image_picker/image_picker.dart';
@@ -42,6 +43,7 @@ class _ImageScreenState extends State<ImageScreen> {
   @override
   void initState() {
     decryptImages();
+
     loadPhotos();
     print(imgPath);
     super.initState();
@@ -189,7 +191,7 @@ class _ImageScreenState extends State<ImageScreen> {
                             ),
                           )
                         : Image.asset(
-                            'assets/Capture5.JPG',
+                            'assets/ic.JPG',
                             fit: BoxFit.cover,
                           ),
                     title: SizedBox(
@@ -227,9 +229,10 @@ class _ImageScreenState extends State<ImageScreen> {
                         height: MediaQuery.of(context).size.height * 0.7,
                         child: _isLoading
                             ? const Center(
-                                child: CircularProgressIndicator(
-                                color: Colors.redAccent,
-                                backgroundColor: Colors.lightBlueAccent,
+                                child: SizedBox(
+                                height: 100,
+                                width: 100,
+                                child: CupertinoActivityIndicator(radius: 20),
                               ))
                             : loadPhotos(),
                       ),
@@ -478,15 +481,12 @@ class _ImageScreenState extends State<ImageScreen> {
 
   void openFile(PlatformFile file) {
     OpenFile.open(file.path);
-    print(file.path.toString());
   }
 
   void importFiles() async {
     setState(() {
       _isLoading = true;
     });
-    String fileName = '';
-    String fileType = '';
 
     FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: true);
 
@@ -507,6 +507,7 @@ class _ImageScreenState extends State<ImageScreen> {
             loadPhotos();
             Future.delayed(const Duration(seconds: 1));
             _isLoading = false;
+            decryptedImages.last;
           },
         );
       }
@@ -558,6 +559,7 @@ class _ImageScreenState extends State<ImageScreen> {
       ImageService(pinNumber: key).encryptFiles(imageName, '$imageName.aes', widget.path);
       setState(() {
         decryptedImages.add('${widget.path}/$imageName');
+        decryptedImages.last;
         _isLoading = false;
       });
     }

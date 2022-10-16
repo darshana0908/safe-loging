@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,7 +24,7 @@ class CustomDrawer extends StatefulWidget {
 class _CustomDrawerState extends State<CustomDrawer> {
   String? imageName;
   String imgPath = '/storage/emulated/0/Android/data/com.example.safe_encrypt/files/safe/app/new/';
-
+  bool isloding = false;
   String finalImage = '';
 
   String assetPath = 'assets/ic.JPG';
@@ -43,6 +44,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
     setState(() {
       finalImage = imageName.toString();
+      isloding = true;
     });
   }
 
@@ -77,7 +79,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       if (finalImage.isNotEmpty)
                         CircleAvatar(foregroundImage: FileImage(File(finalImage.toString())), radius: 80)
                       else
-                        CircleAvatar(backgroundColor: kblack, radius: 80),
+                        isloding ? const CupertinoActivityIndicator() : CircleAvatar(backgroundColor: kblack, radius: 80),
                       const Positioned(bottom: 20, right: 20, child: Icon(Icons.camera_alt, size: 28, color: Colors.deepPurple)),
                     ],
                   ),
@@ -88,13 +90,16 @@ class _CustomDrawerState extends State<CustomDrawer> {
             leading: const Icon(Icons.create),
             title: const Text(' Create New Vault'),
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const FirstPinNumber()));
+              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => const FirstPinNumber()), (Route<dynamic> route) => false);
+              // Navigator.push(context, MaterialPageRoute(builder: (context) => const FirstPinNumber()));
             },
           ),
           ListTile(
             leading: const Icon(Icons.login),
             title: const Text(' New Vault Login'),
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AppIcon())),
+            onTap: () {
+              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => const AppIcon()), (Route<dynamic> route) => false);
+            },
           ),
           ListTile(
             leading: const Icon(Icons.logout),
